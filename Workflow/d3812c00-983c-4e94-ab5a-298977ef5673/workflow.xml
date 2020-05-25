@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item3" object-name="workflow:name=generic" id="d3812c00-983c-4e94-ab5a-298977ef5673" editor-version="2.0" version="1.0.0" api-version="6.0.0" restartMode="1" resumeFromFailedMode="0">
+    <display-name>Test SQL function</display-name>
+    <position y="50.0" x="100.0"/>
+    <input>
+        <param name="in_Table" type="string"/>
+        <param name="in_Database" type="string"/>
+        <param name="in_Field" type="string"/>
+    </input>
+    <output/>
+    <attrib name="var_AuxResult" type="Array/string">
+        <value encoded="n">#{##}#</value>
+    </attrib>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <position y="50.0" x="510.0"/>
+    </workflow-item>
+    <workflow-item name="item2" out-name="item0" type="task" comparator="0">
+        <display-name>Scriptable task</display-name>
+        <script encoded="false">System.log("getFromSQL Inputs:");
+System.log("in_Database: " + in_Database);
+System.log("in_Table: " + in_Table);
+System.log("in_Field:" + in_Field)
+System.log("getFromSQL Output:");
+for (var auxItem in var_AuxResult){
+    System.log(var_AuxResult[auxItem]);
+}</script>
+        <in-binding>
+            <bind name="var_AuxResult" type="Array/string" export-name="var_AuxResult"/>
+            <bind name="in_Table" type="string" export-name="in_Table"/>
+            <bind name="in_Database" type="string" export-name="in_Database"/>
+            <bind name="in_Field" type="string" export-name="in_Field"/>
+        </in-binding>
+        <out-binding/>
+        <description>Simple task with custom script capability.</description>
+        <position y="58.5" x="366.0"/>
+    </workflow-item>
+    <workflow-item name="item3" out-name="item2" type="task" script-module="com.vmware.iberia.se/getFromSQL" comparator="0">
+        <display-name>Action element</display-name>
+        <script encoded="false">//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.vmware.iberia.se").getFromSQL(SQLName,SQLTable,SQLField);
+</script>
+        <in-binding>
+            <bind name="SQLName" type="string" export-name="in_Database"/>
+            <bind name="SQLTable" type="string" export-name="in_Table"/>
+            <bind name="SQLField" type="string" export-name="in_Field"/>
+        </in-binding>
+        <out-binding>
+            <bind name="actionResult" type="Array/string" export-name="var_AuxResult"/>
+        </out-binding>
+        <description>Add a note to the workflow schema.</description>
+        <position y="60.0" x="260.0"/>
+    </workflow-item>
+    <presentation/>
+</ns2:workflow>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item1" object-name="workflow:name=generic" id="b61fb679-6c55-4508-9db9-ee6cf1145251" editor-version="2.0" version="0.0.0" api-version="6.0.0" restartMode="1" resumeFromFailedMode="0">
+    <display-name>Handler CMDB New Asset</display-name>
+    <position y="50.0" x="100.0"/>
+    <input>
+        <param name="in_projectId" type="string"/>
+        <param name="in_VMName" type="string"/>
+    </input>
+    <output/>
+    <attrib name="actionResult" type="boolean">
+        <value encoded="n">false</value>
+    </attrib>
+    <attrib name="var_SQLName" type="string">
+        <value encoded="n">vRAExtensibility</value>
+    </attrib>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="50.0" x="300.0"/>
+    </workflow-item>
+    <workflow-item name="item1" out-name="item0" type="task" script-module="com.vmware.iberia.se/CMDB_NewAsset" comparator="0">
+        <display-name>Action element</display-name>
+        <script encoded="false">//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.vmware.iberia.se").CMDB_NewAsset(SQLName,CAS_Project,VM_NAME);
+</script>
+        <in-binding>
+            <bind name="SQLName" type="string" export-name="var_SQLName">
+                <description>DB registered at vRO</description>
+            </bind>
+            <bind name="CAS_Project" type="string" export-name="in_projectId">
+                <description></description>
+            </bind>
+            <bind name="VM_NAME" type="string" export-name="in_VMName">
+                <description></description>
+            </bind>
+        </in-binding>
+        <out-binding>
+            <bind name="actionResult" type="boolean" export-name="actionResult"/>
+        </out-binding>
+        <description>Add a note to the workflow schema.</description>
+        <position y="60.0" x="170.0"/>
+    </workflow-item>
+    <presentation/>
+</ns2:workflow>

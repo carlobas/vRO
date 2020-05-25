@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item1" object-name="workflow:name=generic" id="45c04987-5569-48ec-a7e9-227b5329be96" editor-version="2.0" version="1.0.0" api-version="6.0.0" allowed-operations="vef" restartMode="1" resumeFromFailedMode="0">
+    <display-name>IBSE DNS Delete record</display-name>
+    <description>Receives the request from Cloud Assembly to Delete VM ip address at DNS Server (by default iberia.local)</description>
+    <position y="50.0" x="100.0"/>
+    <input>
+        <param name="inputProperties" type="Properties"/>
+    </input>
+    <output/>
+    <attrib name="var_VMName" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <attrib name="var_VMIP" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <attrib name="var_DNSZone" type="string">
+        <value encoded="n">iberia.local</value>
+    </attrib>
+    <attrib name="var_DNSSubdomain" type="string">
+        <value encoded="n">k8s</value>
+    </attrib>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="50.0" x="410.0"/>
+    </workflow-item>
+    <workflow-item name="item1" out-name="item2" type="task" comparator="0">
+        <display-name>Read from CAS</display-name>
+        <script encoded="false">var strVMs = new Array();
+var aIPs = new Array();
+var pProperties = new Properties();
+var auxStr;
+
+//Get VM. We are getting VM name at inventory (not hostname), we expect VM Name &amp; Hostname are the same
+System.log("Get VM Name");
+strVMs = inputProperties.get("resourceNames");
+if (strVMs.length &gt; 0){
+    var_VMName = strVMs[0];
+    System.log("VM name found: " +var_VMName);
+}else{
+    System.error("VM name can't be recovered");
+    throw("VM name can't be recovered from CAS properties");
+}
+
+//Get IP. We only get first IP of first ethernet
+aIPs = inputProperties.get("addresses");
+if (aIPs.length &gt; 0){
+    if (aIPs[0].length &gt; 0){
+        var_VMIP = aIPs[0][0];
+    }else{
+        System.error("Address for eth0 can't be parsed from CAs properties");
+        throw("Address for eth0 can't be parsed from CAs properties");
+    }
+}else{
+    System.error("Address can't be parsed from CAs properties");
+    throw("Address can't be parsed from CAs properties");
+}
+
+/*Looking for DNS zone &amp; subdomain. Not mandatory parámeters
+    cas.iberiase.dns.zone
+    cas.iberiase.dns.subdomain
+*/
+pProperties = inputProperties.get("customProperties");
+if (pProperties.get("cas.iberiase.dns.zone") != null &amp;&amp; pProperties.get("cas.iberiase.dns.zone") != ""){
+    var_DNSZone = pProperties.get("cas.iberiase.dns.zone");
+    System.log("DNS zone found: " +var_DNSZone);
+}
+if (pProperties.get("cas.iberiase.dns.subdomain") != null &amp;&amp; pProperties.get("cas.iberiase.dns.subdomain") != ""){
+    var_DNSSubdomain = pProperties.get("cas.iberiase.dns.subdomain");
+    System.log("DNS subdomain found: " +var_DNSSubdomain);
+}</script>
+        <in-binding>
+            <bind name="inputProperties" type="Properties" export-name="inputProperties"/>
+            <bind name="var_DNSZone" type="string" export-name="var_DNSZone"/>
+            <bind name="var_DNSSubdomain" type="string" export-name="var_DNSSubdomain"/>
+        </in-binding>
+        <out-binding>
+            <bind name="var_VMName" type="string" export-name="var_VMName"/>
+            <bind name="var_VMIP" type="string" export-name="var_VMIP"/>
+            <bind name="var_DNSZone" type="string" export-name="var_DNSZone"/>
+            <bind name="var_DNSSubdomain" type="string" export-name="var_DNSSubdomain"/>
+        </out-binding>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="170.0"/>
+    </workflow-item>
+    <workflow-item name="item2" out-name="item0" type="link" linked-workflow-id="d3e064a9-2ec0-4bc4-a400-e7860de4ed46" comparator="0">
+        <display-name>Workflow element</display-name>
+        <script encoded="false"></script>
+        <in-binding>
+            <bind name="Zone" type="string" export-name="var_DNSZone"/>
+            <bind name="Subdomain" type="string" export-name="var_DNSSubdomain"/>
+            <bind name="Hostname" type="string" export-name="var_VMName"/>
+            <bind name="IP" type="string" export-name="var_VMIP"/>
+        </in-binding>
+        <out-binding/>
+        <description> </description>
+        <position y="60.0" x="276.0"/>
+    </workflow-item>
+    <presentation/>
+</ns2:workflow>

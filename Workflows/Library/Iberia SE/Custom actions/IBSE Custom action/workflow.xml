@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item1" object-name="workflow:name=generic" id="ead5a076-0615-4f3c-abaa-c6987f4c0b59" editor-version="2.0" version="0.0.0" api-version="6.0.0" restartMode="1" resumeFromFailedMode="0">
+    <display-name>IBSE Custom action</display-name>
+    <position y="50.0" x="100.0"/>
+    <input>
+        <param name="inputProperties" type="Properties"/>
+    </input>
+    <output/>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="50.0" x="300.0"/>
+    </workflow-item>
+    <workflow-item name="item1" out-name="item0" type="task" comparator="0">
+        <display-name>Scriptable task</display-name>
+        <script encoded="false">var auxProperties = __metadata_resourceProperties;
+
+System.log("Action request for " +auxProperties.get("resourceName"));
+System.log("VM Config:");
+System.log("CPU: " +auxProperties.get("cpuCount"));
+System.log("Total Mem GB: " +auxProperties.get("totalMemoryMB"));
+System.log("Provision disk GB: " +auxProperties.get("provisionGB"));
+System.log("vSphere ID: " +auxProperties.get("__moref"));</script>
+        <in-binding/>
+        <out-binding/>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.5" x="170.0"/>
+    </workflow-item>
+    <presentation/>
+</ns2:workflow>

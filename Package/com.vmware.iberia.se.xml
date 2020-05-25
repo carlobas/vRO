@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<package>
+<description><![CDATA[Demo scripts & workflows]]></description>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='158b8aaf-489f-44f5-832e-185952f9b259'&dunesName='Action'&name='getRandomPort'&category='com.vmware.iberia.se']]></elm>
+</package>

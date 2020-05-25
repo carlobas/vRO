@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item1" object-name="workflow:name=generic" id="9dc65fde-9b08-4a88-a557-4fc8c8e244ce" editor-version="2.0" version="0.0.0" api-version="6.0.0" restartMode="1" resumeFromFailedMode="0">
+    <display-name>Test</display-name>
+    <position y="50.0" x="100.0"/>
+    <input/>
+    <output/>
+    <attrib name="var_SQL" type="string">
+        <value encoded="n">vRAExtensibility</value>
+    </attrib>
+    <attrib name="var_CAS" type="string">
+        <value encoded="n">Project</value>
+    </attrib>
+    <attrib name="var_VM" type="string">
+        <value encoded="n">VM</value>
+    </attrib>
+    <attrib name="actionResult" type="boolean">
+        <value encoded="n">false</value>
+    </attrib>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="42.11145618000168" x="386.7739820199815"/>
+    </workflow-item>
+    <workflow-item name="item1" out-name="item2" type="task" comparator="0">
+        <display-name>Scriptable task</display-name>
+        <script encoded="false">var auxProperties = new Properties();
+auxProperties.put("Uno", "UnoValor");
+auxProperties.put("dos", "DosValor");
+
+for (var auxKey in auxProperties){
+    System.log(auxKey);
+    System.log(auxProperties.get(auxKey));
+}</script>
+        <in-binding/>
+        <out-binding/>
+        <description>Simple task with custom script capability.</description>
+        <position y="70.0" x="150.0"/>
+    </workflow-item>
+    <workflow-item name="item2" out-name="item0" type="task" script-module="com.vmware.iberia.se/CMDB_NewAsset" comparator="0">
+        <display-name>Action element</display-name>
+        <script encoded="false">//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.vmware.iberia.se").CMDB_NewAsset(SQLName,CAS_Project,VM_NAME);
+</script>
+        <in-binding>
+            <bind name="SQLName" type="string" export-name="var_SQL">
+                <description>DB registered at vRO</description>
+            </bind>
+            <bind name="CAS_Project" type="string" export-name="var_CAS">
+                <description></description>
+            </bind>
+            <bind name="VM_NAME" type="string" export-name="var_VM">
+                <description></description>
+            </bind>
+        </in-binding>
+        <out-binding>
+            <bind name="actionResult" type="boolean" export-name="actionResult"/>
+        </out-binding>
+        <description>Add a note to the workflow schema.</description>
+        <position y="66.05572809000084" x="243.38699100999077"/>
+    </workflow-item>
+    <presentation/>
+</ns2:workflow>

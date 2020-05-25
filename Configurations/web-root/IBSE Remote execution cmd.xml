@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<config-element id="9d4d0ff9-0b5d-4a68-9cc2-867f5968e65c" version="1.0.0">
+  <display-name><![CDATA[IBSE Remote execution cmd]]></display-name>
+  <atts>
+    <att name="SessionUser" type="string" read-only="false">
+      <value encoded="n"><![CDATA[domain_joiner@iberia.local]]></value>
+    </att>
+    <att name="SessionUserPassword" type="SecureString" read-only="false">
+      <value encoded="n"><![CDATA[__NULL__]]></value>
+    </att>
+    <att name="RemoteHost" type="VC:VirtualMachine" read-only="false">
+      <value encoded="n"><![CDATA[dunes://service.dunes.ch/CustomSDKObject?id='vcenter.regiona.iberia.local%2Cid:vm-2328'&dunesName='VC:VirtualMachine']]></value>
+      <description><![CDATA[Remote host where script and/or command will be executed]]></description>
+    </att>
+  </atts>
+</config-element>

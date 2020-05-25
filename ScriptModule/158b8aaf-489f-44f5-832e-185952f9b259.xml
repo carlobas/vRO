@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getRandomPort" result-type="number" api-version="6.0.0" id="158b8aaf-489f-44f5-832e-185952f9b259" version="1.0.0" category-name="com.vmware.iberia.se">
+  <description><![CDATA[basic function to get Random port]]></description>
+  <param n="inPortLow" t="number"><![CDATA[Port min]]></param>
+  <param n="inPortHigh" t="number"><![CDATA[Port max]]></param>
+  <script encoded="false"><![CDATA[//Devuelve un número entero entre el Max y Min pasado como parámetro
+//Se suma 1 a inPortHigh por que la función random devuelve un aleatorio entre 0 y 1, pero nunca el 1
+
+var auxPort = Math.floor(Math.random() * ((inPortHigh + 1) - inPortLow) + inPortLow);
+System.log(auxPort.toString());
+return auxPort;]]></script>
+</dunes-script-module>

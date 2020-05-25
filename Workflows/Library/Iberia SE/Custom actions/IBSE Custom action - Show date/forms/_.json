@@ -1,0 +1,1 @@
+{"schema":{"in_Date":{"id":"in_Date","type":{"dataType":"dateTime"},"label":"in_Date","constraints":{"required":false}}},"layout":{"pages":[{"id":"page_8yg53psn","title":"General","sections":[{"id":"section_xothd92m","fields":[{"id":"in_Date","display":"dateTime"}]}]}]},"itemId":""}

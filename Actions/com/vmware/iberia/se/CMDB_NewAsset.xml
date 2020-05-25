@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="CMDB_NewAsset" result-type="boolean" api-version="6.0.0" id="bd9fa3d7-2c4d-48e5-8492-196ed2df0f1b" version="1.0.0" category-name="com.vmware.iberia.se">
+  <param n="SQLName" t="string"><![CDATA[DB registered at vRO]]></param>
+  <param n="CAS_Project" t="string"><![CDATA[]]></param>
+  <param n="VM_NAME" t="string"><![CDATA[]]></param>
+  <script encoded="false"><![CDATA[var auxDBs = SQLDatabaseManager.getDatabases();
+var activeDB = null;
+var auxRecords = null;
+var auxQuery = "";
+
+for (var item in auxDBs){
+	System.log(auxDBs[item].name);
+	if (auxDBs[item].name == SQLName){
+	    System.log("Database found");
+		activeDB = auxDBs[item];
+	}
+}
+
+if (activeDB == null){
+    System.log("Error: DB not found (" +SQLName +")");
+    return false;
+}else{
+    //Inserting new record
+    auxQuery = "INSERT INTO CMDB (CAS_PROJECT, VM_NAME, ASSET_STATUS) ";
+    auxQuery += "VALUES ('" +CAS_Project +"','" +VM_NAME +"','CREATED')";
+    System.log(auxQuery);
+    auxRecords = activeDB.executeCustomQuery(auxQuery);
+    if (auxRecords != 1){
+        System.log("Error, assest not created");
+        return false;
+    }else{
+        System.log("Asset created successfully");
+    }
+}
+return true;]]></script>
+</dunes-script-module>

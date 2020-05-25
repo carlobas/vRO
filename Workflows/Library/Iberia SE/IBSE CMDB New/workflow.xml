@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item1" object-name="workflow:name=generic" id="daea9ba0-7607-45cb-b64f-859a883cac8c" editor-version="2.0" version="1.0.0" api-version="6.0.0" restartMode="1" resumeFromFailedMode="0">
+    <display-name>IBSE CMDB New</display-name>
+    <position y="50.0" x="100.0"/>
+    <input>
+        <param name="inputProperties" type="Properties"/>
+    </input>
+    <output/>
+    <attrib name="str_ProjectID" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <attrib name="strVMs" type="Array/string">
+        <value encoded="n">[]</value>
+    </attrib>
+    <attrib name="auxCustomProperties" type="Properties">
+        <value encoded="n">#[##]#</value>
+    </attrib>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="50.0" x="400.0"/>
+    </workflow-item>
+    <workflow-item name="item1" out-name="item2" type="task" comparator="0">
+        <display-name>Read properties from CAS</display-name>
+        <script encoded="false">var auxInt = 0;
+//Get Project ID
+System.log("Parsing CAS parameters");
+System.log("Project ID:" +inputParameters.get("projectId"));
+str_ProjectID = inputParameters.get("projectId");
+System.log("Component Type:" +inputParameters.get("componentTypeId"));
+
+//Get VM List
+System.log("VM List");
+strVMs = inputParameters.get("resourceNames");
+for (auxInt = 0; auxInt &lt; strVMs.length; auxInt++){
+    System.log(auxInt +" " +strVMs[auxInt]);
+}
+
+//Only show properties. They won't be saved
+System.log("Project properties");
+auxCustomProperties = inputParameters.get("customProperties");
+for (var auxKey in auxCustomProperties){
+    System.log("Key: " +auxKey +" Value: " +auxCustomProperties.get(auxKey));
+}</script>
+        <in-binding>
+            <bind name="inputParameters" type="Properties" export-name="inputProperties"/>
+        </in-binding>
+        <out-binding>
+            <bind name="str_ProjectID" type="string" export-name="str_ProjectID"/>
+            <bind name="strVMs" type="Array/string" export-name="strVMs"/>
+            <bind name="auxCustomProperties" type="Properties" export-name="auxCustomProperties"/>
+        </out-binding>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="160.0"/>
+    </workflow-item>
+    <workflow-item name="item2" out-name="item0" type="foreach" comparator="0">
+        <display-name>Foreach element</display-name>
+        <in-binding>
+            <bind name="in_projectId" type="string" export-name="str_ProjectID"/>
+            <bind name="in_VMName" type="Array/string" export-name="*strVMs"/>
+        </in-binding>
+        <out-binding/>
+        <reference id="b61fb679-6c55-4508-9db9-ee6cf1145251" type="Workflow"/>
+        <position y="60.0" x="270.0"/>
+    </workflow-item>
+    <presentation/>
+</ns2:workflow>

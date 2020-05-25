@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getVMByName" result-type="VC:VirtualMachine" api-version="6.0.0" id="452c52e6-cdc0-493f-a2c7-90571ee3cdc1" version="1.0.0" category-name="com.vmware.iberia.se">
+  <param n="name" t="string"><![CDATA[]]></param>
+  <script encoded="false"><![CDATA[var allVms = VcPlugin.getAllVirtualMachines();
+System.log("Looking for " +name);
+System.log("Num VMs: " +allVms.length);
+for (var I = 0; I < allVms.length; I++) {
+    System.log(allVms[I].name);
+    if (allVms[I].name.toLowerCase() === name.toLowerCase()) {
+        return allVms[I];
+    }
+}
+return null;]]></script>
+</dunes-script-module>

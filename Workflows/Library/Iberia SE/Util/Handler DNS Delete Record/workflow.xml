@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item2" object-name="workflow:name=generic" id="d3e064a9-2ec0-4bc4-a400-e7860de4ed46" editor-version="2.0" version="1.0.0" api-version="6.0.0" allowed-operations="vef" restartMode="1" resumeFromFailedMode="0">
+    <display-name>Handler DNS Delete Record</display-name>
+    <description>Delete record in dns server. This workflow avoids to use DC directly, instead it uses a jump server (powershell.regiona.iberia.local). The workflow can delete Forward &amp; reverse zone entry</description>
+    <position y="50.0" x="100.0"/>
+    <input>
+        <param name="Zone" type="string"/>
+        <param name="Subdomain" type="string"/>
+        <param name="Hostname" type="string"/>
+        <param name="IP" type="string"/>
+    </input>
+    <output/>
+    <attrib name="var_SessionUser" type="string" conf-id="9d4d0ff9-0b5d-4a68-9cc2-867f5968e65c" conf-key="SessionUser">
+        <description>User for remote execution</description>
+    </attrib>
+    <attrib name="var_SessionUserPassword" type="SecureString" conf-id="9d4d0ff9-0b5d-4a68-9cc2-867f5968e65c" conf-key="SessionUserPassword">
+        <description>Password for remote user execution</description>
+    </attrib>
+    <attrib name="var_RemoteHost" type="VC:VirtualMachine" conf-id="9d4d0ff9-0b5d-4a68-9cc2-867f5968e65c" conf-key="RemoteHost">
+        <description>Remote host where command will be executed</description>
+    </attrib>
+    <attrib name="var_DNSRemoteHost" type="string">
+        <value encoded="n">labdc01.iberia.local</value>
+        <description>DNS Server</description>
+    </attrib>
+    <attrib name="var_DNSZone" type="string">
+        <value encoded="n">iberia.local</value>
+        <description>Zone at DNS server</description>
+    </attrib>
+    <attrib name="var_DNSSubdomain" type="string">
+        <value encoded="n">k8s</value>
+        <description>Register in a "subdomain" into the zone. Example: to register test.k8s.iberia.local, zone is iberia.local and subdomain is k8s</description>
+    </attrib>
+    <attrib name="var_DNSRecordType" type="string">
+        <value encoded="n">A</value>
+        <description>By defult record type will be A. It can be changed adding input variable to update this variable</description>
+    </attrib>
+    <attrib name="var_DNSCommand" type="string">
+        <value encoded="n">c:\windows\system32\dnscmd.exe</value>
+        <description></description>
+    </attrib>
+    <attrib name="var_DNSCommandInteractive" type="boolean">
+        <value encoded="n">false</value>
+        <description>Shows if the command execution session will be interactive or not </description>
+    </attrib>
+    <attrib name="result" type="number">
+        <value encoded="n"/>
+    </attrib>
+    <attrib name="var_DNSCommandParameters" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <attrib name="var_DNSCommandParametersPTR" type="string">
+        <value encoded="n"/>
+    </attrib>
+    <attrib name="var_DNSDeleteReverseZone" type="boolean">
+        <value encoded="n">true</value>
+    </attrib>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="50.0" x="660.0"/>
+    </workflow-item>
+    <workflow-item name="item1" out-name="item8" type="link" linked-workflow-id="C98080808080808080808080808080805E80808001322751030482b80adf61e7c" comparator="0">
+        <display-name>Remove forward</display-name>
+        <script encoded="false"></script>
+        <in-binding>
+            <bind name="vmUsername" type="string" export-name="var_SessionUser">
+                <description>Username for the virtual machine</description>
+            </bind>
+            <bind name="vmPassword" type="SecureString" export-name="var_SessionUserPassword">
+                <description>Password for the virtual machine</description>
+            </bind>
+            <bind name="vm" type="VC:VirtualMachine" export-name="var_RemoteHost">
+                <description>Virtual machine</description>
+            </bind>
+            <bind name="interactiveSession" type="boolean" export-name="var_DNSCommandInteractive">
+                <description>This is set to true if the client wants an interactive session in the guest.</description>
+            </bind>
+            <bind name="programPath" type="string" export-name="var_DNSCommand">
+                <description>The absolute path to the program to start. For Linux guest operating systems, /bin/bash is used to start the program.  For Solaris guest operating systems, /bin/bash is used to start the program if it exists. Otherwise /bin/sh is used. If /bin/sh is used, then the process ID returned will be that of the shell used to start the program, rather than the program itself, due to the differences in how /bin/sh and /bin/bash work. This PID will still be usable for watching the process with this API to find its exit code and elapsed time. </description>
+            </bind>
+            <bind name="arguments" type="string" export-name="var_DNSCommandParameters">
+                <description>The arguments to the program. In Linux and Solaris guest operating systems, the program will be executed by a guest shell. This allows stdio redirection, but may also require that characters which must be escaped to the shell also be escaped on the command line provided. For Windows guest operating systems, prefixing the command with "cmd /c" can provide stdio redirection. </description>
+            </bind>
+            <bind name="workingDirectory" type="string" export-name="">
+                <description>The absolute path of the working directory for the program to be run. VMware recommends explicitly setting the working directory for the program to be run. If this value is unset or is an empty string, the behavior depends on the guest operating system. For Linux guest operating systems, if this value is unset or is an empty string, the working directory will be the home directory of the user associated with the guest authentication. For other guest operating systems, if this value is unset, the behavior is unspecified. </description>
+            </bind>
+            <bind name="environment" type="Array/string" export-name="">
+                <description>An array of environment variables, specified in the guest OS notation (eg PATH=c:\bin;c:\windows\system32 or LD_LIBRARY_PATH=/usr/lib:/lib), to be set for the program being run. Note that these are not additions to the default environment variables; they define the complete set available to the program. If none are specified the values are guest dependent. </description>
+            </bind>
+        </in-binding>
+        <out-binding>
+            <bind name="result" type="number" export-name="result">
+                <description>The pid of the program started.</description>
+            </bind>
+        </out-binding>
+        <description> </description>
+        <position y="60.0" x="300.0"/>
+    </workflow-item>
+    <workflow-item name="item2" out-name="item1" type="task" comparator="0">
+        <display-name>Update values</display-name>
+        <script encoded="false">//Validate inputs and compose command
+var re = new RegExp("^((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){3}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})$");
+var aIP;
+var auxReverseZone;
+
+System.log("Hostname: " +Hostname);
+System.log("IP: " +IP);
+if (IP.match(re)){
+    System.log("This is a valid IP");
+}else{
+    System.error("IP doesn't match with regular expresion");
+    throw("Error IP format (" +IP +")");
+}
+
+//Zone must exist
+if (Zone != "") var_DNSZone = Zone;
+//Subdomain can be void, so the record will be registered in root zone
+var_DNSSubdomain = Subdomain;
+
+/*
+Removes forward and reverse zone entry
+dnscmd labdc01.iberia.local /RecordDelete iberia.local test.k8s A /f
+dnscmd labdc01.iberia.local /RecordDelete 14.10.10.in-addr.arpa 150 PTR /f
+*/
+//Delete DNS Command
+var_DNSCommandParameters = var_DNSRemoteHost + " /RecordDelete " +var_DNSZone +" " +Hostname;
+if (var_DNSSubdomain != "") var_DNSCommandParameters += "." +var_DNSSubdomain;
+var_DNSCommandParameters += " A /f ";
+
+//Delete DNS Reverse Command
+aIP = IP.split(".");
+auxReverseZone = aIP[2] +"." +aIP[1] +"." +aIP[0] +".in-addr.arpa";
+var_DNSCommandParametersPTR = var_DNSRemoteHost +" /RecordDelete " +auxReverseZone +" " +aIP[3] +" PTR /f";</script>
+        <in-binding>
+            <bind name="Zone" type="string" export-name="Zone"/>
+            <bind name="Subdomain" type="string" export-name="Subdomain"/>
+            <bind name="Hostname" type="string" export-name="Hostname"/>
+            <bind name="IP" type="string" export-name="IP"/>
+            <bind name="var_DNSRemoteHost" type="string" export-name="var_DNSRemoteHost"/>
+            <bind name="var_DNSSubdomain" type="string" export-name="var_DNSSubdomain"/>
+            <bind name="var_DNSRecordType" type="string" export-name="var_DNSRecordType"/>
+            <bind name="var_DNSZone" type="string" export-name="var_DNSZone"/>
+        </in-binding>
+        <out-binding>
+            <bind name="var_DNSZone" type="string" export-name="var_DNSZone"/>
+            <bind name="var_DNSSubdomain" type="string" export-name="var_DNSSubdomain"/>
+            <bind name="var_DNSCommandParameters" type="string" export-name="var_DNSCommandParameters"/>
+            <bind name="var_DNSCommandParametersPTR" type="string" export-name="var_DNSCommandParametersPTR"/>
+        </out-binding>
+        <description></description>
+        <position y="60.0" x="160.0"/>
+    </workflow-item>
+    <workflow-item name="item3" out-name="item0" type="task" comparator="0">
+        <display-name>Show Result</display-name>
+        <script encoded="false">System.log("Create DNS Record");
+System.log("DNS Command:" +var_DNSCommand);
+System.log("DNS Command paramters: " +var_DNSCommandParameters);
+System.log("DNS Command output: " +result);</script>
+        <in-binding>
+            <bind name="var_DNSCommand" type="string" export-name="var_DNSCommand"/>
+            <bind name="result" type="number" export-name="result"/>
+            <bind name="var_DNSCommandParameters" type="string" export-name="var_DNSCommandParameters"/>
+        </in-binding>
+        <out-binding/>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="500.0"/>
+    </workflow-item>
+    <workflow-item name="item6" out-name="item3" type="link" linked-workflow-id="C98080808080808080808080808080805E80808001322751030482b80adf61e7c" comparator="0">
+        <display-name>Remove Reverse</display-name>
+        <script encoded="false"></script>
+        <in-binding>
+            <bind name="vmUsername" type="string" export-name="var_SessionUser">
+                <description>Username for the virtual machine</description>
+            </bind>
+            <bind name="vmPassword" type="SecureString" export-name="var_SessionUserPassword">
+                <description>Password for the virtual machine</description>
+            </bind>
+            <bind name="vm" type="VC:VirtualMachine" export-name="var_RemoteHost">
+                <description>Virtual machine</description>
+            </bind>
+            <bind name="interactiveSession" type="boolean" export-name="var_DNSCommandInteractive">
+                <description>This is set to true if the client wants an interactive session in the guest.</description>
+            </bind>
+            <bind name="programPath" type="string" export-name="var_DNSCommand">
+                <description>The absolute path to the program to start. For Linux guest operating systems, /bin/bash is used to start the program.  For Solaris guest operating systems, /bin/bash is used to start the program if it exists. Otherwise /bin/sh is used. If /bin/sh is used, then the process ID returned will be that of the shell used to start the program, rather than the program itself, due to the differences in how /bin/sh and /bin/bash work. This PID will still be usable for watching the process with this API to find its exit code and elapsed time. </description>
+            </bind>
+            <bind name="arguments" type="string" export-name="var_DNSCommandParametersPTR">
+                <description>The arguments to the program. In Linux and Solaris guest operating systems, the program will be executed by a guest shell. This allows stdio redirection, but may also require that characters which must be escaped to the shell also be escaped on the command line provided. For Windows guest operating systems, prefixing the command with "cmd /c" can provide stdio redirection. </description>
+            </bind>
+            <bind name="workingDirectory" type="string" export-name="">
+                <description>The absolute path of the working directory for the program to be run. VMware recommends explicitly setting the working directory for the program to be run. If this value is unset or is an empty string, the behavior depends on the guest operating system. For Linux guest operating systems, if this value is unset or is an empty string, the working directory will be the home directory of the user associated with the guest authentication. For other guest operating systems, if this value is unset, the behavior is unspecified. </description>
+            </bind>
+            <bind name="environment" type="Array/string" export-name="">
+                <description>An array of environment variables, specified in the guest OS notation (eg PATH=c:\bin;c:\windows\system32 or LD_LIBRARY_PATH=/usr/lib:/lib), to be set for the program being run. Note that these are not additions to the default environment variables; they define the complete set available to the program. If none are specified the values are guest dependent. </description>
+            </bind>
+        </in-binding>
+        <out-binding>
+            <bind name="result" type="number" export-name="result">
+                <description>The pid of the program started.</description>
+            </bind>
+        </out-binding>
+        <description> </description>
+        <position y="120.0" x="500.0"/>
+    </workflow-item>
+    <workflow-item name="item8" out-name="item6" alt-out-name="item3" type="condition" comparator="0">
+        <display-name>Decision</display-name>
+        <script encoded="false">// Generated by the system, cannot be edited
+return (var_DNSDeleteReverseZone === true);</script>
+        <in-binding>
+            <bind name="var_DNSDeleteReverseZone" type="boolean" export-name="var_DNSDeleteReverseZone"/>
+        </in-binding>
+        <out-binding/>
+        <description>Custom decision based on a custom script.</description>
+        <condition name="var_DNSDeleteReverseZone" type="boolean" comparator="0" label="null"></condition>
+        <position y="110.0" x="360.0"/>
+    </workflow-item>
+    <presentation/>
+</ns2:workflow>

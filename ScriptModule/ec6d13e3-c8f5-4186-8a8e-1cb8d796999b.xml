@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getFromSQL" result-type="Array/string" api-version="6.0.0" id="ec6d13e3-c8f5-4186-8a8e-1cb8d796999b" version="1.0.0" category-name="com.vmware.iberia.se">
+  <description><![CDATA[Function ro recover data from SQL Server]]></description>
+  <param n="SQLName" t="string"><![CDATA[SQL Connection name]]></param>
+  <param n="SQLTable" t="string"><![CDATA[SQL Table]]></param>
+  <param n="SQLField" t="string"><![CDATA[SQL Field]]></param>
+  <script encoded="false"><![CDATA[var auxDBs = SQLDatabaseManager.getDatabases();
+var activeDB = null;
+var resultRecords = null;
+var returnData = new Array();
+
+for (var item in auxDBs){
+	System.log(auxDBs[item].name);
+	if (auxDBs[item].name == SQLName){
+	    System.log("Database found");
+		activeDB = auxDBs[item];
+	}
+}
+
+if (activeDB != null){
+		resultRecords = activeDB.readCustomQuery("Select * from " +SQLTable);
+}
+
+if (resultRecords != null){
+	for (var record in resultRecords){
+		returnData.push(resultRecords[record].getProperty(SQLField));
+		System.log(resultRecords[record].getProperty(SQLField).trim());
+	}
+}else{
+	System.log ("No result found");
+}
+return returnData]]></script>
+</dunes-script-module>
