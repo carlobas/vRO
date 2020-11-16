@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item1" object-name="workflow:name=generic" id="f5ffe585-3f7a-4f6a-9262-a721af05f6aa" editor-version="2.0" version="0.0.0" api-version="6.0.0" restartMode="1" resumeFromFailedMode="0">
+    <display-name>ConfigElementTest</display-name>
+    <position y="50.0" x="100.0"/>
+    <input/>
+    <output/>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="50.0" x="300.0"/>
+    </workflow-item>
+    <workflow-item name="item1" out-name="item0" type="task" comparator="0">
+        <display-name>Scriptable task</display-name>
+        <script encoded="false">var ConfElements = Server.getConfigurationElementCategoryWithPath("LNTest").configurationElements;&#13;
+for (var i in ConfElements)&#13;
+{&#13;
+if (ConfElements[i].name=="LNTest") var conf = ConfElements[i];&#13;
+}&#13;
+System.log(conf)&#13;
+var arr = conf.getAttributeWithKey("Name")&#13;
+var values = arr.value;&#13;
+for (var i in values)&#13;
+{&#13;
+    System.log(values[i])&#13;
+}</script>
+        <in-binding/>
+        <out-binding/>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="170.0"/>
+    </workflow-item>
+    <presentation/>
+</ns2:workflow>

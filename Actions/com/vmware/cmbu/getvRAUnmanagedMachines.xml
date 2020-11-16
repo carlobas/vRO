@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getvRAUnmanagedMachines" result-type="Array/Properties" api-version="6.0.0" id="73ffe3c8-706e-493b-9bac-12ca93e481a5" version="1.0.1" allowed-operations="evf" category-name="com.vmware.cmbu">
+  <description><![CDATA[Returns an array of Objects representing the vRA Unmanaged Machines]]></description>
+  <param n="vRAUrl" t="string"><![CDATA[vRealize Automation URL (e.g. https://vra-appliance.cmbu.local)]]></param>
+  <param n="vRAAccessToken" t="SecureString"><![CDATA[vRealize Automation Access Token]]></param>
+  <param n="vRAOnboardingPlanLink" t="string"/>
+  <param n="filterNames" t="Array/string"/>
+  <script encoded="false"><![CDATA[var dynamicHost = RESTHostManager.createHost("dynamicRequest");
+var restHost = RESTHostManager.createTransientHostFrom(dynamicHost);
+    restHost.operationTimeout = 60;
+    restHost.connectionTimeout = 30;
+    restHost.hostVerification = false;
+    restHost.url = vRAUrl;
+
+var requestMethod = "POST";
+var requestUri = "relocation/api/wo/query-unmanaged-machine";
+var requestHeaders = new Properties();
+    requestHeaders.put("Content-Type","application/json");
+    requestHeaders.put("Authorization","Bearer "+vRAAccessToken)
+var requestObj = new Object();
+    requestObj.planLink = vRAOnboardingPlanLink;
+    var expFields = new Array();
+        expFields.push("documentSelfLink");
+        expFields.push("name");
+    requestObj.expandFields = expFields;
+    requestObj.optionExcludePlanMachines = "true";
+if(filterNames.length > 0) {
+    var filters = new Array();
+    var filter = new Object();
+        filter.field = "NAME";
+        filter.values = filterNames;
+        filters.push(filter);
+    requestObj.filters = filters;
+}
+
+System.debug(JSON.stringify(requestObj, null, 4));
+
+var vRAUnmanagedMachines = new Array()
+
+function processRequestResult(requestObj, nextPageLink){
+    if(nextPageLink) {
+        requestObj.nextPageLink = nextPageLink;
+    }
+    requestContent = JSON.stringify(requestObj);
+    requestResult = System.getModule("com.vmware.cmbu").restRequest(restHost, requestMethod, requestContent, requestUri, requestHeaders, true);
+
+    if(requestResult["statusCode"] == "200") {
+        var contentAsString = requestResult["contentAsString"];
+        var responseObj = JSON.parse(contentAsString);
+    }
+
+    for(var key in responseObj.page.documents) {
+        System.debug("VM: "+responseObj.page.documents[key].name+" ("+responseObj.page.documents[key].documentSelfLink+")")
+        var machine = new Properties();
+            machine.put("name", responseObj.page.documents[key].name);
+            machine.put("link", responseObj.page.documents[key].documentSelfLink);
+        vRAUnmanagedMachines.push(machine);
+    }
+
+    if(responseObj.nextPageLink){
+        processRequestResult(requestObj, responseObj.nextPageLink);
+    }
+}
+processRequestResult(requestObj)
+
+return vRAUnmanagedMachines;]]></script>
+</dunes-script-module>

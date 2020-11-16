@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getVcResourceByDatacenter" result-type="Array/string" api-version="6.0.0" id="360f1e38-ebfc-42e2-a4ee-99595a1fc1ec" version="0.0.0" allowed-operations="evf" category-name="com.vmware.cmbu">
+  <param n="dataCenter" t="string"/>
+  <script encoded="false"><![CDATA[if(dataCenter != "") {
+    var dcObj
+    for each(var dc in Server.findAllForType("VC:Datacenter")) {
+        if(dc.name == dataCenter) {
+            dcObj = dc;
+            break;
+        }
+    }
+
+    var allClusters = new Array();  
+    
+    getAllClustersInFolder(dc.hostFolder);  
+    return allClusters;  
+} else {
+    return new Array();
+}
+
+function getAllClustersInFolder(folder) {  
+    var children = folder.childEntity;  
+    for (var i in children) {  
+        if (children[i] instanceof VcFolder) {  
+        getAllClustersInFolder(children[i]);  
+        }  
+        if (children[i] instanceof VcClusterComputeResource) { 
+            //var option = "/"+dataCenter+"/host/"+children[i].name+"/Resources";
+            allClusters.push(children[i].name);  
+        }  
+    }  
+}
+]]></script>
+</dunes-script-module>

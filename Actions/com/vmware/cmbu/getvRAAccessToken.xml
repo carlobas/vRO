@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getvRAAccessToken" result-type="SecureString" api-version="6.0.0" id="915b2b2d-556b-4ce7-8803-cbefae4a8b07" version="1.0.0" allowed-operations="evf" category-name="com.vmware.cmbu">
+  <description><![CDATA[Returns vRA Access Token]]></description>
+  <param n="vRAUrl" t="string"><![CDATA[vRealize Automation URL (e.g. https://vra-appliance.cmbu.local)]]></param>
+  <param n="vRAUser" t="string"><![CDATA[vRealize Automation User]]></param>
+  <param n="vRAPassword" t="SecureString"><![CDATA[vRealize Automation Password]]></param>
+  <script encoded="false"><![CDATA[var dynamicHost = RESTHostManager.createHost("dynamicRequest");
+var restHost = RESTHostManager.createTransientHostFrom(dynamicHost);
+    restHost.operationTimeout = 60;
+    restHost.connectionTimeout = 30;
+    restHost.hostVerification = false;
+    restHost.url = vRAUrl;
+var requestMethod = "POST";
+
+if(vRAUser.indexOf("@") > 0) {
+    // Use the IDP auth
+    var user = vRAUser.split("@");
+    System.debug("Logging in with user "+user[0]+" and domain "+user[1]);
+    var requestUri = "/csp/gateway/am/idp/auth/login?access_token";
+    var requestHeaders = new Properties();
+        requestHeaders.put("Content-Type","application/json");
+
+    var requestObj = new Object()      
+        requestObj.username = user[0];
+        requestObj.password = vRAPassword;
+        requestObj.domain   = user[1];
+} else {
+    var requestUri = "/csp/gateway/am/api/login?access_token";
+    var requestHeaders = new Properties();
+        requestHeaders.put("Content-Type","application/json");
+
+    var requestObj = new Object()
+        requestObj.username = vRAUser;
+        requestObj.password = vRAPassword;
+}
+
+var requestContent = JSON.stringify(requestObj);
+
+var requestResult = System.getModule("com.vmware.cmbu").restRequest(restHost, requestMethod, requestContent, requestUri, requestHeaders, true);
+
+/*for(var key in requestResult) {
+    System.debug(key+": "+requestResult[key]);
+}*/
+
+if(requestResult["statusCode"] == "200") {
+    var contentAsString = requestResult["contentAsString"];
+    responseObj = JSON.parse(contentAsString);
+    vRAAccessToken = responseObj.access_token;
+}
+
+return vRAAccessToken;]]></script>
+</dunes-script-module>

@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="deletevRAOnboardingPlan" result-type="boolean" api-version="6.0.0" id="4d4f8c4f-25ca-4c57-b9f8-67515691817e" version="1.0.0" allowed-operations="evf" category-name="com.vmware.cmbu">
+  <param n="vRAUrl" t="string"><![CDATA[vRealize Automation URL (e.g. https://vra-appliance.cmbu.local)]]></param>
+  <param n="vRAAccessToken" t="SecureString"><![CDATA[vRealize Automation Access Token]]></param>
+  <param n="vRAOnboardingPlanLink" t="string"/>
+  <script encoded="false"><![CDATA[var dynamicHost = RESTHostManager.createHost("dynamicRequest");
+var restHost = RESTHostManager.createTransientHostFrom(dynamicHost);
+    restHost.operationTimeout = 60;
+    restHost.connectionTimeout = 30;
+    restHost.hostVerification = false;
+    restHost.url = vRAUrl;
+
+var requestMethod = "DELETE";
+var requestUri = vRAOnboardingPlanLink;
+var requestHeaders = new Properties();
+    requestHeaders.put("Content-Type","application/json");
+    requestHeaders.put("Authorization","Bearer "+vRAAccessToken)
+
+var requestResult = System.getModule("com.vmware.cmbu").restRequest(restHost, requestMethod, null, requestUri, requestHeaders, true);
+
+/*for(var key in requestResult) {
+    System.debug(key+": "+requestResult[key]);
+}*/
+
+if(requestResult["statusCode"] == "202") {
+    return true;
+}
+
+return false;]]></script>
+</dunes-script-module>

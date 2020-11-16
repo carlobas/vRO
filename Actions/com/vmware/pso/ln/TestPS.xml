@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="TestPS" result-type="string" api-version="6.0.0" id="90a0337f-05e2-45f4-a9a1-1d442481cdd3" version="0.0.0" category-name="com.vmware.pso.ln">
+  <runtime><![CDATA[powercli:11-powershell-6.2]]></runtime>
+  <script encoded="false"><![CDATA[function Handler($context, $inputs) {
+
+    $inputsString = $inputs | ConvertTo-Json -Compress
+
+    Write-Host "Inputs were $inputsString"
+
+   $output="theStringValue"
+
+   return $output
+
+}]]></script>
+</dunes-script-module>

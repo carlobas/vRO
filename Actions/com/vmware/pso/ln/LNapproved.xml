@@ -1,0 +1,5 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="LNapproved" result-type="boolean" api-version="6.0.0" id="9381fc30-f208-4956-8016-fda90a6baa83" version="0.0.0" category-name="com.vmware.pso.ln">
+  <script encoded="false"><![CDATA[var approved=true;
+return approved]]></script>
+</dunes-script-module>

@@ -1,0 +1,1 @@
+{"schema":{"InVcSdkConnection":{"id":"InVcSdkConnection","type":{"dataType":"reference","referenceType":"VC:SdkConnection"},"label":"InVcSdkConnection","constraints":{"required":false}}},"layout":{"pages":[{"id":"page_pbvjqgl8","title":"General","sections":[{"id":"section_jofvca5k","fields":[{"id":"InVcSdkConnection","display":"valuePickerTree"}]}]}]},"itemId":""}

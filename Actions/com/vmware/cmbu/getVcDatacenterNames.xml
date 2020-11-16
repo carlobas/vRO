@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getVcDatacenterNames" result-type="Array/string" api-version="6.0.0" id="c9589b5e-26e9-4576-8fdf-f0c8d51481b3" version="0.0.1" allowed-operations="evf" category-name="com.vmware.cmbu">
+  <script encoded="false"><![CDATA[
+var dcNames = new Array();
+for each (var dC in Server.findAllForType("VC:Datacenter")) {
+    dcNames.push(dC.name);
+}
+System.debug("Found "+dcNames.length+" Datacenters");
+return dcNames;]]></script>
+</dunes-script-module>

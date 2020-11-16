@@ -1,0 +1,1 @@
+{"schema":{"HostSystem":{"id":"HostSystem","type":{"dataType":"reference","referenceType":"VC:HostSystem"},"label":"HostSystem","constraints":{"required":false}}},"layout":{"pages":[{"id":"page_a1ky13lo","title":"General","sections":[{"id":"section_hp91p3x3","fields":[{"id":"HostSystem","display":"valuePickerTree"}]}]}]},"itemId":""}

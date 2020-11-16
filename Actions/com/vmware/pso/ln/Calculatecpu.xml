@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="Calculatecpu" result-type="string" api-version="6.0.0" id="64cce2ca-ab12-4d4d-90ec-0c4e027720fc" version="0.0.0" category-name="com.vmware.pso.ln">
+  <param n="json" t="string"/>
+  <param n="resource" t="string"/>
+  <script encoded="false"><![CDATA[if (resource == "CPU") return JSON.parse(json).servers.specs.cpu
+if (resource == "MEM") return JSON.parse(json).servers.specs.memory]]></script>
+</dunes-script-module>

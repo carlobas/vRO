@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getVcNetworkNamesByDatacenter" result-type="Array/string" api-version="6.0.0" id="5daffd87-0942-40d1-9f8f-3226f0b7d024" version="0.0.0" allowed-operations="evf" category-name="com.vmware.cmbu">
+  <param n="dataCenter" t="string"/>
+  <script encoded="false"><![CDATA[if(dataCenter != "") {
+    var dcObj
+    for each(var dc in Server.findAllForType("VC:Datacenter")) {
+        if(dc.name == dataCenter) {
+            dcObj = dc;
+            break;
+        }
+    }
+    var arrPaths = new Array();
+    for each (network in dcObj.network) {
+        arrPaths.push(network.name);
+    }
+    return arrPaths.sort();
+} else {
+    return new Array();
+}]]></script>
+</dunes-script-module>

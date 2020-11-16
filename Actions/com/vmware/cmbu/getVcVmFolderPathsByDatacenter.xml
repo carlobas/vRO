@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getVcVmFolderPathsByDatacenter" result-type="Array/string" api-version="6.0.0" id="33272faf-fc4a-4f06-8c05-c64c5ce17e38" version="0.0.0" allowed-operations="evf" category-name="com.vmware.cmbu">
+  <param n="dataCenter" t="string"/>
+  <script encoded="false"><![CDATA[if(dataCenter != "") {
+    var dcObj
+    for each(var dc in Server.findAllForType("VC:Datacenter")) {
+        if(dc.name == dataCenter) {
+            dcObj = dc;
+            break;
+        }
+    }
+    var arrPaths = new Array();
+    getAllVMFoldersInFolder(dc.vmFolder, "/"+dataCenter+"/vm"); 
+    return arrPaths.sort();
+} else {
+    return new Array();
+}
+
+function getAllVMFoldersInFolder(folder,path) {  
+    var children = folder.childEntity;  
+    for (var i in children) {  
+        if (children[i] instanceof VcFolder) {  
+            myPath = path+"/"+children[i].name;
+            arrPaths.push(myPath);
+            getAllVMFoldersInFolder(children[i],myPath);  
+        }  
+    }  
+}]]></script>
+</dunes-script-module>

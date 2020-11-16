@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="PowerShellAction" result-type="Properties" api-version="6.0.0" id="f20d9bef-5d8a-4fa2-9705-70ab5366d874" version="0.0.0" category-name="com.vmware.pso.ln" memory-limit="256000000">
+  <runtime><![CDATA[powercli:11-powershell-6.2]]></runtime>
+  <script encoded="false"><![CDATA[function Handler($context, $inputs) {
+$ht1 = @{ A = 'a'; B = 'b'}
+$theObject = new-object psobject -Property $ht1
+write-host $theObject
+return $theObject
+}]]></script>
+</dunes-script-module>

@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="createvRAOnboardingDeployment" result-type="string" api-version="6.0.0" id="5a53fe01-b4ce-42ee-87f0-1f4267130733" version="1.0.0" allowed-operations="evf" category-name="com.vmware.cmbu">
+  <param n="vRAUrl" t="string"><![CDATA[vRealize Automation URL (e.g. https://vra-appliance.cmbu.local)]]></param>
+  <param n="vRAAccessToken" t="SecureString"><![CDATA[vRealize Automation Access Token]]></param>
+  <param n="vRAOnboardingDeploymentName" t="string"><![CDATA[vRealize Onboarding Deployment Name]]></param>
+  <param n="vRAOnboardingPlanLink" t="string"><![CDATA[vRealize Onboarding Plan Link]]></param>
+  <param n="vRAConsumerDeploymentLink" t="string"><![CDATA[vRealize Onboarding Deployment Link]]></param>
+  <script encoded="false"><![CDATA[var dynamicHost = RESTHostManager.createHost("dynamicRequest");
+var restHost = RESTHostManager.createTransientHostFrom(dynamicHost);
+    restHost.operationTimeout = 60;
+    restHost.connectionTimeout = 30;
+    restHost.hostVerification = false;
+    restHost.url = vRAUrl;
+
+var requestMethod = "POST";
+var requestUri = "relocation/onboarding/deployment";
+var requestHeaders = new Properties();
+    requestHeaders.put("Content-Type","application/json");
+    requestHeaders.put("Authorization","Bearer "+vRAAccessToken)
+var requestObj = new Object();
+    requestObj.name = vRAOnboardingDeploymentName;
+    requestObj.planLink = vRAOnboardingPlanLink;
+    if(vRAConsumerDeploymentLink) {
+        requestObj.consumerDeploymentLink = vRAConsumerDeploymentLink;
+    }
+
+var requestContent = JSON.stringify(requestObj);
+
+var requestResult = System.getModule("com.vmware.cmbu").restRequest(restHost, requestMethod, requestContent, requestUri, requestHeaders, true);
+
+/*for(var key in requestResult) {
+    System.debug(key+": "+requestResult[key]);
+}*/
+
+if(requestResult["statusCode"] == "200") {
+    var contentAsString = requestResult["contentAsString"];
+    var responseObj = JSON.parse(contentAsString);
+}
+var vRAOnboardingDeploymentLink = responseObj.documentSelfLink;
+return vRAOnboardingDeploymentLink;]]></script>
+</dunes-script-module>

@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getValuesFromConfElement" result-type="Array/string" api-version="6.0.0" id="90791b62-207b-4647-b66b-def920db07af" version="0.0.0" category-name="com.vmware.pso.ln">
+  <script encoded="false"><![CDATA[var ConfElements = Server.getConfigurationElementCategoryWithPath("LNTest").configurationElements;
+for (var i in ConfElements)
+{
+if (ConfElements[i].name=="LNTest") var conf = ConfElements[i];
+}
+System.log(conf)
+var arr = conf.getAttributeWithKey("Name")
+var values = arr.value;
+return values;]]></script>
+</dunes-script-module>

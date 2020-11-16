@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<config-element id="f55ab565-11e1-4e4b-99ff-9b8ae2b6b43e" version="0.0.0">
+  <display-name><![CDATA[LNTest]]></display-name>
+  <atts>
+    <att name="Name" type="Array/string" read-only="false">
+      <value encoded="n"><![CDATA[[12:string#Test1,12:string#Test2]]]></value>
+    </att>
+  </atts>
+</config-element>

@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getvRAMachines" result-type="Array/Properties" api-version="6.0.0" id="d4da022f-4137-4f95-b9d4-76a0010c3a2d" version="1.0.0" allowed-operations="evf" category-name="com.vmware.cmbu">
+  <description><![CDATA[Returns an array of Objects representing the vRA Virtual Machines. Optional filter string.]]></description>
+  <param n="vRAUrl" t="string"><![CDATA[vRealize Automation URL (e.g. https://vra-appliance.cmbu.local)]]></param>
+  <param n="vRAAccessToken" t="SecureString"><![CDATA[vRealize Automation Access Token]]></param>
+  <param n="nameFilterString" t="Array/string"><![CDATA[(optional) String Array of VM Names]]></param>
+  <script encoded="false"><![CDATA[var dynamicHost = RESTHostManager.createHost("dynamicRequest");
+var restHost = RESTHostManager.createTransientHostFrom(dynamicHost);
+    restHost.operationTimeout = 60;
+    restHost.connectionTimeout = 30;
+    restHost.hostVerification = false;
+    restHost.url = vRAUrl;
+
+var requestMethod = "GET";
+var requestUri = "iaas/api/machines";
+var requestHeaders = new Properties();
+    requestHeaders.put("Content-Type","application/json");
+    requestHeaders.put("Authorization","Bearer "+vRAAccessToken)
+var requestContent = null
+
+if(nameFilterString.length > 0) {
+    //requestUri = requestUri+"?$filter=((name%20eq%20%27*"+nameFilterString+"*%27))";
+
+    var filterArray = new Array();
+    for each (filterName in nameFilterString) {
+        filterArray.push("(name%20eq%20%27*"+filterName+"*%27)");
+    }
+    var filterString ="?$filter=(";
+        filterString+=filterArray.join("%20or%20");
+        filterString+=")";
+    
+    requestUri = requestUri+filterString
+} else {
+    requestUri = requestUri+"?$top=1000&$skip=0";
+}
+
+var requestResult = System.getModule("com.vmware.cmbu").restRequest(restHost, requestMethod, requestContent, requestUri, requestHeaders, true);
+
+/*for(var key in requestResult) {
+    System.debug(key+": "+requestResult[key]);
+}*/
+
+if(requestResult["statusCode"] == "200") {
+    var contentAsString = requestResult["contentAsString"];
+    var responseObj = JSON.parse(contentAsString);
+}
+
+var vRAMachines = new Array()
+for each(var vRAMachine in responseObj.content) {
+    vRAMachines.push(vRAMachine);
+}
+System.debug("Found: "+vRAMachines.length+" vRA Machines");
+return vRAMachines;
+
+
+]]></script>
+</dunes-script-module>

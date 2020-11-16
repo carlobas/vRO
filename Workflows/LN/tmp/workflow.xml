@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item3" object-name="workflow:name=generic" id="f5534db9-87e2-40ed-bd19-cefd2cf69a68" editor-version="2.0" version="0.0.0" api-version="6.0.0" restartMode="1" resumeFromFailedMode="0">
+    <display-name>tmp</display-name>
+    <position y="30.0" x="20.0"/>
+    <input/>
+    <output/>
+    <attrib name="tmp" type="Properties">
+        <value encoded="n">#[##]#</value>
+    </attrib>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="57.61974768490697" x="475.55530811755864"/>
+    </workflow-item>
+    <workflow-item name="item2" out-name="item0" type="task" comparator="0">
+        <display-name>Scriptable task</display-name>
+        <runtime>powercli:11-powershell-6.2</runtime>
+        <script encoded="false">function Handler($context, $inputs) {
+    $inputsString = $inputs | ConvertTo-Json
+  Write-Host $inputsString
+    Write-Host $inputs.tmp
+
+    $output=@{status = 'done'}
+
+    return $output
+}
+</script>
+        <in-binding>
+            <bind name="tmp" type="Properties" export-name="tmp"/>
+        </in-binding>
+        <out-binding/>
+        <description>Simple task with custom script capability.</description>
+        <position y="51.5079728224078" x="276.01815048367877"/>
+    </workflow-item>
+    <workflow-item name="item3" out-name="item2" type="task" script-module="com.vmware.pso.ln/PowerShellAction" comparator="0">
+        <display-name>Action element</display-name>
+        <script encoded="false">//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.vmware.pso.ln").PowerShellAction();
+</script>
+        <in-binding/>
+        <out-binding>
+            <bind name="actionResult" type="Properties" export-name="tmp"/>
+        </out-binding>
+        <description>Add a note to the workflow schema.</description>
+        <position y="40.0" x="120.0"/>
+    </workflow-item>
+    <presentation/>
+</ns2:workflow>

@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getVcNetworkNamesByCluster" result-type="Array/string" api-version="6.0.0" id="41931afb-2bdd-4f0f-9e1f-684cac8f9e7a" version="0.0.0" allowed-operations="evf" category-name="com.vmware.cmbu">
+  <param n="cluster" t="string"/>
+  <script encoded="false"><![CDATA[if(cluster != "") {
+    var dcObj
+    for each(var cls in Server.findAllForType("VC:ClusterComputeResource")) {
+        if(cls.name == cluster) {
+            clsObj = cls;
+            break;
+        }
+    }
+    var arrPaths = new Array();
+    for each (network in clsObj.network) {
+        arrPaths.push(network.name.replace(" (DSwitch)",""));
+    }
+    return arrPaths.sort();
+} else {
+    return new Array();
+}]]></script>
+</dunes-script-module>

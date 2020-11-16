@@ -1,0 +1,165 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<workflow xmlns="http://vmware.com/vco/workflow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://vmware.com/vco/workflow http://vmware.com/vco/workflow/Workflow-v4.xsd" root-name="item4" object-name="workflow:name=generic" id="5507da59-680b-4471-9490-d91729ead290" version="1.0.0" api-version="6.0.0" allowed-operations="evf" editor-version="2.0" restartMode="1" resumeFromFailedMode="0">
+  <display-name><![CDATA[Add TKG Cluster to vRA]]></display-name>
+  <position y="10.0" x="50.0"/>
+  <input>
+    <param name="vRAUrl" type="string">
+      <description><![CDATA[vRealize Automation URL (e.g. https://vra-appliance.cmbu.local)]]></description>
+    </param>
+    <param name="k8sClusterName" type="string"/>
+    <param name="k8sClusterAddress" type="string"/>
+    <param name="k8sUserPublicKey" type="SecureString"/>
+    <param name="k8sUserPrivateKey" type="SecureString"/>
+    <param name="k8sCACertificate" type="SecureString"/>
+    <param name="vRAUser" type="string">
+      <description><![CDATA[vRealize Automation User]]></description>
+    </param>
+    <param name="vRAPassword" type="SecureString">
+      <description><![CDATA[vRealize Automation Password]]></description>
+    </param>
+    <param name="k8sClusterCertificateFingerprint" type="string"/>
+    <param name="vRAProjectName" type="string"/>
+  </input>
+  <attrib name="vRAAccessToken" type="SecureString" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="vRAExternalKubernetesCluster" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="vRACodeStreamK8sEndpoint" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="decodedCACertificate" type="SecureString" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="decodedUserPublicKey" type="SecureString" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="decodedUserPrivateKey" type="SecureString" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <workflow-item name="item0" type="end" end-mode="0">
+    <in-binding/>
+    <position y="10.0" x="700.0"/>
+  </workflow-item>
+  <workflow-item name="item2" out-name="item0" type="task" script-module="com.vmware.cmbu/createvRACodeStreamK8sEndpointWithCertAuth">
+    <display-name><![CDATA[Create Code Stream K8s Endpoint]]></display-name>
+    <script encoded="false"><![CDATA[//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.vmware.cmbu").createvRACodeStreamK8sEndpointWithCertAuth(vRAUrl,vRAAccessToken,k8sClusterName,k8sClusterDescription,k8sClusterAddress,k8sUserPublicKey,k8sUserPrivateKey,k8sCACertificate,vRAProjectName,k8sClusterCertificateFingerprint);
+]]></script>
+    <in-binding>
+      <bind name="vRAUrl" type="string" export-name="vRAUrl">
+        <description><![CDATA[vRealize Automation URL (e.g. https://vra-appliance.cmbu.local)]]></description>
+      </bind>
+      <bind name="vRAAccessToken" type="SecureString" export-name="vRAAccessToken">
+        <description><![CDATA[vRealize Automation Access Token]]></description>
+      </bind>
+      <bind name="k8sClusterName" type="string" export-name="k8sClusterName"/>
+      <bind name="k8sClusterDescription" type="string" export-name="k8sClusterName"/>
+      <bind name="k8sClusterAddress" type="string" export-name="k8sClusterAddress"/>
+      <bind name="k8sUserPublicKey" type="SecureString" export-name="k8sUserPublicKey"/>
+      <bind name="k8sUserPrivateKey" type="SecureString" export-name="k8sUserPrivateKey"/>
+      <bind name="k8sCACertificate" type="SecureString" export-name="k8sCACertificate"/>
+      <bind name="vRAProjectName" type="string" export-name="vRAProjectName"/>
+      <bind name="k8sClusterCertificateFingerprint" type="string" export-name="k8sClusterCertificateFingerprint">
+        <description><![CDATA[SHA256 Fingerprint]]></description>
+      </bind>
+    </in-binding>
+    <out-binding>
+      <bind name="actionResult" type="string" export-name="vRACodeStreamK8sEndpoint"/>
+    </out-binding>
+    <description><![CDATA[Add a note to the workflow schema.]]></description>
+    <position y="20.0" x="530.0"/>
+  </workflow-item>
+  <workflow-item name="item3" out-name="item2" type="task" script-module="com.vmware.cmbu/createvRAExternalKubernetesCluster">
+    <display-name><![CDATA[Create External Kubernetes Cluster]]></display-name>
+    <script encoded="false"><![CDATA[//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.vmware.cmbu").createvRAExternalKubernetesCluster(vRAUrl,vRAAccessToken,k8sClusterName,k8sClusterDescription,k8sClusterAddress,k8sUserPublicKey,k8sUserPrivateKey,k8sCACertificate);
+]]></script>
+    <in-binding>
+      <bind name="vRAUrl" type="string" export-name="vRAUrl">
+        <description><![CDATA[vRealize Automation URL (e.g. https://vra-appliance.cmbu.local)]]></description>
+      </bind>
+      <bind name="vRAAccessToken" type="SecureString" export-name="vRAAccessToken">
+        <description><![CDATA[vRealize Automation Access Token]]></description>
+      </bind>
+      <bind name="k8sClusterName" type="string" export-name="k8sClusterName"/>
+      <bind name="k8sClusterDescription" type="string" export-name="k8sClusterName"/>
+      <bind name="k8sClusterAddress" type="string" export-name="k8sClusterAddress"/>
+      <bind name="k8sUserPublicKey" type="SecureString" export-name="decodedUserPublicKey"/>
+      <bind name="k8sUserPrivateKey" type="SecureString" export-name="decodedUserPrivateKey"/>
+      <bind name="k8sCACertificate" type="SecureString" export-name="decodedCACertificate"/>
+    </in-binding>
+    <out-binding>
+      <bind name="actionResult" type="string" export-name="vRAExternalKubernetesCluster"/>
+    </out-binding>
+    <description><![CDATA[Add a note to the workflow schema.]]></description>
+    <position y="20.0" x="400.0"/>
+  </workflow-item>
+  <workflow-item name="item4" out-name="item5" type="task" script-module="com.vmware.cmbu/getvRAAccessToken">
+    <display-name><![CDATA[Get vRA Access Token]]></display-name>
+    <script encoded="false"><![CDATA[//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.vmware.cmbu").getvRAAccessToken(vRAUrl,vRAUser,vRAPassword);
+]]></script>
+    <in-binding>
+      <bind name="vRAUrl" type="string" export-name="vRAUrl">
+        <description><![CDATA[vRealize Automation URL (e.g. https://vra-appliance.cmbu.local)]]></description>
+      </bind>
+      <bind name="vRAUser" type="string" export-name="vRAUser">
+        <description><![CDATA[vRealize Automation User]]></description>
+      </bind>
+      <bind name="vRAPassword" type="SecureString" export-name="vRAPassword">
+        <description><![CDATA[vRealize Automation Password]]></description>
+      </bind>
+    </in-binding>
+    <out-binding>
+      <bind name="actionResult" type="SecureString" export-name="vRAAccessToken"/>
+    </out-binding>
+    <description><![CDATA[Add a note to the workflow schema.]]></description>
+    <position y="20.0" x="140.0"/>
+  </workflow-item>
+  <workflow-item name="item5" out-name="item3" type="task">
+    <display-name><![CDATA[Decode Certificates]]></display-name>
+    <script encoded="false"><![CDATA[decodedUserPublicKey = CryptoEncoding.base64Decode(k8sUserPublicKey);
+decodedUserPrivateKey = CryptoEncoding.base64Decode(k8sUserPrivateKey);
+decodedCACertificate = CryptoEncoding.base64Decode(k8sCACertificate);]]></script>
+    <in-binding>
+      <bind name="k8sCACertificate" type="SecureString" export-name="k8sCACertificate"/>
+      <bind name="k8sUserPublicKey" type="SecureString" export-name="k8sUserPublicKey"/>
+      <bind name="k8sUserPrivateKey" type="SecureString" export-name="k8sUserPrivateKey"/>
+    </in-binding>
+    <out-binding>
+      <bind name="decodedUserPublicKey" type="SecureString" export-name="decodedUserPublicKey"/>
+      <bind name="decodedUserPrivateKey" type="SecureString" export-name="decodedUserPrivateKey"/>
+      <bind name="decodedCACertificate" type="SecureString" export-name="decodedCACertificate"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="20.0" x="280.0"/>
+  </workflow-item>
+  <presentation>
+    <p-param name="vRAUrl">
+      <desc><![CDATA[vRealize Automation URL (e.g. https://vra-appliance.cmbu.local)]]></desc>
+    </p-param>
+    <p-param name="k8sClusterName">
+      <desc><![CDATA[k8sClusterName]]></desc>
+    </p-param>
+    <p-param name="k8sClusterAddress">
+      <desc><![CDATA[k8sClusterAddress]]></desc>
+    </p-param>
+    <p-param name="k8sUserPublicKey">
+      <desc><![CDATA[k8sUserPublicKey]]></desc>
+    </p-param>
+    <p-param name="k8sUserPrivateKey">
+      <desc><![CDATA[k8sUserPrivateKey]]></desc>
+    </p-param>
+    <p-param name="k8sCACertificate">
+      <desc><![CDATA[k8sCACertificate]]></desc>
+    </p-param>
+    <p-param name="vRAUser">
+      <desc><![CDATA[vRealize Automation User]]></desc>
+    </p-param>
+    <p-param name="vRAPassword">
+      <desc><![CDATA[vRealize Automation Password]]></desc>
+    </p-param>
+  </presentation>
+</workflow>

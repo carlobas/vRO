@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<package>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Workflow?id='5507da59-680b-4471-9490-d91729ead290'&dunesName='Workflow']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='7b8e0d80-661d-4c65-9165-f4c8a4dca0ab'&dunesName='Action'&name='createvRACodeStreamK8sEndpointWithCertAuth'&category='com.vmware.cmbu']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='9015298c-ff99-4a5e-98b3-52b72179988a'&dunesName='Action'&name='restRequest'&category='com.vmware.cmbu']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='519428eb-a884-43fc-9fcd-af9869b6ee4b'&dunesName='Action'&name='createvRAExternalKubernetesCluster'&category='com.vmware.cmbu']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='915b2b2d-556b-4ce7-8803-cbefae4a8b07'&dunesName='Action'&name='getvRAAccessToken'&category='com.vmware.cmbu']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Workflow?id='627a648f-5c05-47d4-ade4-b3c0d71d1fe4'&dunesName='Workflow']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='9cb82ebd-4055-4afa-85c4-c96bf310a29d'&dunesName='Action'&name='getvRACloudAccounts'&category='com.vmware.cmbu']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='45084b1c-4678-4d60-b63d-41b3db3350a6'&dunesName='Action'&name='getvRAProjects'&category='com.vmware.cmbu']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='57074390-7f16-4a9c-87c7-13a83a5c9b96'&dunesName='Action'&name='createvRAOnboardingPlan'&category='com.vmware.cmbu']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='73ffe3c8-706e-493b-9bac-12ca93e481a5'&dunesName='Action'&name='getvRAUnmanagedMachines'&category='com.vmware.cmbu']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='5a53fe01-b4ce-42ee-87f0-1f4267130733'&dunesName='Action'&name='createvRAOnboardingDeployment'&category='com.vmware.cmbu']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='9416df6a-64b2-4404-a29e-82e6e82224cc'&dunesName='Action'&name='createvRAOnboardingBulkDeployment'&category='com.vmware.cmbu']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='3b764f0e-7802-4c02-a26b-7fd9f84c82bc'&dunesName='Action'&name='runvRAOnboardingPlan'&category='com.vmware.cmbu']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='4d4f8c4f-25ca-4c57-b9f8-67515691817e'&dunesName='Action'&name='deletevRAOnboardingPlan'&category='com.vmware.cmbu']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='d4da022f-4137-4f95-b9d4-76a0010c3a2d'&dunesName='Action'&name='getvRAMachines'&category='com.vmware.cmbu']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='578cfa12-7e28-462f-a0fa-1dd395f400ec'&dunesName='Action'&name='setvRAMachineTags'&category='com.vmware.cmbu']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='dc161c1a-b466-4284-ba77-a764f68fd5f7'&dunesName='Action'&name='getvRADeploymentByName'&category='com.vmware.cmbu']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='be801b5a-2d2f-40cb-9c79-65ab40e4195c'&dunesName='Action'&name='getVcDatastoreNamesByDatacenter'&category='com.vmware.cmbu']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='41931afb-2bdd-4f0f-9e1f-684cac8f9e7a'&dunesName='Action'&name='getVcNetworkNamesByCluster'&category='com.vmware.cmbu']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='4a390360-92d4-4807-8d9a-0eaf689b9002'&dunesName='Action'&name='getVcDatastoreNamesByCluster'&category='com.vmware.cmbu']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='360f1e38-ebfc-42e2-a4ee-99595a1fc1ec'&dunesName='Action'&name='getVcResourceByDatacenter'&category='com.vmware.cmbu']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='c9589b5e-26e9-4576-8fdf-f0c8d51481b3'&dunesName='Action'&name='getVcDatacenterNames'&category='com.vmware.cmbu']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='33272faf-fc4a-4f06-8c05-c64c5ce17e38'&dunesName='Action'&name='getVcVmFolderPathsByDatacenter'&category='com.vmware.cmbu']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='5daffd87-0942-40d1-9f8f-3226f0b7d024'&dunesName='Action'&name='getVcNetworkNamesByDatacenter'&category='com.vmware.cmbu']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='5059a3bc-c8c3-4986-bfa4-f38b7c29a7db'&dunesName='Action'&name='getTKGManagementClusters'&category='com.vmware.cmbu']]></elm>
+<used-plugin name='REST' version='2.3.5' />
+</package>

@@ -1,0 +1,1 @@
+{"schema":{"ipv4cidr":{"id":"ipv4cidr","type":{"dataType":"string"},"label":"ipv4cidr","constraints":{"required":false}}},"layout":{"pages":[{"id":"page_it12kyk8","title":"General","sections":[{"id":"section_2hb3jxtv","fields":[{"id":"ipv4cidr","display":"textField"}]}]}]},"itemId":""}

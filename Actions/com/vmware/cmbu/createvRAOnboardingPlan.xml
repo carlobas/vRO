@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="createvRAOnboardingPlan" result-type="string" api-version="6.0.0" id="57074390-7f16-4a9c-87c7-13a83a5c9b96" version="1.0.0" allowed-operations="evf" category-name="com.vmware.cmbu">
+  <param n="vRAUrl" t="string"><![CDATA[vRealize Automation URL (e.g. https://vra-appliance.cmbu.local)]]></param>
+  <param n="vRAAccessToken" t="SecureString"><![CDATA[vRealize Automation Access Token]]></param>
+  <param n="vRAProjectId" t="string"/>
+  <param n="vRAEndpointIds" t="Array/string"/>
+  <param n="vRADeploymentTag" t="string"/>
+  <script encoded="false"><![CDATA[var dynamicHost = RESTHostManager.createHost("dynamicRequest");
+var restHost = RESTHostManager.createTransientHostFrom(dynamicHost);
+    restHost.operationTimeout = 60;
+    restHost.connectionTimeout = 30;
+    restHost.hostVerification = false;
+    restHost.url = vRAUrl;
+
+var requestMethod = "POST";
+var requestUri = "relocation/onboarding/plan";
+var requestHeaders = new Properties();
+    requestHeaders.put("Content-Type","application/json");
+    requestHeaders.put("Authorization","Bearer "+vRAAccessToken)
+var requestObj = new Object();
+    requestObj.name = "vRO Onboarding Plan";
+    requestObj.projectId = vRAProjectId;
+    requestObj.endpointIds = vRAEndpointIds;
+    requestObj.deploymentTagName = vRADeploymentTag;
+    requestObj.deploymentTagType = "TAG"
+
+var requestContent = JSON.stringify(requestObj);
+
+var requestResult = System.getModule("com.vmware.cmbu").restRequest(restHost, requestMethod, requestContent, requestUri, requestHeaders, true);
+
+/*for(var key in requestResult) {
+    System.debug(key+": "+requestResult[key]);
+}*/
+
+if(requestResult["statusCode"] == "200") {
+    var contentAsString = requestResult["contentAsString"];
+    var responseObj = JSON.parse(contentAsString);
+}
+var vRAOnboardingPlanLink = responseObj.documentSelfLink;
+return vRAOnboardingPlanLink;]]></script>
+</dunes-script-module>

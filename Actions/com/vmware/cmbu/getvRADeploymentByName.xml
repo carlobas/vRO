@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getvRADeploymentByName" result-type="Array/Properties" api-version="6.0.0" id="dc161c1a-b466-4284-ba77-a764f68fd5f7" version="1.0.0" allowed-operations="evf" category-name="com.vmware.cmbu">
+  <param n="vRAUrl" t="string"><![CDATA[vRealize Automation URL (e.g. https://vra-appliance.cmbu.local)]]></param>
+  <param n="vRAAccessToken" t="SecureString"><![CDATA[vRealize Automation Access Token]]></param>
+  <param n="vRADeploymentName" t="string"/>
+  <script encoded="false"><![CDATA[var dynamicHost = RESTHostManager.createHost("dynamicRequest");
+var restHost = RESTHostManager.createTransientHostFrom(dynamicHost);
+    restHost.operationTimeout = 60;
+    restHost.connectionTimeout = 30;
+    restHost.hostVerification = false;
+    restHost.url = vRAUrl;
+
+var requestMethod = "GET";
+var requestUri = "/deployment/api/deployments?name="+encodeURI(vRADeploymentName);
+var requestHeaders = new Properties();
+    requestHeaders.put("Content-Type","application/json");
+    requestHeaders.put("Authorization","Bearer "+vRAAccessToken)
+var requestContent = null
+
+var requestResult = System.getModule("com.vmware.cmbu").restRequest(restHost, requestMethod, requestContent, requestUri, requestHeaders, true);
+
+/*for(var key in requestResult) {
+    System.debug(key+": "+requestResult[key]);
+}*/
+
+if(requestResult["statusCode"] == "200") {
+    var contentAsString = requestResult["contentAsString"];
+    var responseObj = JSON.parse(contentAsString);
+    var deployments = new Array();
+        deployments = responseObj.content
+}
+System.debug("Found "+deployments.length+" deployments");
+return deployments;]]></script>
+</dunes-script-module>

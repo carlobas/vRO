@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="createvRACodeStreamK8sEndpointWithCertAuth" result-type="string" api-version="6.0.0" id="7b8e0d80-661d-4c65-9165-f4c8a4dca0ab" version="1.0.0" allowed-operations="evf" category-name="com.vmware.cmbu">
+  <param n="vRAUrl" t="string"><![CDATA[vRealize Automation URL (e.g. https://vra-appliance.cmbu.local)]]></param>
+  <param n="vRAAccessToken" t="SecureString"><![CDATA[vRealize Automation Access Token]]></param>
+  <param n="k8sClusterName" t="string"/>
+  <param n="k8sClusterDescription" t="string"/>
+  <param n="k8sClusterAddress" t="string"/>
+  <param n="k8sUserPublicKey" t="SecureString"/>
+  <param n="k8sUserPrivateKey" t="SecureString"/>
+  <param n="k8sCACertificate" t="SecureString"/>
+  <param n="vRAProjectName" t="string"/>
+  <param n="k8sClusterCertificateFingerprint" t="string"><![CDATA[SHA256 Fingerprint]]></param>
+  <script encoded="false"><![CDATA[var dynamicHost = RESTHostManager.createHost("dynamicRequest");
+var restHost = RESTHostManager.createTransientHostFrom(dynamicHost);
+    restHost.operationTimeout = 60;
+    restHost.connectionTimeout = 30;
+    restHost.hostVerification = false;
+    restHost.url = vRAUrl;
+
+var requestMethod = "POST";
+var requestUri = "/pipeline/api/endpoints";
+var requestHeaders = new Properties();
+    requestHeaders.put("Content-Type","application/json");
+    requestHeaders.put("Authorization","Bearer "+vRAAccessToken)
+
+var endpointProperties = new Object();
+    endpointProperties.kubernetesURL = k8sClusterAddress;
+    endpointProperties.authType = "certificate";
+    endpointProperties.certAuthorityData = k8sCACertificate;
+    endpointProperties.certData = k8sUserPublicKey;
+    endpointProperties.certKeyData = k8sUserPrivateKey;
+    endpointProperties.fingerprint = k8sClusterCertificateFingerprint;
+    
+    
+var requestObj = new Object();
+    requestObj.name = k8sClusterName;
+    requestObj.project = vRAProjectName;
+    requestObj.kind = "ENDPOINT";
+    requestObj.description = k8sClusterDescription;
+    requestObj.type = "k8s";
+    requestObj.isRestricted = false;
+    requestObj.properties = endpointProperties;
+
+var requestContent = JSON.stringify(requestObj);
+
+//System.debug(requestContent);
+
+var requestResult = System.getModule("com.vmware.cmbu").restRequest(restHost, requestMethod, requestContent, requestUri, requestHeaders, true);
+
+/*for(var key in requestResult) {
+    System.debug(key+": "+requestResult[key]);
+}*/
+
+if(requestResult["statusCode"] == "200") {
+    var contentAsString = requestResult["contentAsString"];
+    //var responseObj = JSON.parse(contentAsString);
+}
+return contentAsString;]]></script>
+</dunes-script-module>

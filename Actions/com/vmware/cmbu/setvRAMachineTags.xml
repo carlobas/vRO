@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="setvRAMachineTags" result-type="boolean" api-version="6.0.0" id="578cfa12-7e28-462f-a0fa-1dd395f400ec" version="1.0.0" allowed-operations="evf" category-name="com.vmware.cmbu">
+  <description><![CDATA[Applies an array of Tags to a vRA Virtual Machine.]]></description>
+  <param n="vRAUrl" t="string"><![CDATA[vRealize Automation URL (e.g. https://vra-appliance.cmbu.local)]]></param>
+  <param n="vRAAccessToken" t="SecureString"><![CDATA[vRealize Automation Access Token]]></param>
+  <param n="vRAMachineId" t="string"><![CDATA[vRealize Automation Machine Id]]></param>
+  <param n="vRAMachineTags" t="Array/string"><![CDATA[Array of strings: "tagName:tagValue"]]></param>
+  <script encoded="false"><![CDATA[var dynamicHost = RESTHostManager.createHost("dynamicRequest");
+var restHost = RESTHostManager.createTransientHostFrom(dynamicHost);
+    restHost.operationTimeout = 60;
+    restHost.connectionTimeout = 30;
+    restHost.hostVerification = false;
+    restHost.url = vRAUrl;
+
+var requestMethod = "PATCH";
+var requestUri = "/iaas/api/machines/"+vRAMachineId;
+var requestHeaders = new Properties();
+    requestHeaders.put("Content-Type","application/json");
+    requestHeaders.put("Authorization","Bearer "+vRAAccessToken)
+
+var tagsObj = new Array();
+for each(var tagString in vRAMachineTags) {
+    var tag = tagString.split(":");
+    var tagObj = new Object();
+        tagObj.key = tag[0];
+        tagObj.value = tag[1];
+    tagsObj.push(tagObj);
+}
+
+var requestObj = new Object();
+    requestObj.tags = tagsObj;
+
+var requestContent = JSON.stringify(requestObj);
+
+//System.debug(requestContent);
+
+var requestResult = System.getModule("com.vmware.cmbu").restRequest(restHost, requestMethod, requestContent, requestUri, requestHeaders, true);
+
+/*for(var key in requestResult) {
+    System.debug(key+": "+requestResult[key]);
+}*/
+
+if(requestResult["statusCode"] == "200") {
+    System.debug("Successfully applied tags to VM");
+    return true;
+}
+return false;]]></script>
+</dunes-script-module>

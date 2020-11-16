@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item1" object-name="workflow:name=generic" id="87b9c831-6580-40b0-88e2-6d20b77420b0" editor-version="2.0" version="0.0.0" api-version="6.0.0" restartMode="1" resumeFromFailedMode="0">
+    <display-name>GetCDROM</display-name>
+    <position y="50.0" x="100.0"/>
+    <input>
+        <param name="vm" type="VC:VirtualMachine"/>
+        <param name="isoPath" type="string"/>
+    </input>
+    <output/>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="50.0" x="300.0"/>
+    </workflow-item>
+    <workflow-item name="item1" out-name="item0" type="task" comparator="0">
+        <display-name>Scriptable task</display-name>
+        <script encoded="false">// get the cdrom device&#13;
+&#13;
+cdromKey = -1;&#13;
+&#13;
+for each (var device in vm.config.hardware.device)&#13;
+{&#13;
+  if (device instanceof VcVirtualCdrom)&#13;
+  {&#13;
+  cdromKey = device.key;&#13;
+  ideControllerKey = device.controllerKey;&#13;
+  break;&#13;
+  }&#13;
+}&#13;
+&#13;
+if (cdromKey == -1)&#13;
+{&#13;
+  throw "No CDROM device found";&#13;
+}&#13;
+&#13;
+// mount the iso&#13;
+deviceChange = new Array();&#13;
+deviceChange[0] = new VcVirtualDeviceConfigSpec();&#13;
+deviceChange[0].operation = VcVirtualDeviceConfigSpecOperation.edit;&#13;
+deviceChange[0].device = new VcVirtualCdrom();&#13;
+deviceChange[0].device.key = cdromKey;&#13;
+deviceChange[0].device.deviceInfo = new VcDescription();&#13;
+deviceChange[0].device.deviceInfo.label = "CD/DVD drive 1";&#13;
+deviceChange[0].device.deviceInfo.summary = "Remote ATAPI";&#13;
+deviceChange[0].device.backing = new VcVirtualCdromIsoBackingInfo();&#13;
+deviceChange[0].device.backing.fileName = isoPath;&#13;
+deviceChange[0].device.connectable = new VcVirtualDeviceConnectInfo();&#13;
+deviceChange[0].device.connectable.startConnected = false;&#13;
+deviceChange[0].device.connectable.allowGuestControl = true;&#13;
+deviceChange[0].device.connectable.connected = true;&#13;
+deviceChange[0].device.connectable.status = "untried";&#13;
+deviceChange[0].device.controllerKey = ideControllerKey;&#13;
+deviceChange[0].device.unitNumber = 0;&#13;
+var spec = new VcVirtualMachineConfigSpec();&#13;
+spec.deviceChange = deviceChange;&#13;
+task = vm.reconfigVM_Task(spec);</script>
+        <in-binding>
+            <bind name="vm" type="VC:VirtualMachine" export-name="vm"/>
+            <bind name="isoPath" type="string" export-name="isoPath"/>
+        </in-binding>
+        <out-binding/>
+        <description>Simple task with custom script capability.</description>
+        <position y="50.0" x="170.0"/>
+    </workflow-item>
+    <presentation/>
+</ns2:workflow>

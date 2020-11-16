@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getTKGManagementClusters" result-type="Array/string" api-version="6.0.0" id="5059a3bc-c8c3-4986-bfa4-f38b7c29a7db" version="0.0.2" allowed-operations="evf" category-name="com.vmware.cmbu">
+  <description><![CDATA[Returns an array of string values]]></description>
+  <script encoded="false"><![CDATA[var vRAUrl = "https://vra8-test-ga.cmbu.local/";
+var vRAUser = "configuser";
+var vRAPassword = "VMware1!";
+var vRAAccessToken = System.getModule("com.vmware.cmbu").getvRAAccessToken("https://vra8-test-ga.cmbu.local/", "configuser", "VMware1!");
+var keyFilterString = "tkg_management_cluster";
+
+var dynamicHost = RESTHostManager.createHost("dynamicRequest");
+var restHost = RESTHostManager.createTransientHostFrom(dynamicHost);
+    restHost.operationTimeout = 60;
+    restHost.connectionTimeout = 30;
+    restHost.hostVerification = false;
+    restHost.url = vRAUrl;
+
+var requestMethod = "GET";
+var requestUri = "iaas/api/tags";
+var requestHeaders = new Properties();
+    requestHeaders.put("Content-Type","application/json");
+    requestHeaders.put("Authorization","Bearer "+vRAAccessToken)
+var requestContent = null
+
+if(keyFilterString != "") {
+    requestUri = requestUri+"?$filter=((key%20eq%20%27*"+keyFilterString+"*%27))";
+} else {
+    requestUri = requestUri+"?$top=1000&$skip=0";
+}
+
+var requestResult = System.getModule("com.vmware.cmbu").restRequest(restHost, requestMethod, requestContent, requestUri, requestHeaders, true);
+
+/*for(var key in requestResult) {
+    System.debug(key+": "+requestResult[key]);
+}*/
+
+if(requestResult["statusCode"] == "200") {
+    var contentAsString = requestResult["contentAsString"];
+    var responseObj = JSON.parse(contentAsString);
+}
+
+var tkgManagementClusters = new Array()
+for each(var tkgTag in responseObj.content) {
+    tkgManagementClusters.push(tkgTag.value);
+}
+System.debug("Found: "+tkgManagementClusters.length+" TKG Management Clusters");
+return tkgManagementClusters;]]></script>
+</dunes-script-module>

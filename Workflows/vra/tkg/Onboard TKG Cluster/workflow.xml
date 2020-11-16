@@ -1,0 +1,467 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<workflow xmlns="http://vmware.com/vco/workflow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://vmware.com/vco/workflow http://vmware.com/vco/workflow/Workflow-v4.xsd" root-name="item1" object-name="workflow:name=generic" id="627a648f-5c05-47d4-ade4-b3c0d71d1fe4" version="1.0.1" api-version="6.0.0" allowed-operations="evf" editor-version="2.0" restartMode="1" resumeFromFailedMode="0">
+  <display-name><![CDATA[Onboard TKG Cluster]]></display-name>
+  <position y="10.0" x="50.0"/>
+  <input>
+    <param name="vRAUrl" type="string"/>
+    <param name="vRAUser" type="string"/>
+    <param name="vRAPassword" type="SecureString"/>
+    <param name="vCenterUrl" type="string"/>
+    <param name="vRAProjectName" type="string"/>
+    <param name="tkgDeploymentName" type="string"/>
+    <param name="tkgClusterType" type="string">
+      <description><![CDATA[Management or Workload]]></description>
+    </param>
+    <param name="tkgDeploymentVMCount" type="number"/>
+    <param name="tkgManagementCluster" type="string">
+      <description><![CDATA[TKG Management Cluster Name]]></description>
+    </param>
+  </input>
+  <attrib name="vRAAccessToken" type="SecureString" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="vRACloudAccounts" type="Array/Properties" read-only="false">
+    <value encoded="n"><![CDATA[[]]]></value>
+  </attrib>
+  <attrib name="vRAProjects" type="Array/Properties" read-only="false">
+    <value encoded="n"><![CDATA[[]]]></value>
+  </attrib>
+  <attrib name="vRAProjectId" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="vRAEndpointIds" type="Array/string" read-only="false">
+    <value encoded="n"><![CDATA[[]]]></value>
+  </attrib>
+  <attrib name="vRADeploymentTag" type="string" read-only="false">
+    <value encoded="n"><![CDATA[TKG-Management]]></value>
+  </attrib>
+  <attrib name="vRAOnboardingPlanLink" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="vRAOnboardingResources" type="Array/Properties" read-only="false">
+    <value encoded="n"><![CDATA[[]]]></value>
+  </attrib>
+  <attrib name="vRAOnboardingDeploymentLink" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="vRABulkOnboardSuccess" type="boolean" read-only="false">
+    <value encoded="n"><![CDATA[false]]></value>
+  </attrib>
+  <attrib name="vRAPlanRunSuccess" type="boolean" read-only="false">
+    <value encoded="n"><![CDATA[false]]></value>
+  </attrib>
+  <attrib name="sleepTime" type="number" read-only="false">
+    <value encoded="n"><![CDATA[30.0]]></value>
+  </attrib>
+  <attrib name="vRAOnboardingPlanDeleteSuccess" type="boolean" read-only="false">
+    <value encoded="n"><![CDATA[false]]></value>
+  </attrib>
+  <attrib name="vRADeploymentsByName" type="Array/Properties" read-only="false">
+    <value encoded="n"><![CDATA[[]]]></value>
+  </attrib>
+  <attrib name="vRAConsumerDeploymentLink" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="tkgVMFilterNames" type="Array/string" read-only="false">
+    <value encoded="n"><![CDATA[[]]]></value>
+  </attrib>
+  <workflow-item name="item0" type="end" end-mode="0">
+    <in-binding/>
+    <position y="310.0" x="60.0"/>
+  </workflow-item>
+  <workflow-item name="item1" out-name="item3" type="task" script-module="com.vmware.cmbu/getvRAAccessToken">
+    <display-name><![CDATA[getvRAAccessToken]]></display-name>
+    <script encoded="false"><![CDATA[//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.vmware.cmbu").getvRAAccessToken(vRAUrl, vRAUser, vRAPassword);
+]]></script>
+    <in-binding>
+      <bind name="vRAUrl" type="string" export-name="vRAUrl">
+        <description><![CDATA[vRealize Automation URL (e.g. https://vra-appliance.cmbu.local)]]></description>
+      </bind>
+      <bind name="vRAUser" type="string" export-name="vRAUser">
+        <description><![CDATA[vRealize Automation User]]></description>
+      </bind>
+      <bind name="vRAPassword" type="SecureString" export-name="vRAPassword">
+        <description><![CDATA[vRealize Automation Password]]></description>
+      </bind>
+    </in-binding>
+    <out-binding>
+      <bind name="actionResult" type="SecureString" export-name="vRAAccessToken"/>
+    </out-binding>
+    <description><![CDATA[Add a note to the workflow schema.]]></description>
+    <position y="20.0" x="180.0"/>
+  </workflow-item>
+  <workflow-item name="item3" out-name="item4" type="task" script-module="com.vmware.cmbu/getvRACloudAccounts">
+    <display-name><![CDATA[Get Cloud Accounts]]></display-name>
+    <script encoded="false"><![CDATA[//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.vmware.cmbu").getvRACloudAccounts(vRAUrl,vRAAccessToken);
+]]></script>
+    <in-binding>
+      <bind name="vRAUrl" type="string" export-name="vRAUrl">
+        <description><![CDATA[vRealize Automation URL (e.g. https://vra-appliance.cmbu.local)]]></description>
+      </bind>
+      <bind name="vRAAccessToken" type="SecureString" export-name="vRAAccessToken">
+        <description><![CDATA[vRealize Automation Access Token]]></description>
+      </bind>
+    </in-binding>
+    <out-binding>
+      <bind name="actionResult" type="Array/Properties" export-name="vRACloudAccounts"/>
+    </out-binding>
+    <description><![CDATA[Add a note to the workflow schema.]]></description>
+    <position y="20.0" x="360.0"/>
+  </workflow-item>
+  <workflow-item name="item4" out-name="item6" type="task" script-module="com.vmware.cmbu/getvRAProjects">
+    <display-name><![CDATA[Get Projects]]></display-name>
+    <script encoded="false"><![CDATA[//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.vmware.cmbu").getvRAProjects(vRAUrl,vRAAccessToken);
+]]></script>
+    <in-binding>
+      <bind name="vRAUrl" type="string" export-name="vRAUrl">
+        <description><![CDATA[vRealize Automation URL (e.g. https://vra-appliance.cmbu.local)]]></description>
+      </bind>
+      <bind name="vRAAccessToken" type="SecureString" export-name="vRAAccessToken">
+        <description><![CDATA[vRealize Automation Access Token]]></description>
+      </bind>
+    </in-binding>
+    <out-binding>
+      <bind name="actionResult" type="Array/Properties" export-name="vRAProjects"/>
+    </out-binding>
+    <description><![CDATA[Add a note to the workflow schema.]]></description>
+    <position y="20.0" x="540.0"/>
+  </workflow-item>
+  <workflow-item name="item6" out-name="item7" type="task">
+    <display-name><![CDATA[Get Objects]]></display-name>
+    <script encoded="false"><![CDATA[// Get Endpoint ID from Cloud Accounts
+var vRAEndpointIds = new Array();
+for(var key in vRACloudAccounts) {
+    var account = vRACloudAccounts[key];
+    if(account.cloudAccountProperties.hasOwnProperty('hostName')) {
+        //System.log(account.cloudAccountProperties.hostName);
+        //System.log(account.cloudAccountProperties.id);
+        if(vCenterUrl.indexOf(account.cloudAccountProperties.hostName) >= 0) {
+            System.log(account.id);
+            vRAEndpointIds.push(account.id)
+        }
+    }
+}
+
+// Get Project Id from Projects
+var vRAProjectId;
+for(var key in vRAProjects) {
+    var project = vRAProjects[key];
+    if(project.name.indexOf(vRAProjectName) >= 0) {
+        vRAProjectId = project.id;
+    }
+}
+
+// Create the TKG VM Names to look for
+var tkgVMFilterNames = new Array();
+    tkgVMFilterNames.push(tkgDeploymentName+"-md-");
+    tkgVMFilterNames.push(tkgDeploymentName+"-control-plane");
+    tkgVMFilterNames.push(tkgDeploymentName+"-tkg-system-lb");
+    tkgVMFilterNames.push(tkgDeploymentName+"-default-lb");
+]]></script>
+    <in-binding>
+      <bind name="vRACloudAccounts" type="Array/Properties" export-name="vRACloudAccounts"/>
+      <bind name="vCenterUrl" type="string" export-name="vCenterUrl"/>
+      <bind name="vRAProjectName" type="string" export-name="vRAProjectName"/>
+      <bind name="vRAProjects" type="Array/Properties" export-name="vRAProjects"/>
+      <bind name="tkgDeploymentName" type="string" export-name="tkgDeploymentName"/>
+      <bind name="tkgClusterType" type="string" export-name="tkgClusterType"/>
+    </in-binding>
+    <out-binding>
+      <bind name="vRAEndpointIds" type="Array/string" export-name="vRAEndpointIds"/>
+      <bind name="vRAProjectId" type="string" export-name="vRAProjectId"/>
+      <bind name="tkgVMFilterNames" type="Array/string" export-name="tkgVMFilterNames"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="90.0" x="540.0"/>
+  </workflow-item>
+  <workflow-item name="item7" out-name="item8" type="task" script-module="com.vmware.cmbu/createvRAOnboardingPlan">
+    <display-name><![CDATA[Create Onboarding Plan]]></display-name>
+    <script encoded="false"><![CDATA[//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.vmware.cmbu").createvRAOnboardingPlan(vRAUrl,vRAAccessToken,vRAProjectId,vRAEndpointIds,vRADeploymentTag);
+]]></script>
+    <in-binding>
+      <bind name="vRAUrl" type="string" export-name="vRAUrl">
+        <description><![CDATA[vRealize Automation URL (e.g. https://vra-appliance.cmbu.local)]]></description>
+      </bind>
+      <bind name="vRAAccessToken" type="SecureString" export-name="vRAAccessToken">
+        <description><![CDATA[vRealize Automation Access Token]]></description>
+      </bind>
+      <bind name="vRAProjectId" type="string" export-name="vRAProjectId"/>
+      <bind name="vRAEndpointIds" type="Array/string" export-name="vRAEndpointIds"/>
+      <bind name="vRADeploymentTag" type="string" export-name="vRADeploymentTag"/>
+    </in-binding>
+    <out-binding>
+      <bind name="actionResult" type="string" export-name="vRAOnboardingPlanLink"/>
+    </out-binding>
+    <description><![CDATA[Add a note to the workflow schema.]]></description>
+    <position y="90.0" x="360.0"/>
+  </workflow-item>
+  <workflow-item name="item8" out-name="item15" type="task" script-module="com.vmware.cmbu/getvRAUnmanagedMachines">
+    <display-name><![CDATA[Get Unmanaged Machines]]></display-name>
+    <script encoded="false"><![CDATA[//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.vmware.cmbu").getvRAUnmanagedMachines(vRAUrl,vRAAccessToken,vRAOnboardingPlanLink,filterNames);
+]]></script>
+    <in-binding>
+      <bind name="vRAUrl" type="string" export-name="vRAUrl">
+        <description><![CDATA[vRealize Automation URL (e.g. https://vra-appliance.cmbu.local)]]></description>
+      </bind>
+      <bind name="vRAAccessToken" type="SecureString" export-name="vRAAccessToken">
+        <description><![CDATA[vRealize Automation Access Token]]></description>
+      </bind>
+      <bind name="vRAOnboardingPlanLink" type="string" export-name="vRAOnboardingPlanLink"/>
+      <bind name="filterNames" type="Array/string" export-name="tkgVMFilterNames"/>
+    </in-binding>
+    <out-binding>
+      <bind name="actionResult" type="Array/Properties" export-name="vRAOnboardingResources"/>
+    </out-binding>
+    <description><![CDATA[Add a note to the workflow schema.]]></description>
+    <position y="90.0" x="180.0"/>
+  </workflow-item>
+  <workflow-item name="item9" out-name="item10" type="task" script-module="com.vmware.cmbu/createvRAOnboardingDeployment">
+    <display-name><![CDATA[Create Onboarding Deployment]]></display-name>
+    <script encoded="false"><![CDATA[//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.vmware.cmbu").createvRAOnboardingDeployment(vRAUrl,vRAAccessToken,vRAOnboardingDeploymentName,vRAOnboardingPlanLink,vRAConsumerDeploymentLink);
+]]></script>
+    <in-binding>
+      <bind name="vRAUrl" type="string" export-name="vRAUrl">
+        <description><![CDATA[vRealize Automation URL (e.g. https://vra-appliance.cmbu.local)]]></description>
+      </bind>
+      <bind name="vRAAccessToken" type="SecureString" export-name="vRAAccessToken">
+        <description><![CDATA[vRealize Automation Access Token]]></description>
+      </bind>
+      <bind name="vRAOnboardingDeploymentName" type="string" export-name="tkgDeploymentName">
+        <description><![CDATA[vRealize Onboarding Deployment Name]]></description>
+      </bind>
+      <bind name="vRAOnboardingPlanLink" type="string" export-name="vRAOnboardingPlanLink">
+        <description><![CDATA[vRealize Onboarding Plan Link]]></description>
+      </bind>
+      <bind name="vRAConsumerDeploymentLink" type="string" export-name="vRAConsumerDeploymentLink">
+        <description><![CDATA[vRealize Onboarding Deployment Link]]></description>
+      </bind>
+    </in-binding>
+    <out-binding>
+      <bind name="actionResult" type="string" export-name="vRAOnboardingDeploymentLink"/>
+    </out-binding>
+    <description><![CDATA[Add a note to the workflow schema.]]></description>
+    <position y="170.0" x="360.0"/>
+  </workflow-item>
+  <workflow-item name="item10" out-name="item11" type="task" script-module="com.vmware.cmbu/createvRAOnboardingBulkDeployment">
+    <display-name><![CDATA[Create Onboarding Bulk Deployment]]></display-name>
+    <script encoded="false"><![CDATA[//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.vmware.cmbu").createvRAOnboardingBulkDeployment(vRAUrl,vRAAccessToken,vRAOnboardingDeploymentLink,vRAOnboardingPlanLink,vRAOnboardingResources);
+]]></script>
+    <in-binding>
+      <bind name="vRAUrl" type="string" export-name="vRAUrl">
+        <description><![CDATA[vRealize Automation URL (e.g. https://vra-appliance.cmbu.local)]]></description>
+      </bind>
+      <bind name="vRAAccessToken" type="SecureString" export-name="vRAAccessToken">
+        <description><![CDATA[vRealize Automation Access Token]]></description>
+      </bind>
+      <bind name="vRAOnboardingDeploymentLink" type="string" export-name="vRAOnboardingDeploymentLink"/>
+      <bind name="vRAOnboardingPlanLink" type="string" export-name="vRAOnboardingPlanLink"/>
+      <bind name="vRAOnboardingResources" type="Array/Properties" export-name="vRAOnboardingResources"/>
+    </in-binding>
+    <out-binding>
+      <bind name="actionResult" type="boolean" export-name="vRABulkOnboardSuccess"/>
+    </out-binding>
+    <description><![CDATA[Add a note to the workflow schema.]]></description>
+    <position y="170.0" x="520.0"/>
+  </workflow-item>
+  <workflow-item name="item11" out-name="item12" type="task" script-module="com.vmware.cmbu/runvRAOnboardingPlan">
+    <display-name><![CDATA[Run Onboarding Plan]]></display-name>
+    <script encoded="false"><![CDATA[//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.vmware.cmbu").runvRAOnboardingPlan(vRAUrl,vRAAccessToken,vRAOnboardingPlanLink);
+]]></script>
+    <in-binding>
+      <bind name="vRAUrl" type="string" export-name="vRAUrl">
+        <description><![CDATA[vRealize Automation URL (e.g. https://vra-appliance.cmbu.local)]]></description>
+      </bind>
+      <bind name="vRAAccessToken" type="SecureString" export-name="vRAAccessToken">
+        <description><![CDATA[vRealize Automation Access Token]]></description>
+      </bind>
+      <bind name="vRAOnboardingPlanLink" type="string" export-name="vRAOnboardingPlanLink"/>
+    </in-binding>
+    <out-binding>
+      <bind name="actionResult" type="boolean" export-name="vRAPlanRunSuccess"/>
+    </out-binding>
+    <description><![CDATA[Add a note to the workflow schema.]]></description>
+    <position y="250.0" x="520.0"/>
+  </workflow-item>
+  <workflow-item name="item12" prototype-id="sleep" out-name="item13" content-mode="x" type="task">
+    <display-name><![CDATA[Sleep]]></display-name>
+    <script encoded="false"><![CDATA[//Auto-generated script
+if ( sleepTime !== null )  {
+	System.sleep(sleepTime * 1000);
+}else  {
+	throw "'sleepTime' is NULL"; 
+}]]></script>
+    <in-binding>
+      <bind name="sleepTime" type="number" export-name="sleepTime">
+        <description><![CDATA[Time to sleep in seconds]]></description>
+      </bind>
+    </in-binding>
+    <out-binding/>
+    <description><![CDATA[Sleep a given number of seconds.]]></description>
+    <position y="250.0" x="360.0"/>
+  </workflow-item>
+  <workflow-item name="item13" out-name="item17" type="task" script-module="com.vmware.cmbu/deletevRAOnboardingPlan">
+    <display-name><![CDATA[Delete Onboarding Plan]]></display-name>
+    <script encoded="false"><![CDATA[//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.vmware.cmbu").deletevRAOnboardingPlan(vRAUrl,vRAAccessToken,vRAOnboardingPlanLink);
+]]></script>
+    <in-binding>
+      <bind name="vRAUrl" type="string" export-name="vRAUrl">
+        <description><![CDATA[vRealize Automation URL (e.g. https://vra-appliance.cmbu.local)]]></description>
+      </bind>
+      <bind name="vRAAccessToken" type="SecureString" export-name="vRAAccessToken">
+        <description><![CDATA[vRealize Automation Access Token]]></description>
+      </bind>
+      <bind name="vRAOnboardingPlanLink" type="string" export-name="vRAOnboardingPlanLink"/>
+    </in-binding>
+    <out-binding>
+      <bind name="actionResult" type="boolean" export-name="vRAOnboardingPlanDeleteSuccess"/>
+    </out-binding>
+    <description><![CDATA[Add a note to the workflow schema.]]></description>
+    <position y="250.0" x="180.0"/>
+  </workflow-item>
+  <workflow-item name="item15" out-name="item18" type="custom-condition" alt-out-name="item16">
+    <display-name><![CDATA[Decision]]></display-name>
+    <script encoded="false"><![CDATA[System.log("Found "+vRAOnboardingResources.length+" VMs, expecting "+tkgDeploymentVMCount);
+if(vRAOnboardingResources.length >= tkgDeploymentVMCount) {
+    System.debug("Sleeping for 30 seconds...");
+    return true;
+}
+return false;]]></script>
+    <in-binding>
+      <bind name="vRAOnboardingResources" type="Array/Properties" export-name="vRAOnboardingResources"/>
+      <bind name="tkgDeploymentVMCount" type="number" export-name="tkgDeploymentVMCount"/>
+      <bind name="tkgDeploymentName" type="string" export-name="tkgDeploymentName"/>
+    </in-binding>
+    <out-binding/>
+    <description><![CDATA[Custom decision based on a custom script.]]></description>
+    <position y="80.0" x="20.0"/>
+  </workflow-item>
+  <workflow-item name="item16" prototype-id="sleep" out-name="item8" content-mode="x" type="task">
+    <display-name><![CDATA[Sleep]]></display-name>
+    <script encoded="false"><![CDATA[//Auto-generated script
+if ( sleepTime !== null )  {
+	System.sleep(sleepTime * 1000);
+}else  {
+	throw "'sleepTime' is NULL"; 
+}]]></script>
+    <in-binding>
+      <bind name="sleepTime" type="number" export-name="sleepTime">
+        <description><![CDATA[Time to sleep in seconds]]></description>
+      </bind>
+    </in-binding>
+    <out-binding/>
+    <description><![CDATA[Sleep a given number of seconds.]]></description>
+    <position y="130.0" x="100.0"/>
+  </workflow-item>
+  <workflow-item name="item17" out-name="item0" type="task">
+    <display-name><![CDATA[Tag TKG VMs]]></display-name>
+    <script encoded="false"><![CDATA[var tkgMachines = System.getModule("com.vmware.cmbu").getvRAMachines(vRAUrl,vRAAccessToken,tkgVMFilterNames);
+
+for each(var tkgMachine in tkgMachines) {
+    System.debug("Applying tags to "+tkgMachine.name+" ("+tkgMachine.id+")");
+    var tags = new Array();
+        tags.push("tkg_cluster_name:"+tkgDeploymentName);
+        tags.push("tkg_cluster_type:"+tkgClusterType.toLowerCase())
+    if(tkgManagementCluster) {
+        tags.push("tkg_management_cluster:"+tkgManagementCluster)
+    }
+    if(tkgMachine.name.indexOf("-md-") >= 0) {
+        // Worker Node
+        tags.push("tkg_node_type:worker_node");
+    } else if(tkgMachine.name.indexOf("-control-plane-") >= 0) {
+        // Control plane
+        tags.push("tkg_node_type:management_node");
+    } else if(tkgMachine.name.indexOf("-system-lb") >= 0 | tkgMachine.name.indexOf("-default-lb") >= 0) {
+        // Load balancer
+        tags.push("tkg_node_type:load_balancer");
+    }
+    //System.log(JSON.stringify(tags, null, 4));
+    System.getModule("com.vmware.cmbu").setvRAMachineTags(vRAUrl,vRAAccessToken,tkgMachine.id,tags);
+}
+]]></script>
+    <in-binding>
+      <bind name="vRAAccessToken" type="SecureString" export-name="vRAAccessToken"/>
+      <bind name="tkgClusterType" type="string" export-name="tkgClusterType"/>
+      <bind name="vRAUrl" type="string" export-name="vRAUrl"/>
+      <bind name="tkgManagementCluster" type="string" export-name="tkgManagementCluster"/>
+      <bind name="tkgDeploymentName" type="string" export-name="tkgDeploymentName"/>
+      <bind name="tkgVMFilterNames" type="Array/string" export-name="tkgVMFilterNames"/>
+    </in-binding>
+    <out-binding/>
+    <position y="250.0" x="20.0"/>
+  </workflow-item>
+  <workflow-item name="item18" out-name="item19" type="task" script-module="com.vmware.cmbu/getvRADeploymentByName">
+    <display-name><![CDATA[Get Deployment by Name]]></display-name>
+    <script encoded="false"><![CDATA[//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.vmware.cmbu").getvRADeploymentByName(vRAUrl,vRAAccessToken,vRADeploymentName);
+]]></script>
+    <in-binding>
+      <bind name="vRAUrl" type="string" export-name="vRAUrl">
+        <description><![CDATA[vRealize Automation URL (e.g. https://vra-appliance.cmbu.local)]]></description>
+      </bind>
+      <bind name="vRAAccessToken" type="SecureString" export-name="vRAAccessToken">
+        <description><![CDATA[vRealize Automation Access Token]]></description>
+      </bind>
+      <bind name="vRADeploymentName" type="string" export-name="tkgDeploymentName"/>
+    </in-binding>
+    <out-binding>
+      <bind name="actionResult" type="Array/Properties" export-name="vRADeploymentsByName"/>
+    </out-binding>
+    <description><![CDATA[Add a note to the workflow schema.]]></description>
+    <position y="170.0" x="20.0"/>
+  </workflow-item>
+  <workflow-item name="item19" out-name="item9" type="task">
+    <display-name><![CDATA[Get Deployment Link]]></display-name>
+    <script encoded="false"><![CDATA[if(vRADeploymentsByName.length > 0) {
+    var deployment = vRADeploymentsByName.shift();
+    vRAConsumerDeploymentLink = "/deployment/api/deployments/"+deployment.id;
+} else {
+    vRAConsumerDeploymentLink = null;
+}]]></script>
+    <in-binding>
+      <bind name="vRADeploymentsByName" type="Array/Properties" export-name="vRADeploymentsByName"/>
+    </in-binding>
+    <out-binding>
+      <bind name="vRAConsumerDeploymentLink" type="string" export-name="vRAConsumerDeploymentLink"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="170.0" x="180.0"/>
+  </workflow-item>
+  <presentation>
+    <p-param name="vRAUrl">
+      <desc><![CDATA[vRAUrl]]></desc>
+    </p-param>
+    <p-param name="vRAUser">
+      <desc><![CDATA[vRAUser]]></desc>
+    </p-param>
+    <p-param name="vRAPassword">
+      <desc><![CDATA[vRAPassword]]></desc>
+    </p-param>
+    <p-param name="vCenterUrl">
+      <desc><![CDATA[vCenterUrl]]></desc>
+    </p-param>
+    <p-param name="vRAProjectName">
+      <desc><![CDATA[vRAProjectName]]></desc>
+    </p-param>
+    <p-param name="tkgDeploymentName">
+      <desc><![CDATA[tkgDeploymentName]]></desc>
+    </p-param>
+    <p-param name="tkgClusterType">
+      <desc><![CDATA[Management or Workload]]></desc>
+    </p-param>
+    <p-param name="tkgDeploymentVMCount">
+      <desc><![CDATA[tkgDeploymentVMCount]]></desc>
+    </p-param>
+    <p-param name="tkgManagementCluster">
+      <desc><![CDATA[TKG Management Cluster Name]]></desc>
+    </p-param>
+  </presentation>
+</workflow>

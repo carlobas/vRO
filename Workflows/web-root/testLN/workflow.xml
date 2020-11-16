@@ -1,9 +1,23 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<workflow xmlns="http://vmware.com/vco/workflow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://vmware.com/vco/workflow http://vmware.com/vco/workflow/Workflow-v4.xsd" root-name="item0" object-name="workflow:name=generic" id="a1a85a5f-7fbf-4d5b-b190-4d4dadd056b8" version="0.0.0" api-version="6.0.0" editor-version="2.0" restartMode="1" resumeFromFailedMode="0">
-  <display-name><![CDATA[testLN]]></display-name>
-  <position y="50.0" x="100.0"/>
-  <workflow-item name="item0" type="end" end-mode="0">
-    <position y="50.0" x="240.0"/>
-  </workflow-item>
-  <presentation/>
-</workflow>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item1" object-name="workflow:name=generic" id="a1a85a5f-7fbf-4d5b-b190-4d4dadd056b8" editor-version="2.0" version="0.0.0" api-version="6.0.0" restartMode="1" resumeFromFailedMode="0">
+    <display-name>testLN</display-name>
+    <position y="50.0" x="100.0"/>
+    <input/>
+    <output/>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="50.0" x="300.0"/>
+    </workflow-item>
+    <workflow-item name="item1" out-name="item0" type="task" comparator="0">
+        <display-name>Scriptable task</display-name>
+        <script encoded="false">import atob;&#13;
+var tmp = atob("encodedString:TmFtZTtIb3N0bmFtZTtJUC9SYW5nbyByZWQ7U2VjdXJpdHkgR3JvdXAgKE9yaWdlbik7SG9zdG5hbWUvUmVkO0lQL1JhbmdvIHJlZDtTZWN1cml0eSBHcm91cCAoZGVzdGlubyk7Tm9tYnJlO1B1ZXJ0bztQcm90b2NvbG8NCmh0dHBfZXM7bXhmdXdlczAzOzEwLjE5Mi4xNjQuNDI7QkJERDtNWEZVV1NUMDE7MTAuMTkyLjExMi4yMTU7RlQ7aHR0cHM7NDQzO1RDUA0Kc3NoX2VzO214ZnV3ZXMwMzsxMC4xOTIuMTY0LjQyO0JCREQ7TVhGVVdTVDAxOzEwLjE5Mi4xMTIuMjE1O0ZUO3NzaDsyMjtUQ1ANCmFwaV84MDgwO214ZnV3ZXMwMzsxMC4xOTIuMTY0LjQyO0JCREQ7TVhGVVdTVDAxOzEwLjE5Mi4xMTIuMjE1O0ZUO3dzYXBpLWh0dHBzOzgwODA7VENQDQpodHRwc19vdjRjO214ZnV3LWluZjAyLW92NHZjMDAxOzEwLjE5My45Mi4xMzA7RlQ7TVhGVVdTVDAxOzEwLjE5Mi4xMTIuMjE1O0JCREQ7aHR0cHM7NDQzO1RDUA0Kc2hoX292NGM7bXhmdXctaW5mMDItb3Y0dmMwMDE7MTAuMTkzLjkyLjEzMDtGVDtNWEZVV1NUMDE7MTAuMTkyLjExMi4yMTU7QkJERDtzc2g7MjI7VENQDQphcGlfb3Y0YztteGZ1dy1pbmYwMi1vdjR2YzAwMTsxMC4xOTMuOTIuMTMwO0ZUO01YRlVXU1QwMTsxMC4xOTIuMTEyLjIxNTtCQkREO3dzYXBpLWh0dHBzOzU5ODk7VENQ")&#13;
+System.log(tmp)</script>
+        <in-binding/>
+        <out-binding/>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="130.0"/>
+    </workflow-item>
+    <presentation/>
+</ns2:workflow>

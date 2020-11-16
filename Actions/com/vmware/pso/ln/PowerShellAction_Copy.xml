@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="PowerShellAction_Copy" result-type="string" api-version="6.0.0" id="0d21a1c1-04c3-4934-83da-2d581823ab8d" version="0.0.0" category-name="com.vmware.pso.ln" memory-limit="256000000">
+  <runtime><![CDATA[powercli:11-powershell-6.2]]></runtime>
+  <script encoded="false"><![CDATA[function Handler($context, $inputs) {
+$ht1 = @{ A = 'a'; B = 'b'; DateTime = Get-Date }
+$theObject = new-object psobject -Property $ht1
+write-host $theObject
+return $ht1.A
+}]]></script>
+</dunes-script-module>
