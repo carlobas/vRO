@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item4" object-name="Workflow:name=generic" id="50dc956a-35a1-453d-80a8-7e3fcc5e98c2" editor-version="2.0" version="1.0.2" api-version="6.0.0" allowed-operations="evf" restartMode="1" resumeFromFailedMode="0">
+    <display-name>VRA Execute Codestream Pipeline</display-name>
+    <description>Makes a quick call to a REST host, without the need to have a RESTOperation defined.</description>
+    <ref-types>&gt;(REST:RESTHost)</ref-types>
+    <position y="200.0" x="40.0"/>
+    <input>
+        <param name="inputProperties" type="Properties"/>
+    </input>
+    <output>
+        <param name="result" type="Properties">
+            <description>The result</description>
+        </param>
+    </output>
+    <attrib name="errorCode" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <attrib name="restHost" type="REST:RESTHost">
+        <value encoded="n">dunes://service.dunes.ch/CustomSDKObject?id='908bff99-09f4-4542-b7af-397b8accf018'&amp;dunesName='REST:RESTHost'</value>
+        <description>Specify pre-defined rest host</description>
+    </attrib>
+    <attrib name="requestType" type="string">
+        <value encoded="n">POST</value>
+        <description>The type of the request</description>
+    </attrib>
+    <attrib name="BearerToken" type="string">
+        <value encoded="n"></value>
+        <description>will be provided by script</description>
+    </attrib>
+    <attrib name="blueprintname" type="string">
+        <value encoded="n"></value>
+        <description>will be provided by EBS payload</description>
+    </attrib>
+    <attrib name="blueprintversion" type="string">
+        <value encoded="n"></value>
+        <description>will be provided by EBS payload</description>
+    </attrib>
+    <attrib name="blueprintid" type="string">
+        <value encoded="n"></value>
+        <description>will be provided by EBS payload</description>
+    </attrib>
+    <attrib name="vrauser" type="string">
+        <value encoded="n">vra8</value>
+        <description>user to access vRA API</description>
+    </attrib>
+    <attrib name="vrauserpassword" type="SecureString">
+        <value encoded="n">12BN38K6AW36N21T52H78H2FG44G46N62T53S33Z916E3ACPF68434DS3081AFCV7905347YFADAF5ET62A03D6Q644D2C1W4972562UB99B152UEFC188EH3CB8ECCL4CCD76BU9396353J3721A5CWBE6DD2FUDC01FEBTEBAC093G6C1D2D5L185F2B9O1037D8BR</value>
+        <description>Password of user to access vRA API</description>
+    </attrib>
+    <attrib name="pipelinename" type="string">
+        <value encoded="n">Push Blueprint to GIT Repo</value>
+        <description>Name of Pipeline to execute</description>
+    </attrib>
+    <attrib name="vraproject" type="string">
+        <value encoded="n">Project demo</value>
+        <description>vRA Project where Codestream Pipeline resides</description>
+    </attrib>
+    <workflow-item name="item0" out-name="item3" catch-name="item2" throw-bind-name="errorCode" type="task" comparator="0">
+        <display-name>Get Refresh Token</display-name>
+        <script encoded="false">
+//Get Refresh Token
+var requestType = "POST";
+var operationUrl = "/csp/gateway/am/api/login?access_token";
+var requestContent = '{"username": "' + vrauser + '","password": "' + vrauserpassword + '"}';
+System.log(requestContent);
+var requestContentType = "application/json";
+
+var request = restHost.createRequest(requestType, operationUrl, requestContent, requestContentType);
+request.contentType = requestContentType;
+
+System.log("request: " + request.fullUrl);
+var response = request.execute();
+System.log(response.contentAsString);
+
+var responseJSON = JSON.parse(response.contentAsString);
+var refreshtoken = responseJSON.refresh_token;
+System.log(refreshtoken);
+
+//Get Bearer Token
+var operationUrl = "/iaas/api/login";
+var requestContent = '{"refreshToken": '+ refreshtoken + ' }';
+
+var request = restHost.createRequest(requestType, operationUrl, requestContent, requestContentType);
+request.contentType = requestContentType;
+
+System.log("request: " + request.fullUrl);
+var response = request.execute();
+System.log("response: " + response.contentAsString);
+var responseJSON = JSON.parse(response.contentAsString);
+BearerToken = responseJSON.token;
+
+System.log(BearerToken);
+
+result = new Properties();
+result.put("statusCode", response.statusCode);
+result.put("contentLength", response.contentLength);
+result.put("headers", response.getAllHeaders());
+result.put("contentAsString", response.contentAsString);
+</script>
+        <in-binding>
+            <bind name="vrauser" type="string" export-name="vrauser"/>
+            <bind name="restHost" type="REST:RESTHost" export-name="restHost"/>
+            <bind name="vrauserpassword" type="SecureString" export-name="vrauserpassword"/>
+        </in-binding>
+        <out-binding>
+            <bind name="errorCode" type="string" export-name="errorCode"/>
+            <bind name="result" type="Properties" export-name="result"/>
+            <bind name="BearerToken" type="string" export-name="BearerToken"/>
+        </out-binding>
+        <position y="150.0" x="360.0"/>
+    </workflow-item>
+    <workflow-item name="item1" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="140.0" x="680.0"/>
+    </workflow-item>
+    <workflow-item name="item2" throw-bind-name="errorCode" type="end" end-mode="1" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="90.0" x="300.0"/>
+    </workflow-item>
+    <workflow-item name="item3" out-name="item1" type="task" comparator="0">
+        <display-name>Execute Codestream Pipeline</display-name>
+        <script encoded="false">//Execute Codestream Pipeline
+var pipeencoded = encodeURIComponent(pipelinename)
+var projectencoded = encodeURIComponent(vraproject)
+var operationUrl = "codestream/api/pipelines/" + projectencoded + "/" + pipeencoded + "/executions";
+System.log(operationUrl);
+var requestContent = '{"input": {"blueprintId": "' + blueprintid + '","blueprintName": "' + blueprintname + '","version": "' + blueprintversion + '"}}';
+System.log(requestContent);
+var requestType = "POST";
+var requestContentType = "application/json";
+
+var request = restHost.createRequest(requestType, operationUrl, requestContent, requestContentType);
+request.contentType = requestContentType;
+request.setHeader("Authorization","Bearer " + BearerToken);
+
+System.log("request: " + request.fullUrl);
+var response = request.execute();
+System.log("response: " + response.contentAsString);</script>
+        <in-binding>
+            <bind name="BearerToken" type="string" export-name="BearerToken"/>
+            <bind name="restHost" type="REST:RESTHost" export-name="restHost"/>
+            <bind name="blueprintname" type="string" export-name="blueprintname"/>
+            <bind name="blueprintid" type="string" export-name="blueprintid"/>
+            <bind name="blueprintversion" type="string" export-name="blueprintversion"/>
+            <bind name="pipelinename" type="string" export-name="pipelinename"/>
+            <bind name="vraproject" type="string" export-name="vraproject"/>
+        </in-binding>
+        <out-binding/>
+        <description>Simple task with custom script capability.</description>
+        <position y="150.0" x="523.0"/>
+    </workflow-item>
+    <workflow-item name="item4" out-name="item0" type="task" comparator="0">
+        <display-name>Get Input Properties</display-name>
+        <script encoded="false">// Dump input properties from EBS event
+function dumpProperties(props, lvl) {
+	var keys = props.keys;
+	var prefix = ""
+    for (var i=0; i&lt;lvl; i++){
+		prefix = prefix + " ";
+	} 
+	for (k in keys){
+		var key = keys[k];
+		var value = props.get(keys[k])
+		if ("Properties" == System.getObjectType(value)){
+		  System.log(prefix + key + "[" )
+		  dumpProperties(value, (lvl+2));
+		  System.log(prefix + "]" )
+		} else {
+		  System.log( prefix + key + ":" + value)
+		}
+	}
+}
+
+//dumpProperties(inputProperties, 0)
+
+//customProps = inputProperties.get("customProperties")
+System.log(inputProperties.get("blueprintId"))
+System.log(inputProperties.get("blueprintName"))
+System.log(inputProperties.get("version"))
+
+blueprintid=inputProperties.get("blueprintId")
+blueprintname=inputProperties.get("blueprintName")
+blueprintversion=inputProperties.get("version")
+</script>
+        <in-binding>
+            <bind name="inputProperties" type="Properties" export-name="inputProperties"/>
+        </in-binding>
+        <out-binding>
+            <bind name="blueprintname" type="string" export-name="blueprintname"/>
+            <bind name="blueprintversion" type="string" export-name="blueprintversion"/>
+            <bind name="blueprintid" type="string" export-name="blueprintid"/>
+        </out-binding>
+        <description>Simple task with custom script capability.</description>
+        <position y="150.0" x="140.0"/>
+    </workflow-item>
+    <presentation>
+        <p-group>
+            <title>Request properties</title>
+            <p-param name="restHost">
+                <desc>The host that should take the request</desc>
+                <p-qual kind="static" name="mandatory" type="boolean">true</p-qual>
+                <p-qual name="contextualParameter" type="void"></p-qual>
+            </p-param>
+            <p-param name="operationUrl">
+                <desc>The URL that should be appended to the host base URL in order to make the request</desc>
+                <p-qual kind="static" name="mandatory" type="boolean">true</p-qual>
+            </p-param>
+            <p-param name="requestType">
+                <desc>The type of the request</desc>
+                <p-qual kind="static" name="mandatory" type="boolean">true</p-qual>
+                <p-qual kind="static" name="defaultValue" type="string">GET</p-qual>
+                <p-qual kind="static" name="genericEnumeration" type="Array/string">#{#string#GET#;#string#POST#;#string#PUT#;#string#DELETE#;#string#OPTIONS#;#string#HEAD#;#string#PATCH#;#string#TRACE#}#</p-qual>
+            </p-param>
+            <p-param name="requestContent">
+                <desc>The request content</desc>
+                <p-qual kind="static" name="mandatory" type="boolean">true</p-qual>
+                <p-qual kind="ognl" name="visible" type="boolean">(#requestType=="POST"||#requestType=="PUT"||#requestType=="PATCH"||#requestType=="DELETE")</p-qual>
+                <p-qual kind="static" name="defaultValue" type="string">__NULL__</p-qual>
+                <p-qual name="textInput" type="void"></p-qual>
+            </p-param>
+            <p-param name="requestContentType">
+                <desc>The request content type</desc>
+                <p-qual kind="static" name="mandatory" type="boolean">true</p-qual>
+                <p-qual kind="ognl" name="visible" type="boolean">(#requestType=="POST"||#requestType=="PUT"||#requestType=="PATCH"||#requestType=="DELETE")</p-qual>
+                <p-qual kind="static" name="defaultValue" type="string">__NULL__</p-qual>
+            </p-param>
+        </p-group>
+    </presentation>
+</ns2:workflow>

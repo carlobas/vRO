@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<package>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Workflow?id='50dc956a-35a1-453d-80a8-7e3fcc5e98c2'&dunesName='Workflow']]></elm>
+<used-plugin name='REST' version='2.3.8' />
+</package>
