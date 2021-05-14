@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item2" object-name="workflow:name=generic" id="5ed27aa2-9f14-41ba-b501-2aa645d2d0b5" editor-version="2.0" version="1.0.0" api-version="6.0.0" restartMode="1" resumeFromFailedMode="0">
+    <display-name>Handler Send Notification</display-name>
+    <position y="50.0" x="100.0"/>
+    <input>
+        <param name="to" type="string"/>
+        <param name="subject" type="string"/>
+        <param name="content" type="string"/>
+    </input>
+    <output/>
+    <attrib name="fromAddress" type="string" conf-id="0b7b5ecb-0799-4608-ba95-f33df6a08d69" conf-key="fromAddress"/>
+    <attrib name="fromName" type="string" conf-id="0b7b5ecb-0799-4608-ba95-f33df6a08d69" conf-key="fromName"/>
+    <attrib name="smtpHost" type="string" conf-id="0b7b5ecb-0799-4608-ba95-f33df6a08d69" conf-key="smtpHost"/>
+    <attrib name="smtpHostPort" type="number" conf-id="0b7b5ecb-0799-4608-ba95-f33df6a08d69" conf-key="smtpHostPort"/>
+    <attrib name="useSSL" type="boolean" conf-id="0b7b5ecb-0799-4608-ba95-f33df6a08d69" conf-key="useSSL"/>
+    <attrib name="useTLS" type="boolean" conf-id="0b7b5ecb-0799-4608-ba95-f33df6a08d69" conf-key="useTLS"/>
+    <attrib name="authUser" type="string" conf-id="0b7b5ecb-0799-4608-ba95-f33df6a08d69" conf-key="authUser"/>
+    <attrib name="authPassword" type="SecureString" conf-id="0b7b5ecb-0799-4608-ba95-f33df6a08d69" conf-key="authPassword"/>
+    <attrib name="emailTo" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <attrib name="emailSubject" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <attrib name="emailContent" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="50.0" x="500.0"/>
+    </workflow-item>
+    <workflow-item name="item1" out-name="item0" type="link" linked-workflow-id="8D80808080808080808080808080808089808080012318760241416446ce5b52f" comparator="0">
+        <display-name>Send notification</display-name>
+        <script encoded="false"></script>
+        <in-binding>
+            <bind name="smtpHost" type="string" export-name="smtpHost">
+                <description>SMTP host</description>
+            </bind>
+            <bind name="smtpPort" type="number" export-name="smtpHostPort">
+                <description>SMTP port</description>
+            </bind>
+            <bind name="username" type="string" export-name="authUser">
+                <description>Username for authentication</description>
+            </bind>
+            <bind name="password" type="SecureString" export-name="authPassword">
+                <description>Password for authentication</description>
+            </bind>
+            <bind name="fromName" type="string" export-name="fromName">
+                <description>Sender's name</description>
+            </bind>
+            <bind name="fromAddress" type="string" export-name="fromAddress">
+                <description>Sender's address</description>
+            </bind>
+            <bind name="toAddress" type="string" export-name="emailTo">
+                <description>Destination address</description>
+            </bind>
+            <bind name="subject" type="string" export-name="emailSubject">
+                <description>Email subject</description>
+            </bind>
+            <bind name="content" type="string" export-name="emailContent">
+                <description>Email content (text or HTML)</description>
+            </bind>
+            <bind name="useSsl" type="boolean" export-name="useSSL">
+                <description>If set to true, use SSL to connect </description>
+            </bind>
+            <bind name="useStartTls" type="boolean" export-name="useTLS">
+                <description>If true, enables the use of the STARTTLS command (if supported by the server) to switch the connection to a TLS-protected connection before issuing any login commands.</description>
+            </bind>
+        </in-binding>
+        <out-binding/>
+        <description> </description>
+        <position y="60.0" x="320.0"/>
+    </workflow-item>
+    <workflow-item name="item2" out-name="item1" type="task" comparator="0">
+        <display-name>Update email values</display-name>
+        <script encoded="false">emailContent = content;
+emailSubject = subject;
+emailTo = to;</script>
+        <in-binding>
+            <bind name="to" type="string" export-name="to"/>
+            <bind name="content" type="string" export-name="content"/>
+            <bind name="subject" type="string" export-name="subject"/>
+        </in-binding>
+        <out-binding>
+            <bind name="emailContent" type="string" export-name="emailContent"/>
+            <bind name="emailSubject" type="string" export-name="emailSubject"/>
+            <bind name="emailTo" type="string" export-name="emailTo"/>
+        </out-binding>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="180.0"/>
+    </workflow-item>
+    <presentation/>
+</ns2:workflow>

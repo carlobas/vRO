@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="restRequest" result-type="Properties" api-version="6.0.0" id="0373f68c-7431-47a9-836c-612632240c41" version="1.0.0" category-name="com.vmware.iberia.se.rest">
+  <param n="restHost" t="REST:RESTHost"><![CDATA[]]></param>
+  <param n="method" t="string"><![CDATA[]]></param>
+  <param n="content" t="string"><![CDATA[]]></param>
+  <param n="uri" t="string"><![CDATA[]]></param>
+  <param n="headers" t="Properties"><![CDATA[]]></param>
+  <param n="logging" t="boolean"><![CDATA[]]></param>
+  <script encoded="false"><![CDATA[//Copy from CMBU restRequest for internal modification
+if(logging) { System.log("[restRequest] Executing "+method+" on "+uri); }
+var request = restHost.createRequest(method, uri, content);
+if (headers){
+	for each (key in headers.keys) {
+		request.setHeader(key, headers.get(key))
+	}
+}
+var response = request.execute();
+
+
+
+if ( response.statusCode >= 400 ) {
+	if(logging) { System.log("[restRequest] Response: ("+response.statusCode+"): "+response.contentAsString); }
+	var errorMessage = new Properties();
+	errorMessage.put("statusCode", response.statusCode);
+	errorMessage.put("message",(new XML(response.contentAsString).message.toString()));
+    //throw JSON.stringify(errorMessage);
+}
+
+result = new Properties();
+result.put("statusCode", response.statusCode);
+result.put("contentLength", response.contentLength);
+result.put("headers", response.getAllHeaders());
+result.put("contentAsString", response.contentAsString);
+result.put("cookies", restHost.getCookies());
+
+return result;]]></script>
+</dunes-script-module>

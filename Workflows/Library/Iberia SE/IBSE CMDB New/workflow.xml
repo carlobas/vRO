@@ -13,7 +13,7 @@
         <value encoded="n">[]</value>
     </attrib>
     <attrib name="auxCustomProperties" type="Properties">
-        <value encoded="n">#[##]#</value>
+        <value encoded="n">{}</value>
     </attrib>
     <workflow-item name="item0" type="end" end-mode="0" comparator="0">
         <in-binding/>

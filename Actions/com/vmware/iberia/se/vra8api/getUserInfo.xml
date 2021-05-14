@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getUserInfo" result-type="string" api-version="6.0.0" id="386e629e-c6a8-433a-b9a8-f4402b4be227" version="1.0.0" category-name="com.vmware.iberia.se.vra8api">
+  <description><![CDATA[Get refresh-token from login]]></description>
+  <param n="vRAHost" t="string"><![CDATA[]]></param>
+  <param n="vRARefreshToken" t="string"><![CDATA[]]></param>
+  <param n="vRAUserTogetInfo" t="string"><![CDATA[]]></param>
+  <param n="vRAOrgID" t="string"><![CDATA[]]></param>
+  <script encoded="false"><![CDATA[	//Uses vRA URL, user & Password to get refresh-token
+	var dynamicHost = RESTHostManager.createHost("dynamicRequest");
+	var restHost = RESTHostManager.createTransientHostFrom(dynamicHost);
+	    restHost.operationTimeout = 60;
+	    restHost.connectionTimeout = 30;
+	    restHost.hostVerification = false;
+	    restHost.url = vRAHost;
+	var requestMethod = "GET";
+    var requestUri = "/csp/gateway/am/api/users/" +vRAUserTogetInfo +"/orgs/"+vRAOrgID +"/info";
+	System.debug("Get User Info URI: " +requestUri);
+	var requestHeaders = new Properties();
+	    requestHeaders.put("Content-Type","application/json");
+	    requestHeaders.put("csp-auth-token", vRARefreshToken);
+	var requestContent = JSON.stringify("");
+	
+	var requestResult = System.getModule("com.vmware.iberia.se.rest").restRequest(restHost, requestMethod, requestContent, requestUri, requestHeaders, false);
+	
+    //If everything it's ok, this var will contain User Info in JSON string format
+    var contentAsString = "";
+    System.debug("Get User info status code: " +requestResult["statusCode"])
+    System.debug("ContentString: ");
+    System.debug(requestResult["contentAsString"]);
+	if(requestResult["statusCode"] == "200") {
+	    contentAsString = requestResult["contentAsString"];
+	}
+	
+	return contentAsString;]]></script>
+</dunes-script-module>

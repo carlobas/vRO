@@ -1,0 +1,118 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<workflow xmlns="http://vmware.com/vco/workflow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://vmware.com/vco/workflow http://vmware.com/vco/workflow/Workflow-v4.xsd" root-name="item1" object-name="workflow:name=generic" id="e41cbcf5-774c-4ebc-82c4-73f4a1da998e" version="1.0.0" api-version="6.0.0" editor-version="2.0" restartMode="1" resumeFromFailedMode="0">
+  <display-name><![CDATA[Test Get User Email]]></display-name>
+  <position y="50.0" x="100.0"/>
+  <input>
+    <param name="inUser" type="string"/>
+    <param name="inDeploymentID" type="string"/>
+  </input>
+  <attrib name="varvRAOrgID" type="string" read-only="false" conf-id="3fbaecc5-5f5c-426b-a0f9-22491deb0f43" conf-key="vRAOrgID">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="actionResult" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="varvRAHost" type="string" read-only="false" conf-id="3fbaecc5-5f5c-426b-a0f9-22491deb0f43" conf-key="vRAHost">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="varvRAUser" type="string" read-only="false" conf-id="3fbaecc5-5f5c-426b-a0f9-22491deb0f43" conf-key="vRAUser">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="varvRAUserPassword" type="SecureString" read-only="false" conf-id="3fbaecc5-5f5c-426b-a0f9-22491deb0f43" conf-key="vRAUserPassword"/>
+  <attrib name="varvRAToken" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <workflow-item name="item0" type="end" end-mode="0">
+    <in-binding/>
+    <position y="50.0" x="860.0"/>
+  </workflow-item>
+  <workflow-item name="item1" out-name="item2" type="task" script-module="com.vmware.iberia.se.vra8api/getToken">
+    <display-name><![CDATA[getToken]]></display-name>
+    <script encoded="false"><![CDATA[//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.vmware.iberia.se.vra8api").getToken(vRAHost, vRAUser, vRAUserPassword);
+]]></script>
+    <in-binding>
+      <bind name="vRAHost" type="string" export-name="varvRAHost"/>
+      <bind name="vRAUser" type="string" export-name="varvRAUser"/>
+      <bind name="vRAUserPassword" type="SecureString" export-name="varvRAUserPassword"/>
+    </in-binding>
+    <out-binding>
+      <bind name="actionResult" type="string" export-name="varvRAToken"/>
+    </out-binding>
+    <description><![CDATA[Add a note to the workflow schema.]]></description>
+    <position y="60.0" x="160.0"/>
+  </workflow-item>
+  <workflow-item name="item2" out-name="item3" type="task" script-module="com.vmware.iberia.se.vra8api/getUserInfo">
+    <display-name><![CDATA[getUserInfo]]></display-name>
+    <script encoded="false"><![CDATA[//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.vmware.iberia.se.vra8api").getUserInfo(vRAHost,vRARefreshToken,vRAUserTogetInfo,vRAOrgID);
+]]></script>
+    <in-binding>
+      <bind name="vRAHost" type="string" export-name="varvRAHost"/>
+      <bind name="vRARefreshToken" type="string" export-name="varvRAToken"/>
+      <bind name="vRAUserTogetInfo" type="string" export-name="inUser"/>
+      <bind name="vRAOrgID" type="string" export-name="varvRAOrgID"/>
+    </in-binding>
+    <out-binding>
+      <bind name="actionResult" type="string" export-name="actionResult"/>
+    </out-binding>
+    <description><![CDATA[Add a note to the workflow schema.]]></description>
+    <position y="60.0" x="300.0"/>
+  </workflow-item>
+  <workflow-item name="item3" out-name="item4" type="task">
+    <display-name><![CDATA[Filter user info]]></display-name>
+    <script encoded="false"><![CDATA[//Filter user information (email, name)
+//ActionResult contains the information about the user
+
+//We don't need to stringify the content, because the content it's already text
+var json = JSON.parse(actionResult);
+ 
+System.log(json.user.firstName +" " +json.user.lastName);
+System.log(json.user.email);]]></script>
+    <in-binding>
+      <bind name="actionResult" type="string" export-name="actionResult"/>
+    </in-binding>
+    <out-binding/>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="60.0" x="430.0"/>
+  </workflow-item>
+  <workflow-item name="item4" out-name="item5" type="task" script-module="com.vmware.iberia.se.vra8api/getDeploymentInfo">
+    <display-name><![CDATA[getDeploymentInfo]]></display-name>
+    <script encoded="false"><![CDATA[//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.vmware.iberia.se.vra8api").getDeploymentInfo(vRADeploymentID,vRAHost,vRARefreshToken);
+]]></script>
+    <in-binding>
+      <bind name="vRADeploymentID" type="string" export-name="inDeploymentID"/>
+      <bind name="vRAHost" type="string" export-name="varvRAHost"/>
+      <bind name="vRARefreshToken" type="string" export-name="varvRAToken"/>
+    </in-binding>
+    <out-binding>
+      <bind name="actionResult" type="string" export-name="actionResult"/>
+    </out-binding>
+    <description><![CDATA[Add a note to the workflow schema.]]></description>
+    <position y="60.0" x="540.0"/>
+  </workflow-item>
+  <workflow-item name="item5" out-name="item0" type="task">
+    <display-name><![CDATA[Show Deployment Info]]></display-name>
+    <script encoded="false"><![CDATA[//We don't need to stringify the content, because the content it's already text
+var json = JSON.parse(actionResult);
+
+System.log(inDeploymentID);
+System.log(json.name);]]></script>
+    <in-binding>
+      <bind name="actionResult" type="string" export-name="actionResult"/>
+      <bind name="inDeploymentID" type="string" export-name="inDeploymentID"/>
+    </in-binding>
+    <out-binding/>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="60.0" x="680.0"/>
+  </workflow-item>
+  <presentation>
+    <p-param name="inUser">
+      <desc><![CDATA[inUser]]></desc>
+    </p-param>
+    <p-param name="inDeploymentID">
+      <desc><![CDATA[inDeploymentID]]></desc>
+    </p-param>
+  </presentation>
+</workflow>

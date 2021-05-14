@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="setSaltkeyState" result-type="string" api-version="6.0.0" id="be42ab4b-4110-421f-8454-ddb6ee1c703b" version="1.0.0" category-name="com.vmware.iberia.se.saltapi">
+  <description><![CDATA[Set SaltKey as rejected]]></description>
+  <param n="SaltHost" t="string"><![CDATA[]]></param>
+  <param n="SaltUser" t="string"><![CDATA[]]></param>
+  <param n="SaltUserPassword" t="SecureString"><![CDATA[]]></param>
+  <param n="SaltKey" t="string"><![CDATA[]]></param>
+  <param n="SaltMasterID" t="string"><![CDATA[]]></param>
+  <param n="SaltKeyState" t="string"><![CDATA[key state (reject, accept..)]]></param>
+  <param n="XXsrftoken" t="string"/>
+  <script encoded="false"><![CDATA[// Uses basic Auth and return a cookie with two componentes that must be passed as headers for next request
+// Salt doesn't provide an API Rest based on url, the url is always the same because its the way to pass the function & parameters to a RPC function
+var saltToken = "";
+
+var dynamicHost = RESTHostManager.createHost("dynamicRequest");
+var restHost = RESTHostManager.createTransientHostFrom(dynamicHost);
+    restHost.operationTimeout = 60;
+    restHost.connectionTimeout = 30;
+    restHost.hostVerification = false;
+    restHost.url = SaltHost;
+var requestMethod = "POST";
+var requestUri = "/rpc";
+var requestHeaders = new Properties();
+    requestHeaders.put("Authorization", "Basic " +CryptoEncoding.base64Encode(SaltUser +":" +SaltUserPassword));
+    requestHeaders.put("Accept", "*/*");
+    requestHeaders.put("X-Xsrftoken", XXsrftoken);
+
+var requestContent = '{"resource": "api", "method": "get_versions"}';
+
+var requestResult = System.getModule("com.vmware.iberia.se.rest").restRequest(restHost, requestMethod, requestContent, requestUri, requestHeaders, false);
+
+if(requestResult["statusCode"] == "200") {
+    for each (var auxItem in requestResult["cookies"]){
+        if (auxItem.name == "raas-session"){
+            saltToken = auxItem.value.replace('/%22/g','"').replace('/%7C/g','|').replace('/%3A/g', ':').replace('/%3D/g', '=');
+        }
+    }
+}
+requestUri = "/rpc";
+requestContent = '{"resource": "minions", "method": "set_minion_key_state", "kwarg": { "state": "' +SaltKeyState +'", "minions": [["' +SaltMasterID +'","' +SaltKey +'"]], "include_accepted":"true"}}';
+
+requestResult = System.getModule("com.vmware.iberia.se.rest").restRequest(restHost, requestMethod, requestContent, requestUri, requestHeaders, false);
+
+return saltToken;]]></script>
+</dunes-script-module>

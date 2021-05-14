@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<config-element id="3fbaecc5-5f5c-426b-a0f9-22491deb0f43" version="1.0.0">
+  <display-name><![CDATA[IBSE vRA 8 REST ops]]></display-name>
+  <description><![CDATA[Configuration for REST operations at vRA 8]]></description>
+  <atts>
+    <att name="vRARestHost" type="REST:RESTHost" read-only="false">
+      <value encoded="n"><![CDATA[dunes://service.dunes.ch/CustomSDKObject?id='908bff99-09f4-4542-b7af-397b8accf018'&dunesName='REST:RESTHost']]></value>
+    </att>
+    <att name="vRAOrgID" type="string" read-only="false">
+      <value encoded="n"><![CDATA[c5319d80-5607-4636-957d-d193db7943ca]]></value>
+      <description><![CDATA[This value can be gather for every request, but it's saved for easy management]]></description>
+    </att>
+    <att name="vRAUser" type="string" read-only="false">
+      <value encoded="n"><![CDATA[vra8@iberia.local]]></value>
+    </att>
+    <att name="vRAUserPassword" type="SecureString" read-only="false">
+      <value encoded="n"><![CDATA[__NULL__]]></value>
+    </att>
+    <att name="vRAHost" type="string" read-only="false">
+      <value encoded="n"><![CDATA[https://vra8.iberia.local]]></value>
+    </att>
+  </atts>
+</config-element>

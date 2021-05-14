@@ -1,0 +1,1 @@
+{"schema":{"inSaltKey":{"id":"inSaltKey","type":{"dataType":"string"},"label":"inSaltKey","constraints":{"required":false}}},"layout":{"pages":[{"id":"page_x9ngu7yg","title":"General","sections":[{"id":"section_b6o5b77e","fields":[{"id":"inSaltKey","display":"textField","signpostPosition":"right-middle","state":{"visible":true,"read-only":false}}]}]}]},"itemId":""}

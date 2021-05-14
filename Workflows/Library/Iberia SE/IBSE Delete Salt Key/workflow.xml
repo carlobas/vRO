@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item1" object-name="workflow:name=generic" id="df33d411-51b2-4d2f-87fe-6046737cc0e8" editor-version="2.0" version="0.0.0" api-version="6.0.0" restartMode="1" resumeFromFailedMode="0">
+    <display-name>IBSE Delete Salt Key</display-name>
+    <description>This workflow is intended to be used as an extensibility for compute post removal with the goal to delete salt key after a VM is deleted from vRA</description>
+    <position y="50.0" x="100.0"/>
+    <input>
+        <param name="inputProperties" type="Properties"/>
+    </input>
+    <output/>
+    <attrib name="var_saltkey" type="string">
+        <value encoded="n"></value>
+        <description>Salt Minion Key to be deleted</description>
+    </attrib>
+    <attrib name="var_hostNameOrIP" type="string">
+        <value encoded="n">10.10.10.70</value>
+        <description>Salt Master Hostname or IP address</description>
+    </attrib>
+    <attrib name="var_port" type="number">
+        <value encoded="n">22.0</value>
+        <description>Salt Master Port</description>
+    </attrib>
+    <attrib name="var_username" type="string">
+        <value encoded="n">root</value>
+        <description>Salt Master Username</description>
+    </attrib>
+    <attrib name="var_password" type="SecureString">
+        <value encoded="n">13BT41S7AQ36K34P21J21J70N4FT63X68S30Q6CS30GE52FBCFX434D1DDM5C2A51BI8A44C62W992BF98UEBFB629HDD91ADFT86ADC30S9DF23C7T87D0CD2NDEB7BB8L9113FC6UD2A6DADRAA834FBW8D8E82AUC44A379T620D768N789E5A4Q1602EF5N</value>
+        <description>Salt Master Password</description>
+    </attrib>
+    <attrib name="var_passwordAuthentication" type="boolean">
+        <value encoded="n">true</value>
+        <description>Sets authentication to password or key file</description>
+    </attrib>
+    <attrib name="var_cmd" type="string">
+        <value encoded="n"></value>
+        <description>The SSH command to run</description>
+    </attrib>
+    <attrib name="var_result" type="number">
+        <value encoded="n"/>
+        <description>0 = OK, Negative = Error, Positive = Number of values returned, after error text</description>
+    </attrib>
+    <attrib name="var_errorText" type="string">
+        <value encoded="n"/>
+        <description>Error text, if any</description>
+    </attrib>
+    <attrib name="var_outputText" type="string">
+        <value encoded="n"/>
+        <description>Result of running the SSH command</description>
+    </attrib>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="50.0" x="590.0"/>
+    </workflow-item>
+    <workflow-item name="item1" out-name="item3" type="task" comparator="0">
+        <display-name>Read from vRA</display-name>
+        <script encoded="false">var strVMs = new Array();&#13;
+var aIPs = new Array();&#13;
+var pProperties = new Properties();&#13;
+var auxStr;&#13;
+&#13;
+//Get VM. We are getting VM name at inventory (not hostname), we expect VM Name &amp; Hostname are the same&#13;
+/*&#13;
+System.log("Get VM Name");&#13;
+strVMs = inputProperties.get("resourceNames");&#13;
+if (strVMs.length &gt; 0){&#13;
+    var_VMName = strVMs[0];&#13;
+    System.log("VM name found: " +var_VMName);&#13;
+}else{&#13;
+    System.error("VM name can't be recovered");&#13;
+    throw("VM name can't be recovered from CAS properties");&#13;
+}&#13;
+*/&#13;
+&#13;
+//Get IP. We only get first IP of first ethernet&#13;
+/*&#13;
+aIPs = inputProperties.get("addresses");&#13;
+if (aIPs.length &gt; 0){&#13;
+    if (aIPs[0].length &gt; 0){&#13;
+        var_VMIP = aIPs[0][0];&#13;
+    }else{&#13;
+        System.error("Address for eth0 can't be parsed from CAs properties");&#13;
+        throw("Address for eth0 can't be parsed from CAs properties");&#13;
+    }&#13;
+}else{&#13;
+    System.error("Address can't be parsed from CAs properties");&#13;
+    throw("Address can't be parsed from CAs properties");&#13;
+}&#13;
+*/&#13;
+&#13;
+/*Looking for Salt Minion Key custom property, this is mandatory&#13;
+    saltkey&#13;
+*/&#13;
+pProperties = inputProperties.get("customProperties");&#13;
+if (pProperties.get("saltkey") != null &amp;&amp; pProperties.get("saltkey") != ""){&#13;
+    var_saltkey = pProperties.get("saltkey");&#13;
+    System.log("Salt Key found: " +var_saltkey);&#13;
+}else{&#13;
+    System.error("Salt Key can't be parsed from vRAs properties");&#13;
+    throw("Salt Key can't be parsed from vRAs properties");&#13;
+}</script>
+        <in-binding>
+            <bind name="inputProperties" type="Properties" export-name="inputProperties"/>
+        </in-binding>
+        <out-binding>
+            <bind name="var_saltkey" type="string" export-name="var_saltkey"/>
+        </out-binding>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="150.0"/>
+    </workflow-item>
+    <workflow-item name="item2" out-name="item4" type="link" linked-workflow-id="90808080808080808080808080808080D28080800120523434428525559a3425f" comparator="0">
+        <display-name>Run SSH command</display-name>
+        <script encoded="false"></script>
+        <in-binding>
+            <bind name="hostNameOrIP" type="string" export-name="var_hostNameOrIP">
+                <description>Hostname or IP address of the SSH host</description>
+            </bind>
+            <bind name="port" type="number" export-name="var_port">
+                <description>Target port</description>
+            </bind>
+            <bind name="username" type="string" export-name="var_username">
+                <description>Username</description>
+            </bind>
+            <bind name="password" type="SecureString" export-name="var_password">
+                <description>Password</description>
+            </bind>
+            <bind name="cmd" type="string" export-name="var_cmd">
+                <description>The SSH command to run</description>
+            </bind>
+            <bind name="passwordAuthentication" type="boolean" export-name="var_passwordAuthentication">
+                <description>Sets authentication to password or key file</description>
+            </bind>
+            <bind name="path" type="Path" export-name="">
+                <description>Path to the private key</description>
+            </bind>
+            <bind name="passphrase" type="SecureString" export-name="">
+                <description>Private key pass-phrase</description>
+            </bind>
+            <bind name="encoding" type="string" export-name="">
+                <description>The encoding to be used. Leave this field empty to use the default system encoding. (Example values: "UTF-8", "ISO-8859-1"...)</description>
+            </bind>
+        </in-binding>
+        <out-binding>
+            <bind name="result" type="number" export-name="var_result">
+                <description>0 = OK, Negative = Error, Positive = Number of values returned, after error text</description>
+            </bind>
+            <bind name="errorText" type="string" export-name="var_errorText">
+                <description>Error text, if any</description>
+            </bind>
+            <bind name="outputText" type="string" export-name="var_outputText">
+                <description>Result of running the SSH command</description>
+            </bind>
+        </out-binding>
+        <description> </description>
+        <position y="60.0" x="350.0"/>
+    </workflow-item>
+    <workflow-item name="item3" out-name="item2" type="task" comparator="0">
+        <display-name>Create cmd</display-name>
+        <script encoded="false">//Build the cmd&#13;
+var_cmd="salt-key -d "+var_saltkey;&#13;
+System.log("Command to be executed on the Salt Master: " +var_cmd);</script>
+        <in-binding>
+            <bind name="var_saltkey" type="string" export-name="var_saltkey"/>
+        </in-binding>
+        <out-binding>
+            <bind name="var_cmd" type="string" export-name="var_cmd"/>
+        </out-binding>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="252.5"/>
+    </workflow-item>
+    <workflow-item name="item4" out-name="item0" type="task" comparator="0">
+        <display-name>Show result</display-name>
+        <script encoded="false">System.log("Salt Delete Key result");&#13;
+System.log("Result:" +var_result);&#13;
+System.log("Outpuet Text: " +var_outputText);&#13;
+System.log("Error Text: " +var_errorText);</script>
+        <in-binding>
+            <bind name="var_errorText" type="string" export-name="var_errorText"/>
+            <bind name="var_outputText" type="string" export-name="var_outputText"/>
+            <bind name="var_result" type="number" export-name="var_result"/>
+        </in-binding>
+        <out-binding/>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="447.5"/>
+    </workflow-item>
+    <presentation/>
+</ns2:workflow>

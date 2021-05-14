@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getLoginToken" result-type="string" api-version="6.0.0" id="43118550-f007-4350-bb05-b1b0dc03f72f" version="1.0.0" category-name="com.vmware.iberia.se.vra8api">
+  <description><![CDATA[Get refresh-token from login ]]></description>
+  <param n="vRARefreshToken" t="string"><![CDATA[]]></param>
+  <param n="vRAHost" t="string"><![CDATA[]]></param>
+  <script encoded="false"><![CDATA[//Uses vRA URL, user & Password to get refresh-token
+var vRAAccessToken = "";
+var dynamicHost = RESTHostManager.createHost("dynamicRequest");
+var restHost = RESTHostManager.createTransientHostFrom(dynamicHost);
+    restHost.operationTimeout = 60;
+    restHost.connectionTimeout = 30;
+    restHost.hostVerification = false;
+    restHost.url = vRAHost;
+var requestMethod = "POST";
+var requestUri = "/iaas/api/login";
+var requestHeaders = new Properties();
+    requestHeaders.put("Content-Type","application/json");
+
+var requestContent = "{ \"refreshToken\": \"" +vRARefreshToken +"\"}";
+
+var requestResult = System.getModule("com.vmware.iberia.se.rest").restRequest(restHost, requestMethod, requestContent, requestUri, requestHeaders, false);
+
+System.debug("Get Login Token Status: " +requestResult["statusCode"]);
+System.debug("Get Login Content: " +requestResult["contentAsString"]);
+System.debug("Get Login requestContent: " +requestContent);
+if(requestResult["statusCode"] == "200") {
+    var json = JSON.parse(requestResult["contentAsString"]);
+    vRAAccessToken = json.token;
+    System.debug(vRAAccessToken);
+}
+return vRAAccessToken;]]></script>
+</dunes-script-module>

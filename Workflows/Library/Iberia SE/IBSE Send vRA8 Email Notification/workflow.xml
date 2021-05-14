@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item4" object-name="workflow:name=generic" id="45bbf7b2-79f0-4781-b4f8-4351afc3733c" editor-version="2.0" version="1.0.0" api-version="6.0.0" restartMode="1" resumeFromFailedMode="0">
+    <display-name>IBSE Send vRA8 Email Notification</display-name>
+    <description>Uses Handler send notification to send notifications to user depending on subscription selected</description>
+    <position y="50.0" x="40.0"/>
+    <input>
+        <param name="inputProperties" type="Properties"/>
+    </input>
+    <output/>
+    <attrib name="templates" type="Array/Properties" conf-id="35894b22-3767-4d35-b00c-62d9bae9eb86" conf-key="templatesXLST"/>
+    <attrib name="varvRAHost" type="string" conf-id="3fbaecc5-5f5c-426b-a0f9-22491deb0f43" conf-key="vRAHost"/>
+    <attrib name="varvRAUser" type="string" conf-id="3fbaecc5-5f5c-426b-a0f9-22491deb0f43" conf-key="vRAUser"/>
+    <attrib name="varvRAUserPassword" type="SecureString" conf-id="3fbaecc5-5f5c-426b-a0f9-22491deb0f43" conf-key="vRAUserPassword"/>
+    <attrib name="varActionResult" type="string">
+        <value encoded="n"></value>
+        <description>Used to move output values from functions to other functions</description>
+    </attrib>
+    <attrib name="varEMailTo" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <attrib name="varEMailSubject" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <attrib name="varEMailContent" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <attrib name="varvRARefreshToken" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <attrib name="varvRAOrgID" type="string" conf-id="3fbaecc5-5f5c-426b-a0f9-22491deb0f43" conf-key="vRAOrgID"/>
+    <attrib name="varvRARequestor" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <attrib name="varvRAEventID" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <attrib name="varEMailToName" type="string">
+        <value encoded="n"></value>
+        <description>Will contain the full name of the requestor user</description>
+    </attrib>
+    <attrib name="varIsDeployment" type="boolean">
+        <value encoded="n">false</value>
+        <description>Because not all events are the same, for deployments we will get extra info</description>
+    </attrib>
+    <attrib name="varvRADeploymentName" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <attrib name="varvRADeploymentID" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <attrib name="varvRAEventTopicID" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="50.0" x="940.0"/>
+    </workflow-item>
+    <workflow-item name="item1" out-name="item8" type="task" comparator="0">
+        <display-name>vRA Email Templates</display-name>
+        <script encoded="false">//ActionResult contains the information from vRA regarding the requestor user
+//Here will be gather the email from ActionResult and email templates
+var auxEmailSubject = "";
+var auxEmailContent = "";
+var auxEmailDefaultSubject = "";
+var auxEmailDefaultContent = "";
+
+var json = JSON.parse(varActionResult);
+varEMailTo = json.user.email;
+varEMailToName = json.user.firstName +" " +json.user.lastName
+
+//Loop looking the right email template
+for each (var template in templates) {
+    if (template.get("EmailTemplateID") == "DEFAULT"){
+        //Value for default events
+        auxEmailDefaultContent = template.get("EmailTemplateContent");
+        auxEmailDefaultSubject = template.get("EmailSubject");
+    }else{
+        //Look for the right template to event
+        if (template.get("EmailTemplateID") == varvRAEventID &amp;&amp; template.get("EmailTemplateEventID") == varvRAEventTopicID){
+            auxEmailContent = template.get("EmailTemplateContent");
+            auxEmailSubject = template.get("EmailSubject");
+        }
+    }
+
+} 
+if (auxEmailContent != "" &amp;&amp; auxEmailSubject != ""){
+    //Email template found for specific eventID
+    varEMailSubject = auxEmailSubject;
+    varEMailContent = auxEmailContent;
+}else{
+    //Specific email template not found, using default one
+    varEMailSubject = auxEmailDefaultSubject;
+    varEMailContent = auxEmailDefaultContent;
+}
+</script>
+        <in-binding>
+            <bind name="templates" type="Array/Properties" export-name="templates"/>
+            <bind name="varvRAEventID" type="string" export-name="varvRAEventID"/>
+            <bind name="varvRARequestor" type="string" export-name="varvRARequestor"/>
+            <bind name="varActionResult" type="string" export-name="varActionResult"/>
+            <bind name="varvRAEventTopicID" type="string" export-name="varvRAEventTopicID"/>
+        </in-binding>
+        <out-binding>
+            <bind name="varEMailContent" type="string" export-name="varEMailContent"/>
+            <bind name="varEMailSubject" type="string" export-name="varEMailSubject"/>
+            <bind name="varEMailTo" type="string" export-name="varEMailTo"/>
+            <bind name="varEMailToName" type="string" export-name="varEMailToName"/>
+        </out-binding>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="341.0"/>
+    </workflow-item>
+    <workflow-item name="item2" out-name="item11" type="task" script-module="com.vmware.iberia.se.vra8api/getToken" comparator="0">
+        <display-name>getToken</display-name>
+        <script encoded="false">//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.vmware.iberia.se.vra8api").getToken(vRAHost, vRAUser, vRAUserPassword);
+</script>
+        <in-binding>
+            <bind name="vRAHost" type="string" export-name="varvRAHost"/>
+            <bind name="vRAUser" type="string" export-name="varvRAUser"/>
+            <bind name="vRAUserPassword" type="SecureString" export-name="varvRAUserPassword"/>
+        </in-binding>
+        <out-binding>
+            <bind name="actionResult" type="string" export-name="varvRARefreshToken"/>
+        </out-binding>
+        <description>Add a note to the workflow schema.</description>
+        <position y="60.0" x="220.0"/>
+    </workflow-item>
+    <workflow-item name="item3" out-name="item1" type="task" script-module="com.vmware.iberia.se.vra8api/getUserInfo" comparator="0">
+        <display-name>getUserInfo</display-name>
+        <script encoded="false">//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.vmware.iberia.se.vra8api").getUserInfo(vRAHost,vRARefreshToken,vRAUserTogetInfo,vRAOrgID);
+</script>
+        <in-binding>
+            <bind name="vRAHost" type="string" export-name="varvRAHost"/>
+            <bind name="vRARefreshToken" type="string" export-name="varvRARefreshToken"/>
+            <bind name="vRAUserTogetInfo" type="string" export-name="varvRARequestor"/>
+            <bind name="vRAOrgID" type="string" export-name="varvRAOrgID"/>
+        </in-binding>
+        <out-binding>
+            <bind name="actionResult" type="string" export-name="varActionResult"/>
+        </out-binding>
+        <description>Add a note to the workflow schema.</description>
+        <position y="180.0" x="220.0"/>
+    </workflow-item>
+    <workflow-item name="item4" out-name="item2" type="task" comparator="0">
+        <display-name>Get info from vRA</display-name>
+        <script encoded="false">//Get information from vRA payload
+//Requestor &amp; event fired. They will be used later
+var jsontxt = JSON.stringify(inputProperties, null, 2);
+var json = JSON.parse(jsontxt);
+varvRARequestor = json.userName;
+//eventTopicId can only be gather from context (not inputProperties)
+varvRAEventID = "deployment.request.post";
+
+//As not all events are the same, for deployments we will get extra information (Name)
+switch (varvRAEventID){
+    case "deployment.request.post":
+        varIsDeployment = true;
+        break;
+    default:
+        varIsDeployment = false;
+        break;
+};
+
+if (varIsDeployment){
+    //For deployments, eventID it's the same and eventType with be different for create, update or delete
+    varvRAEventTopicID = json.eventType;
+    varvRADeploymentID = json.deploymentId;
+    //Get deployment name only implemented for CREATE_DEPLOYMENT, for other cases will be a regular notification
+    //To be implemented
+    if (varvRAEventTopicID != "CREATE_DEPLOYMENT"){
+        varIsDeployment = false;
+    }
+}</script>
+        <in-binding>
+            <bind name="inputProperties" type="Properties" export-name="inputProperties"/>
+        </in-binding>
+        <out-binding>
+            <bind name="varvRAEventID" type="string" export-name="varvRAEventID"/>
+            <bind name="varvRARequestor" type="string" export-name="varvRARequestor"/>
+            <bind name="varIsDeployment" type="boolean" export-name="varIsDeployment"/>
+            <bind name="varvRADeploymentID" type="string" export-name="varvRADeploymentID"/>
+            <bind name="varvRAEventTopicID" type="string" export-name="varvRAEventTopicID"/>
+        </out-binding>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="100.0"/>
+    </workflow-item>
+    <workflow-item name="item5" out-name="item0" type="link" linked-workflow-id="5ed27aa2-9f14-41ba-b501-2aa645d2d0b5" comparator="0">
+        <display-name>Handler Send Notification</display-name>
+        <in-binding>
+            <bind name="to" type="string" export-name="varEMailTo"/>
+            <bind name="subject" type="string" export-name="varEMailSubject"/>
+            <bind name="content" type="string" export-name="varEMailContent"/>
+        </in-binding>
+        <out-binding/>
+        <description> </description>
+        <position y="60.0" x="800.0"/>
+    </workflow-item>
+    <workflow-item name="item6" out-name="item5" type="task" comparator="0">
+        <display-name>Convert template</display-name>
+        <script encoded="false">//Depending on event type, some changes can be made in email templates
+//Adding Full user name, deployment name (if exist), etc
+//This is the first version, so a simple replace will be done. Next versions should be use XSLT templates for better management
+
+varEMailContent = varEMailContent.replace('[USER_FULLNAME]', varEMailToName);
+varEMailContent = varEMailContent.replace('[DEPLOYMENT_NAME]', varvRADeploymentName);</script>
+        <in-binding>
+            <bind name="varEMailContent" type="string" export-name="varEMailContent"/>
+            <bind name="varEMailToName" type="string" export-name="varEMailToName"/>
+            <bind name="varvRADeploymentName" type="string" export-name="varvRADeploymentName"/>
+        </in-binding>
+        <out-binding>
+            <bind name="varEMailContent" type="string" export-name="varEMailContent"/>
+        </out-binding>
+        <description>Changing some data in EMail Template (Full name, Deployment name...)</description>
+        <position y="60.0" x="660.0"/>
+    </workflow-item>
+    <workflow-item name="item8" out-name="item9" alt-out-name="item6" type="condition" comparator="0">
+        <display-name>Decision</display-name>
+        <script encoded="false">// Generated by the system, cannot be edited
+return (varIsDeployment === true);</script>
+        <in-binding>
+            <bind name="varIsDeployment" type="boolean" export-name="varIsDeployment"/>
+        </in-binding>
+        <out-binding/>
+        <description>Custom decision based on a custom script.</description>
+        <condition name="varIsDeployment" type="boolean" comparator="0" label="null"></condition>
+        <position y="20.0" x="480.0"/>
+    </workflow-item>
+    <workflow-item name="item9" out-name="item10" type="task" script-module="com.vmware.iberia.se.vra8api/getDeploymentInfo" comparator="0">
+        <display-name>getDeploymentInfo</display-name>
+        <script encoded="false">//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.vmware.iberia.se.vra8api").getDeploymentInfo(vRADeploymentID,vRAHost,vRARefreshToken);
+</script>
+        <in-binding>
+            <bind name="vRADeploymentID" type="string" export-name="varvRADeploymentID"/>
+            <bind name="vRAHost" type="string" export-name="varvRAHost"/>
+            <bind name="vRARefreshToken" type="string" export-name="varvRARefreshToken"/>
+        </in-binding>
+        <out-binding>
+            <bind name="actionResult" type="string" export-name="varActionResult"/>
+        </out-binding>
+        <description>Add a note to the workflow schema.</description>
+        <position y="120.0" x="480.0"/>
+    </workflow-item>
+    <workflow-item name="item10" out-name="item6" type="task" comparator="0">
+        <display-name>Get Deployment Name</display-name>
+        <script encoded="false">/*
+Deployment name is only send with CREATE_DEPLOYMENT, for other topics we can only get DeploymentID
+For this first version we only fire this Workflow for CREATE_DEPLOYMENT, so deployment name will be empty for other topics
+To be updated in the future to get the name for DELETE &amp; UPDATE deployments
+*/
+if (varvRAEventTopicID == "CREATE_DEPLOYMENT"){
+    var json = JSON.parse(varActionResult);
+    varvRADeploymentName = json.name;
+}else{
+    varvRADeploymentName = "NOT IMPLEMENTED";
+}
+System.debug("Deployment name:" +varvRADeploymentName);
+System.debug(varActionResult);</script>
+        <in-binding>
+            <bind name="varActionResult" type="string" export-name="varActionResult"/>
+            <bind name="varvRAEventTopicID" type="string" export-name="varvRAEventTopicID"/>
+        </in-binding>
+        <out-binding>
+            <bind name="varvRADeploymentName" type="string" export-name="varvRADeploymentName"/>
+        </out-binding>
+        <description>Simple task with custom script capability.</description>
+        <position y="171.5" x="480.0"/>
+    </workflow-item>
+    <workflow-item name="item11" out-name="item3" type="task" script-module="com.vmware.iberia.se.vra8api/getLoginToken" comparator="0">
+        <display-name>getLoginToken</display-name>
+        <script encoded="false">//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.vmware.iberia.se.vra8api").getLoginToken(vRARefreshToken,vRAHost);
+</script>
+        <in-binding>
+            <bind name="vRARefreshToken" type="string" export-name="varvRARefreshToken">
+                <description></description>
+            </bind>
+            <bind name="vRAHost" type="string" export-name="varvRAHost">
+                <description></description>
+            </bind>
+        </in-binding>
+        <out-binding>
+            <bind name="actionResult" type="string" export-name="varvRARefreshToken"/>
+        </out-binding>
+        <description>Add a note to the workflow schema.</description>
+        <position y="115.0" x="220.0"/>
+    </workflow-item>
+    <workflow-note x="223.0" y="16.5" w="118.0" h="204.0" color="a8def5">
+        <description>vRA 8 REST API</description>
+    </workflow-note>
+    <workflow-note x="343.0" y="16.5" w="121.0" h="204.0" color="f8c2ff">
+        <description>EMail info</description>
+    </workflow-note>
+    <workflow-note x="470.0" y="16.5" w="197.0" h="164.5" color="FFFFC0">
+        <description>Deployment Info</description>
+    </workflow-note>
+    <workflow-note x="470.0" y="16.5" w="197.0" h="204.0" color="FFFFC0">
+        <description>Deployment Info</description>
+    </workflow-note>
+</ns2:workflow>

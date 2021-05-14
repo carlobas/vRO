@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="CMDB_UpdateAsset" result-type="boolean" api-version="6.0.0" id="6ad6483a-c787-4d5a-b230-2221cf6e5035" version="1.0.0" category-name="com.vmware.iberia.se">
+  <param n="SQLName" t="string"><![CDATA[DB registered at vRO]]></param>
+  <param n="VM_NAME" t="string"><![CDATA[]]></param>
+  <param n="ASSET_STATUS" t="string"/>
+  <script encoded="false"><![CDATA[var auxDBs = SQLDatabaseManager.getDatabases();
+var activeDB = null;
+var auxRecords = null;
+var auxQuery = "";
+
+for (var item in auxDBs){
+	System.log(auxDBs[item].name);
+	if (auxDBs[item].name == SQLName){
+	    System.log("Database found");
+		activeDB = auxDBs[item];
+	}
+}
+
+if (activeDB == null){
+    System.log("Error: DB not found (" +SQLName +")");
+    return false;
+}else{
+    //Inserting new record
+    auxQuery = "UPDATE CMDB set ASSET_STATUS='" +ASSET_STATUS +"' ";
+    auxQuery += "WHERE VM_NAME='" +VM_NAME +"'";
+    System.log(auxQuery);
+    auxRecords = activeDB.executeCustomQuery(auxQuery);
+    if (auxRecords != 1){
+        System.log("Error, assest not updated");
+        return false;
+    }else{
+        System.log("Asset updated successfully");
+    }
+}
+return true;]]></script>
+</dunes-script-module>

@@ -1,0 +1,1 @@
+{"schema":{"databaseName":{"id":"databaseName","type":{"dataType":"string"},"label":"databaseName","constraints":{"required":false}}},"layout":{"pages":[{"id":"page_10gfe4ek","title":"General","sections":[{"id":"section_2gj3uwrq","fields":[{"id":"databaseName","display":"textField","signpostPosition":"right-middle","state":{"visible":true,"read-only":false}}]}]}]},"itemId":""}

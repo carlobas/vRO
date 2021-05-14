@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getLoginToken" result-type="string" api-version="6.0.0" id="3d4d871b-e4a0-4aa4-8a51-b1eee23f3a8f" version="1.0.0" category-name="com.vmware.iberia.se.saltapi">
+  <description><![CDATA[Get refresh-token from login. Cookie it's returned with two parameters "_xsrf" & "raas_session". Both will be included in next request as Header ]]></description>
+  <param n="SaltHost" t="string"><![CDATA[]]></param>
+  <param n="SaltUser" t="string"><![CDATA[]]></param>
+  <param n="SaltUserPassword" t="SecureString"><![CDATA[]]></param>
+  <script encoded="false"><![CDATA[// Uses basic Auth and return a cookie with two componentes that must be passed as headers for next request
+// Salt doesn't provide an API Rest based on url, the url is always the same because its the way to pass the function & parameters to a RPC function
+var saltToken = "";
+//For any reason (to be investigated), we need to do 2 request to get 2 tokens that will be send as cookies
+//First request to get _xsrf Cookie*************************
+
+var dynamicHost = RESTHostManager.createHost("dynamicRequest");
+var restHost = RESTHostManager.createTransientHostFrom(dynamicHost);
+    restHost.operationTimeout = 60;
+    restHost.connectionTimeout = 30;
+    restHost.hostVerification = false;
+    restHost.url = SaltHost;
+var requestMethod = "GET";
+var requestUri = "/version";
+var requestHeaders = new Properties();
+    requestHeaders.put("Authorization", "Basic " +CryptoEncoding.base64Encode(SaltUser +":" +SaltUserPassword));
+    requestHeaders.put("Accept", "*/*");
+
+var requestContent = '';
+
+var requestResult = System.getModule("com.vmware.iberia.se.rest").restRequest(restHost, requestMethod, requestContent, requestUri, requestHeaders, false);
+
+if(requestResult["statusCode"] == "200") {
+    for each (var auxItem in requestResult["cookies"]){
+        if (auxItem.name == "_xsrf"){
+            System.log("X-Xsrftoken: " +auxItem.value);
+            saltToken = auxItem.value.replace('/%7C/g','|');
+        }
+    }
+}
+
+return saltToken;]]></script>
+</dunes-script-module>

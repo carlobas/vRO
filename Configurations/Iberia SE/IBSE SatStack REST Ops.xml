@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<config-element id="f3665610-6a95-4cab-bee5-37150c323b73" version="1.0.0">
+  <display-name><![CDATA[IBSE SatStack REST Ops]]></display-name>
+  <description><![CDATA[Configuration for SaltStack REST operations ]]></description>
+  <atts>
+    <att name="SaltHost" type="string" read-only="false">
+      <value encoded="n"><![CDATA[https://vrasscraas.iberia.local]]></value>
+    </att>
+    <att name="SaltUser" type="string" read-only="false">
+      <value encoded="n"><![CDATA[root]]></value>
+    </att>
+    <att name="SaltUserPassword" type="SecureString" read-only="false">
+      <value encoded="n"><![CDATA[__NULL__]]></value>
+    </att>
+    <att name="SaltMasterRegionA" type="string" read-only="false">
+      <value encoded="n"><![CDATA[saltmaster_cluster_9afbb698-f298-4ef2-9b4f-bb936430dc45]]></value>
+      <description><![CDATA[It will be included in some minion activities. It can be gather using rest]]></description>
+    </att>
+  </atts>
+</config-element>

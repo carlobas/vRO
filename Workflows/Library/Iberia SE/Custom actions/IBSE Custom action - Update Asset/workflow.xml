@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item1" object-name="workflow:name=generic" id="4e6e0a54-36ed-49a9-a6e9-ab4399723783" editor-version="2.0" version="1.0.0" api-version="6.0.0" restartMode="1" resumeFromFailedMode="0">
+    <display-name>IBSE Custom action - Update Asset</display-name>
+    <description>Update asset status. This workflow works for those blueprints using Create Asset subscription (CloudAgnostic)</description>
+    <position y="50.0" x="100.0"/>
+    <input>
+        <param name="vm" type="VC:VirtualMachine"/>
+        <param name="in_Status" type="string">
+            <description>Gets the actual Asset status</description>
+        </param>
+    </input>
+    <output/>
+    <attrib name="var_SQL" type="string">
+        <value encoded="n">vRAExtensibility</value>
+    </attrib>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="50.0" x="300.0"/>
+    </workflow-item>
+    <workflow-item name="item1" out-name="item0" type="task" comparator="0">
+        <display-name>Update</display-name>
+        <script encoded="false">System.log(vm.displayName);
+System.log(vm.guest.guestFullName);
+System.log(vm.ipAddress);
+System.log(in_Status);
+actionResult = System.getModule("com.vmware.iberia.se").CMDB_UpdateAsset(var_SQL,vm.displayName,in_Status);</script>
+        <in-binding>
+            <bind name="in_Status" type="string" export-name="in_Status"/>
+            <bind name="vm" type="VC:VirtualMachine" export-name="vm"/>
+            <bind name="var_SQL" type="string" export-name="var_SQL"/>
+        </in-binding>
+        <out-binding/>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="170.0"/>
+    </workflow-item>
+    <presentation/>
+</ns2:workflow>

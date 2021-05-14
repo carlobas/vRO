@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getLogicalPorts" result-type="string" api-version="6.0.0" id="553538eb-7c04-4549-878a-d141cb041cd5" version="1.0.0" category-name="com.vmware.iberia.se.nsxapi">
+  <description><![CDATA[Test user/pass using get Logical ports]]></description>
+  <param n="nsxManager" t="string"><![CDATA[]]></param>
+  <param n="nsxUser" t="string"><![CDATA[]]></param>
+  <param n="nsxUserPassword" t="SecureString"><![CDATA[]]></param>
+  <script encoded="false"><![CDATA[var dynamicHost = RESTHostManager.createHost("dynamicRequest");
+var restHost = RESTHostManager.createTransientHostFrom(dynamicHost);
+    restHost.operationTimeout = 60;
+    restHost.connectionTimeout = 30;
+    restHost.hostVerification = false;
+    restHost.url = nsxManager;
+var requestMethod = "GET";
+var requestUri = "/api/v1/logical-ports";
+var requestHeaders = new Properties();
+    requestHeaders.put("Authorization", "Basic " +CryptoEncoding.base64Encode(nsxUser +":" +nsxUserPassword));
+    requestHeaders.put("Accept", "*/*");
+
+var requestContent = '';
+
+var requestResult = System.getModule("com.vmware.iberia.se.rest").restRequest(restHost, requestMethod, requestContent, requestUri, requestHeaders, false);
+
+var contentAsString = "";
+if(requestResult["statusCode"] == "200") {
+    contentAsString = requestResult["contentAsString"];
+    System.debug(contentAsString);
+}else{
+    System.debug("Error(" +requestResult["statusCode"] +"): " +requestResult["contentAsString"]);
+}
+
+return contentAsString;]]></script>
+</dunes-script-module>

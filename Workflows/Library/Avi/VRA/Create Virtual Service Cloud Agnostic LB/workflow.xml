@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item3" object-name="workflow:name=generic" id="73a23dce-5ad0-4d6b-b85e-27a81a9b6abd" editor-version="1.6" version="1.2.9" api-version="6.0.0" allowed-operations="vfe" restartMode="1" resumeFromFailedMode="0">
+    <display-name>Create Virtual Service Cloud Agnostic LB</display-name>
+    <position y="9.545454545454543" x="5.0"/>
+    <input>
+        <param name="name" type="string">
+            <description>name</description>
+        </param>
+        <param name="health_monitor_type" type="string">
+            <description>health_monitor_type</description>
+        </param>
+        <param name="controller" type="string">
+            <description>controller</description>
+        </param>
+        <param name="pool_servers" type="Array/string">
+            <description>pool_servers</description>
+        </param>
+        <param name="server_cloud" type="string">
+            <description>server_cloud</description>
+        </param>
+        <param name="instance_port" type="number">
+            <description>instance_port</description>
+        </param>
+        <param name="vip" type="string">
+            <description>vip</description>
+        </param>
+        <param name="application_profile" type="string">
+            <description>application_profile</description>
+        </param>
+        <param name="service_port" type="number">
+            <description>service_port</description>
+        </param>
+        <param name="response_code" type="Array/string">
+            <description>response_code</description>
+        </param>
+        <param name="command" type="string">
+            <description>command</description>
+        </param>
+        <param name="request" type="string">
+            <description>request</description>
+        </param>
+        <param name="failed_check" type="number">
+            <description>failed_check</description>
+        </param>
+        <param name="successful_check" type="number">
+            <description>successful_check</description>
+        </param>
+        <param name="send_interval" type="number">
+            <description>send_interval</description>
+        </param>
+        <param name="time_out" type="number">
+            <description>time_out</description>
+        </param>
+    </input>
+    <output>
+        <param name="virtualServiceObject" type="Avi:VirtualService">
+            <description>
+	</description>
+        </param>
+    </output>
+    <attrib name="HealthMonitorName" type="string">
+        <value encoded="n">
+		</value>
+        <description>Set the healthmonitor name </description>
+    </attrib>
+    <attrib name="poolName" type="string">
+        <value encoded="n">
+		</value>
+        <description>Set the pool name</description>
+    </attrib>
+    <attrib name="hmData" type="string">
+        <value encoded="n">
+		</value>
+    </attrib>
+    <attrib name="poolData" type="string">
+        <value encoded="n">
+		</value>
+    </attrib>
+    <attrib name="vsVipData" type="string">
+        <value encoded="n">
+		</value>
+    </attrib>
+    <attrib name="vsVipName" type="string">
+        <value encoded="n">
+		</value>
+    </attrib>
+    <attrib name="aviVroClient" type="Avi:AviVroClient">
+        <value encoded="n"/>
+    </attrib>
+    <attrib name="Tenant" type="string">
+        <value encoded="n">
+		</value>
+        <description>Tenant</description>
+    </attrib>
+    <attrib name="virtualServiceData" type="string">
+        <value encoded="n">
+		</value>
+    </attrib>
+    <attrib name="SSLCertificate" type="string">
+        <value encoded="n">System-Default-Cert</value>
+    </attrib>
+    <attrib name="existing_vip" type="boolean">
+        <value encoded="n">false</value>
+        <description>existing_vip</description>
+    </attrib>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="9.045454545454543" x="724.5"/>
+    </workflow-item>
+    <workflow-item name="item6" out-name="item1" type="task" comparator="0">
+        <display-name>AVIObjectName</display-name>
+        <script encoded="false">System.log("aviVroClient : "+aviVroClient);
+HealthMonitorName = Name+"_HealthMonitor"
+vsVipName = Name+"_vsvip"
+poolName = Name+"_pool"
+Tenant="admin"
+System.log("HealthMonitorName : "+HealthMonitorName)
+
+
+</script>
+        <in-binding>
+            <bind name="Name" type="string" export-name="name"/>
+            <bind name="controller" type="string" export-name="controller"/>
+            <bind name="vsVipName" type="string"/>
+            <bind name="aviVroClient" type="Avi:AviVroClient" export-name="aviVroClient"/>
+        </in-binding>
+        <out-binding>
+            <bind name="HealthMonitorName" type="string" export-name="HealthMonitorName"/>
+            <bind name="poolName" type="string" export-name="poolName"/>
+            <bind name="vsVipName" type="string" export-name="vsVipName"/>
+            <bind name="Tenant" type="string" export-name="Tenant"/>
+            <bind name="aviVroClient" type="Avi:AviVroClient" export-name="aviVroClient"/>
+        </out-binding>
+        <position y="100.86363636363636" x="124.5"/>
+    </workflow-item>
+    <workflow-item name="item2" out-name="item0" type="task" comparator="0">
+        <display-name>createObject</display-name>
+        <script encoded="false">//controllerIP = aviVroClient.getCred();
+virtualServiceObject = Server.findForType('Avi:VirtualService', System.getObjectId(virtualServiceObject));
+resp = aviVroClient.executeWorkflow();
+virtualServiceObject=resp[resp.length-1];	
+System.log("Object Created:-&gt; "+virtualServiceObject.getName());
+</script>
+        <in-binding>
+            <bind name="controller" type="string" export-name="controller"/>
+            <bind name="hmData" type="string" export-name="hmData"/>
+            <bind name="poolData" type="string" export-name="poolData"/>
+            <bind name="virtualServiceData" type="string" export-name="virtualServiceData"/>
+            <bind name="vsVipData" type="string" export-name="vsVipData"/>
+            <bind name="aviVroClient" type="Avi:AviVroClient" export-name="aviVroClient"/>
+            <bind name="vsVIP" type="boolean" export-name="existing_vip">
+                <description>Add Existing Shared VIP</description>
+            </bind>
+        </in-binding>
+        <out-binding>
+            <bind name="virtualServiceObject" type="Avi:VirtualService" export-name="virtualServiceObject"/>
+        </out-binding>
+        <position y="100.86363636363636" x="684.5"/>
+    </workflow-item>
+    <workflow-item name="item1" out-name="item4" type="task" script-module="com.vmware.avi/createHealthMonitorObj" comparator="0">
+        <display-name>createHealthMonitorObj</display-name>
+        <script encoded="false">//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.vmware.avi").createHealthMonitorObj(healthMonitorType,hm_type,hm_name,hm_description,is_federated,monitor_port,time_out,send_interval,successful_check,failed_check,command_code,udp_request,dns_query_name,http_response_code,tcp_request,tcp_response,tcp_half_open,maintenance_code,aviVroClient,https_response_code) ;</script>
+        <in-binding>
+            <bind name="healthMonitorType" type="string" export-name="health_monitor_type">
+                <description>Health monitor type</description>
+            </bind>
+            <bind name="hm_name" type="string" export-name="HealthMonitorName">
+                <description>Health monitor name</description>
+            </bind>
+            <bind name="monitor_port" type="number">
+                <description>Monitor port</description>
+            </bind>
+            <bind name="time_out" type="number" export-name="time_out">
+                <description>Time out</description>
+            </bind>
+            <bind name="send_interval" type="number" export-name="send_interval">
+                <description>Send interval</description>
+            </bind>
+            <bind name="successful_check" type="number" export-name="successful_check">
+                <description>Successful Check</description>
+            </bind>
+            <bind name="failed_check" type="number" export-name="failed_check">
+                <description>Failed check</description>
+            </bind>
+            <bind name="aviVroClient" type="Avi:AviVroClient" export-name="aviVroClient">
+                <description>Avi vro client</description>
+            </bind>
+            <bind name="tcp_response" type="string"/>
+            <bind name="command_code" type="string" export-name="command"/>
+            <bind name="hm_description" type="string"/>
+            <bind name="tcp_request" type="string"/>
+            <bind name="https_response_code" type="Array/string" export-name="response_code"/>
+            <bind name="dns_query_name" type="string" export-name="request"/>
+            <bind name="is_federated" type="boolean"/>
+            <bind name="http_response_code" type="Array/string" export-name="response_code"/>
+            <bind name="tcp_half_open" type="boolean"/>
+            <bind name="maintenance_code" type="string"/>
+            <bind name="udp_request" type="string" export-name="request"/>
+            <bind name="hm_type" type="string"/>
+        </in-binding>
+        <out-binding>
+            <bind name="actionResult" type="Avi:AviVroClient"/>
+        </out-binding>
+        <position y="100.86363636363636" x="304.5"/>
+    </workflow-item>
+    <workflow-item name="item3" out-name="item6" type="task" script-module="com.vmware.avi/getAviVroClient" comparator="0">
+        <display-name>getAviVroClient</display-name>
+        <script encoded="false">//Auto generated script, cannot be modified !
+System.getModule("com.vmware.avi").getAviVroClient(controller) ;</script>
+        <in-binding>
+            <bind name="controller" type="string" export-name="controller">
+                <description>Controller IP</description>
+            </bind>
+        </in-binding>
+        <out-binding>
+            <bind name="aviVroClient" type="Avi:AviVroClient" export-name="aviVroClient"/>
+        </out-binding>
+        <position y="19.045454545454543" x="124.5"/>
+    </workflow-item>
+    <workflow-item name="item4" out-name="item5" type="task" script-module="com.vmware.avi/createVRAPoolObj" comparator="0">
+        <display-name>createVRAPoolObj</display-name>
+        <script encoded="false">//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.vmware.avi").createVRAPoolObj(PoolServers,poolName,ServerCloud,Tenant,HealthMonitorName,aviVroClient,instance_port,tier1_lr) ;</script>
+        <in-binding>
+            <bind name="PoolServers" type="Array/string" export-name="pool_servers">
+                <description>Pool servers list </description>
+            </bind>
+            <bind name="poolName" type="string" export-name="poolName">
+                <description>Pool name</description>
+            </bind>
+            <bind name="ServerCloud" type="string" export-name="server_cloud">
+                <description>Servercloud name</description>
+            </bind>
+            <bind name="Tenant" type="string" export-name="Tenant">
+                <description>Tenant name</description>
+            </bind>
+            <bind name="HealthMonitorName" type="string" export-name="HealthMonitorName">
+                <description>New healthmonitor name</description>
+            </bind>
+            <bind name="aviVroClient" type="Avi:AviVroClient" export-name="aviVroClient">
+                <description>Object of the plugin</description>
+            </bind>
+            <bind name="instance_port" type="number" export-name="instance_port"/>
+            <bind name="tier1_lr" type="string" export-name="NULL"/>
+        </in-binding>
+        <out-binding>
+            <bind name="actionResult" type="Avi:AviVroClient"/>
+        </out-binding>
+        <position y="19.045454545454543" x="304.5"/>
+    </workflow-item>
+    <workflow-item name="item5" out-name="item7" type="task" script-module="com.vmware.avi/createVsVIPObj" comparator="0">
+        <display-name>createVsVIPObj</display-name>
+        <script encoded="false">//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.vmware.avi").createVsVIPObj(Tenant,name,IPAddress,eastWestPlacement,aviAllocatedFIp,autoAllocateIp,enabled,autoAllocateFloatingIp,aviAllocatedVip,aviVroClient,tier1,ServerCloud) ;</script>
+        <in-binding>
+            <bind name="Tenant" type="string" export-name="Tenant">
+                <description>Tenant name</description>
+            </bind>
+            <bind name="name" type="string" export-name="vsVipName">
+                <description>Vs vip name</description>
+            </bind>
+            <bind name="IPAddress" type="string" export-name="vip">
+                <description>Vs vip IP address</description>
+            </bind>
+            <bind name="aviVroClient" type="Avi:AviVroClient" export-name="aviVroClient">
+                <description>Object of the plugin</description>
+            </bind>
+            <bind name="autoAllocateIp" type="boolean"/>
+            <bind name="autoAllocateFloatingIp" type="boolean"/>
+            <bind name="aviAllocatedFIp" type="boolean"/>
+            <bind name="enabled" type="boolean"/>
+            <bind name="eastWestPlacement" type="boolean"/>
+            <bind name="aviAllocatedVip" type="boolean"/>
+            <bind name="tier1" type="string"/>
+            <bind name="ServerCloud" type="string" export-name="server_cloud"/>
+        </in-binding>
+        <out-binding>
+            <bind name="actionResult" type="Avi:AviVroClient"/>
+        </out-binding>
+        <position y="19.045454545454543" x="505.0"/>
+    </workflow-item>
+    <workflow-item name="item7" out-name="item2" type="task" script-module="com.vmware.avi/createVirtualServiceObj" comparator="0">
+        <display-name>createVirtualServiceObj</display-name>
+        <script encoded="false">//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.vmware.avi").createVirtualServiceObj(Name,poolgroupName,ServerCloud,Tenant,ApplicationProfile,servicePort,SSLCertificate,SSLCert,CertName,CreateSSL,serviceEngine,poolOrPoolgroup,poolName,vsVIP,existingVIP,allowInvalidClientCert,closeClientConfigUpdate,description,enableAutogw,enableRhi,enableRhiSnat,ignPoolNetReach,removeListeningPortOnVsDown,scaleoutEcmp,clientIpAddr,includeURL,excludeURL,addClientLogFliter,enabledClientLog,clientStringRef,clientDuration,logAllClientHeaders,analyticsProfile,clientInsights,significantLogThrottle,udfLogThrottle,nonSignificantLogs,nslduration,nslThrottle,metricsRealtimeUpdate,metricsRealtimeUpdateDuration,maxCpsPerClient,trafficEnabled,useBridgeIpAsVip,useVipAsSnat,vsVipName,aviVroClient,network_profile) ;</script>
+        <in-binding>
+            <bind name="Name" type="string" export-name="name">
+                <description>Virtual service name</description>
+            </bind>
+            <bind name="ServerCloud" type="string" export-name="server_cloud">
+                <description>Server cloud name</description>
+            </bind>
+            <bind name="Tenant" type="string" export-name="Tenant">
+                <description>Tenant name </description>
+            </bind>
+            <bind name="ApplicationProfile" type="string" export-name="application_profile">
+                <description>Application profile name </description>
+            </bind>
+            <bind name="servicePort" type="number" export-name="service_port">
+                <description>Virtual service port</description>
+            </bind>
+            <bind name="poolName" type="string" export-name="poolName">
+                <description>Newly created pool name</description>
+            </bind>
+            <bind name="vsVipName" type="string" export-name="vsVipName">
+                <description>Name of the vsvip</description>
+            </bind>
+            <bind name="aviVroClient" type="Avi:AviVroClient" export-name="aviVroClient">
+                <description>Object of the plugin</description>
+            </bind>
+            <bind name="CreateSSL" type="boolean"/>
+            <bind name="clientStringRef" type="string"/>
+            <bind name="logAllClientHeaders" type="boolean"/>
+            <bind name="trafficEnabled" type="boolean"/>
+            <bind name="nslThrottle" type="string"/>
+            <bind name="poolgroupName" type="string"/>
+            <bind name="metricsRealtimeUpdateDuration" type="number"/>
+            <bind name="excludeURL" type="string"/>
+            <bind name="SSLCertificate" type="string" export-name="SSLCertificate"/>
+            <bind name="scaleoutEcmp" type="boolean"/>
+            <bind name="vsVIP" type="boolean" export-name="existing_vip"/>
+            <bind name="description" type="string"/>
+            <bind name="enableRhiSnat" type="boolean"/>
+            <bind name="nslduration" type="string"/>
+            <bind name="enableAutogw" type="boolean"/>
+            <bind name="useBridgeIpAsVip" type="boolean"/>
+            <bind name="nonSignificantLogs" type="boolean"/>
+            <bind name="closeClientConfigUpdate" type="boolean"/>
+            <bind name="clientIpAddr" type="string"/>
+            <bind name="enabledClientLog" type="boolean"/>
+            <bind name="SSLCert" type="boolean"/>
+            <bind name="metricsRealtimeUpdate" type="boolean"/>
+            <bind name="clientInsights" type="string"/>
+            <bind name="udfLogThrottle" type="number"/>
+            <bind name="ignPoolNetReach" type="boolean"/>
+            <bind name="serviceEngine" type="string"/>
+            <bind name="addClientLogFliter" type="boolean"/>
+            <bind name="CertName" type="string"/>
+            <bind name="significantLogThrottle" type="number"/>
+            <bind name="includeURL" type="string"/>
+            <bind name="existingVIP" type="string"/>
+            <bind name="enableRhi" type="boolean"/>
+            <bind name="allowInvalidClientCert" type="boolean"/>
+            <bind name="poolOrPoolgroup" type="boolean"/>
+            <bind name="analyticsProfile" type="string"/>
+            <bind name="clientDuration" type="number"/>
+            <bind name="useVipAsSnat" type="boolean"/>
+            <bind name="removeListeningPortOnVsDown" type="boolean"/>
+            <bind name="maxCpsPerClient" type="number"/>
+            <bind name="network_profile" type="string"/>
+        </in-binding>
+        <out-binding>
+            <bind name="actionResult" type="Avi:AviVroClient"/>
+        </out-binding>
+        <position y="100.86363636363636" x="505.0"/>
+    </workflow-item>
+</ns2:workflow>

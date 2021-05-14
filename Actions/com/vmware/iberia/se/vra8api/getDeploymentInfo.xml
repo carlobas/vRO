@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getDeploymentInfo" result-type="string" api-version="6.0.0" id="b400f373-65e4-4387-aa78-818d86de9610" version="1.0.0" category-name="com.vmware.iberia.se.vra8api">
+  <description><![CDATA[Gets the basic information for a specific deployment]]></description>
+  <param n="vRADeploymentID" t="string"><![CDATA[]]></param>
+  <param n="vRAHost" t="string"><![CDATA[]]></param>
+  <param n="vRARefreshToken" t="string"><![CDATA[]]></param>
+  <script encoded="false"><![CDATA[	//Uses vRA URL & Token already gather from getLoginToken
+	var dynamicHost = RESTHostManager.createHost("dynamicRequest");
+	var restHost = RESTHostManager.createTransientHostFrom(dynamicHost);
+	    restHost.operationTimeout = 60;
+	    restHost.connectionTimeout = 30;
+	    restHost.hostVerification = false;
+	    restHost.url = vRAHost;
+	var requestMethod = "GET";
+    var requestUri = "/deployment/api/deployments/" +vRADeploymentID +"?apiVersion=2019-01-15";
+	var requestHeaders = new Properties();
+	    requestHeaders.put("Content-Type","application/json");
+	    requestHeaders.put("csp-auth-token", vRARefreshToken);
+	var requestContent = JSON.stringify("");
+	
+	var requestResult = System.getModule("com.vmware.iberia.se.rest").restRequest(restHost, requestMethod, requestContent, requestUri, requestHeaders, false);
+	
+    //If everything it's ok, this var will contain Deployment Info in JSON string format
+    var contentAsString = "";
+	if(requestResult["statusCode"] == "200") {
+	    contentAsString = requestResult["contentAsString"];
+	}
+	
+	return contentAsString;]]></script>
+</dunes-script-module>

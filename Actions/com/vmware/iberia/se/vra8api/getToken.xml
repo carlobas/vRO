@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getToken" result-type="string" api-version="6.0.0" id="76848b09-cb7f-4959-8251-7c5756c194e7" version="1.0.0" category-name="com.vmware.iberia.se.vra8api">
+  <description><![CDATA[Get refresh-token from login ]]></description>
+  <param n="vRAHost" t="string"><![CDATA[]]></param>
+  <param n="vRAUser" t="string"><![CDATA[]]></param>
+  <param n="vRAUserPassword" t="SecureString"><![CDATA[]]></param>
+  <script encoded="false"><![CDATA[//Uses vRA URL, user & Password to get refresh-token
+var vRAAccessToken = "";
+var dynamicHost = RESTHostManager.createHost("dynamicRequest");
+var restHost = RESTHostManager.createTransientHostFrom(dynamicHost);
+    restHost.operationTimeout = 60;
+    restHost.connectionTimeout = 30;
+    restHost.hostVerification = false;
+    restHost.url = vRAHost;
+var requestMethod = "POST";
+var requestUri = "/csp/gateway/am/idp/auth/login?access_token";
+var requestHeaders = new Properties();
+    requestHeaders.put("Content-Type","application/json");
+
+if(vRAUser.indexOf("@") > 0) {
+    // Use the IDP auth
+    var user = vRAUser.split("@");
+    System.debug("Logging in with user "+user[0]+" and domain "+user[1]);
+    var requestObj = new Object()      
+        requestObj.username = user[0];
+        requestObj.password = vRAUserPassword;
+        requestObj.domain   = user[1];
+} else {
+    System.debug("Logging in with user "+user[0]);
+    var requestObj = new Object();
+        requestObj.username = vRAUser;
+        requestObj.password = vRAUserPassword;
+}
+
+var requestContent = JSON.stringify(requestObj);
+
+var requestResult = System.getModule("com.vmware.iberia.se.rest").restRequest(restHost, requestMethod, requestContent, requestUri, requestHeaders, false);
+
+System.debug("Get Login Token Status: " +requestResult["statusCode"]);
+if(requestResult["statusCode"] == "200") {
+    var json = JSON.parse(requestResult["contentAsString"]);
+    vRAAccessToken = json.refresh_token;
+    System.debug(vRAAccessToken);
+}
+return vRAAccessToken;]]></script>
+</dunes-script-module>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item7" object-name="workflow:name=generic" id="66549bf9-7960-4d27-ae06-ed82ca67be59" editor-version="2.0" version="1.0.1" api-version="6.0.0" allowed-operations="vef" restartMode="1" resumeFromFailedMode="0">
+    <display-name>IBSE SaltStack Delete Key</display-name>
+    <position y="50.0" x="100.0"/>
+    <input>
+        <param name="inputProperties" type="Properties"/>
+    </input>
+    <output/>
+    <attrib name="SaltHost" type="string" conf-id="f3665610-6a95-4cab-bee5-37150c323b73" conf-key="SaltHost"/>
+    <attrib name="SaltUser" type="string" conf-id="f3665610-6a95-4cab-bee5-37150c323b73" conf-key="SaltUser"/>
+    <attrib name="SaltUserPassword" type="SecureString" conf-id="f3665610-6a95-4cab-bee5-37150c323b73" conf-key="SaltUserPassword"/>
+    <attrib name="actionResult" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <attrib name="SaltMasterID" type="string" conf-id="f3665610-6a95-4cab-bee5-37150c323b73" conf-key="SaltMasterRegionA"/>
+    <attrib name="SaltKeyState" type="string">
+        <value encoded="n">reject</value>
+    </attrib>
+    <attrib name="SaltKey" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="50.0" x="680.0"/>
+    </workflow-item>
+    <workflow-item name="item1" out-name="item6" type="task" script-module="com.vmware.iberia.se.saltapi/getLoginToken" comparator="0">
+        <display-name>getLoginToken</display-name>
+        <script encoded="false">//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.vmware.iberia.se.saltapi").getLoginToken(SaltHost,SaltUser,SaltUserPassword);
+</script>
+        <in-binding>
+            <bind name="SaltHost" type="string" export-name="SaltHost">
+                <description></description>
+            </bind>
+            <bind name="SaltUser" type="string" export-name="SaltUser">
+                <description></description>
+            </bind>
+            <bind name="SaltUserPassword" type="SecureString" export-name="SaltUserPassword">
+                <description></description>
+            </bind>
+        </in-binding>
+        <out-binding>
+            <bind name="actionResult" type="string" export-name="actionResult"/>
+        </out-binding>
+        <description>Add a note to the workflow schema.</description>
+        <position y="60.0" x="300.0"/>
+    </workflow-item>
+    <workflow-item name="item6" out-name="item0" type="task" script-module="com.vmware.iberia.se.saltapi/setSaltkeyState" comparator="0">
+        <display-name>setSaltkeyState</display-name>
+        <script encoded="false">//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.vmware.iberia.se.saltapi").setSaltkeyState(SaltHost,SaltUser,SaltUserPassword,SaltKey,SaltMasterID,SaltKeyState,XXsrftoken);
+</script>
+        <in-binding>
+            <bind name="SaltHost" type="string" export-name="SaltHost">
+                <description></description>
+            </bind>
+            <bind name="SaltUser" type="string" export-name="SaltUser">
+                <description></description>
+            </bind>
+            <bind name="SaltUserPassword" type="SecureString" export-name="SaltUserPassword">
+                <description></description>
+            </bind>
+            <bind name="SaltKey" type="string" export-name="SaltKey">
+                <description></description>
+            </bind>
+            <bind name="SaltMasterID" type="string" export-name="SaltMasterID">
+                <description></description>
+            </bind>
+            <bind name="SaltKeyState" type="string" export-name="SaltKeyState">
+                <description>key state (reject, accept..)</description>
+            </bind>
+            <bind name="XXsrftoken" type="string" export-name="actionResult">
+                <description></description>
+            </bind>
+        </in-binding>
+        <out-binding>
+            <bind name="actionResult" type="string" export-name="actionResult"/>
+        </out-binding>
+        <description>Add a note to the workflow schema.</description>
+        <position y="60.0" x="420.0"/>
+    </workflow-item>
+    <workflow-item name="item7" out-name="item1" type="task" comparator="0">
+        <display-name>Read from CAS</display-name>
+        <script encoded="false">var pProperties = new Properties();
+SaltKey = "";
+//Looking for 'saltkey' in Custom Properties
+pProperties = inputProperties.get("customProperties");
+if (pProperties.get("saltkey") != null &amp;&amp; pProperties.get("saltkey") != ""){
+    SaltKey = pProperties.get("saltkey");
+    System.log("Salt Key found: " +SaltKey);
+}</script>
+        <in-binding>
+            <bind name="inputProperties" type="Properties" export-name="inputProperties"/>
+        </in-binding>
+        <out-binding>
+            <bind name="SaltKey" type="string" export-name="SaltKey"/>
+        </out-binding>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="160.0"/>
+    </workflow-item>
+</ns2:workflow>

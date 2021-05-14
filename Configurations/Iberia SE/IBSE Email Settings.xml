@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<config-element id="0b7b5ecb-0799-4608-ba95-f33df6a08d69" version="1.0.0">
+  <display-name><![CDATA[IBSE Email Settings]]></display-name>
+  <description><![CDATA[Default configurations for email notifications (Used by vRA)]]></description>
+  <atts>
+    <att name="fromAddress" type="string" read-only="false">
+      <value encoded="n"><![CDATA[vra_noreply@iberia.local]]></value>
+    </att>
+    <att name="fromName" type="string" read-only="false">
+      <value encoded="n"><![CDATA[vRA Iberia]]></value>
+    </att>
+    <att name="smtpHost" type="string" read-only="false">
+      <value encoded="n"><![CDATA[smtp.iberia.local]]></value>
+    </att>
+    <att name="smtpHostPort" type="number" read-only="false">
+      <value encoded="n"><![CDATA[25.0]]></value>
+    </att>
+    <att name="useSSL" type="boolean" read-only="false">
+      <value encoded="n"><![CDATA[false]]></value>
+    </att>
+    <att name="useTLS" type="boolean" read-only="false">
+      <value encoded="n"><![CDATA[false]]></value>
+    </att>
+    <att name="authUser" type="string" read-only="false">
+      <value encoded="n"><![CDATA[]]></value>
+    </att>
+    <att name="authPassword" type="SecureString" read-only="false">
+      <value encoded="n"><![CDATA[__NULL__]]></value>
+    </att>
+  </atts>
+</config-element>

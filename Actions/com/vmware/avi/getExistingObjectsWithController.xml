@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getExistingObjectsWithController" result-type="Array/string" api-version="6.0.0" id="42556c6b-8b94-45fd-b1fd-feed20a095ca" version="0.0.2" allowed-operations="vfep" category-name="com.vmware.avi">
+  <param n="controller" t="string"><![CDATA[
+	]]></param>
+  <param n="objectType" t="string"><![CDATA[
+	]]></param>
+  <script encoded="false"><![CDATA[/*
+    Modified from Original source. vRA doesn't pass the value of "controller", or simply fill it after get information for server_cloud
+    This function works for vRO Input controls, but not when it's used from vRA
+*/
+try{
+    var objectList = new Array();
+    var vroClientArray=Server.findAllForType('Avi:AviVroClient','');
+    var aviVroClientObj= null;
+    var aviVroClientObjFirst = null;
+    System.debug("Found " +vroClientArray.length +" AVI registered"); 
+    for each(aviVroClient in vroClientArray){
+        if (aviVroClientObjFirst != null){
+            //Only occurs with the first one
+            aviVroClientObjFirst = AviVroClient;
+        }
+	    if(aviVroClient != null){
+		    vroController = aviVroClient.cred.controller;
+		    if(vroController.toLowerCase() == controller.toLowerCase()){
+		        aviVroClientObj= aviVroClient;
+		    }
+	    }	
+    }
+    if (aviVroClientObj == null){
+        //Assign the first one registered in vRO
+        //In case of no AVI controllers registered, both vars will be null
+        aviVroClientObj = aviVroClientObjFirst;
+        System.debug("No AVI controller found, assigned first one");
+    }
+	if(aviVroClientObj == null){
+	    System.log("Controller is null");
+        objectList.push("Controller not found");
+        return objectList;
+	}
+	var response = aviVroClientObj.get(objectType,null);
+    var objectData = JSON.parse(response);
+	for each(index in objectData){
+		objectList.push(index.name);
+	}
+	return objectList;
+}catch(e){
+    System.log("Error occured while fetching objects : "+e)
+}]]></script>
+</dunes-script-module>

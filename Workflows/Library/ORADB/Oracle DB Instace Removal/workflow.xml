@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item1" object-name="workflow:name=generic" id="b75b8265-4b78-41ac-9802-d79e00ac82ec" editor-version="2.0" version="0.0.0" api-version="6.0.0" allowed-operations="vef" restartMode="1" resumeFromFailedMode="0">
+    <display-name>Oracle DB Instace Removal</display-name>
+    <position y="50.0" x="100.0"/>
+    <input>
+        <param name="databaseName" type="string"/>
+    </input>
+    <output/>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="50.0" x="300.0"/>
+    </workflow-item>
+    <workflow-item name="item1" out-name="item0" type="task" comparator="0">
+        <display-name>Scriptable task</display-name>
+        <script encoded="false">System.log("Start");&#13;
+ &#13;
+//Prints Inputs&#13;
+System.log("Database Name: " + databaseName);&#13;
+ &#13;
+//****************************************************&#13;
+&#13;
+System.log("Stop");</script>
+        <in-binding>
+            <bind name="databaseName" type="string" export-name="databaseName"/>
+        </in-binding>
+        <out-binding/>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="150.0"/>
+    </workflow-item>
+</ns2:workflow>

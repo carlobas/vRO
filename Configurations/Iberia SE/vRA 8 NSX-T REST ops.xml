@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<config-element id="20f8727a-f58b-4430-b370-52f8edb6e403" version="1.0.0">
+  <display-name><![CDATA[vRA 8 NSX-T REST ops]]></display-name>
+  <atts>
+    <att name="nsx_manager" type="string" read-only="false">
+      <value encoded="n"><![CDATA[nsxmanagervip.regiona.iberia.local]]></value>
+    </att>
+    <att name="nsx_user" type="string" read-only="false">
+      <value encoded="n"><![CDATA[admin]]></value>
+    </att>
+    <att name="nsx_userPassword" type="SecureString" read-only="false">
+      <value encoded="n"><![CDATA[__NULL__]]></value>
+    </att>
+  </atts>
+</config-element>
