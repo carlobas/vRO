@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item2" object-name="workflow:name=generic" id="8d30821d-b621-4e07-9104-8e8e98a6294e" editor-version="2.0" version="0.0.0" api-version="6.0.0" restartMode="1" resumeFromFailedMode="0">
+    <display-name>IBSE Manual User Interaction</display-name>
+    <position y="50.0" x="100.0"/>
+    <input>
+        <param name="inputProperties" type="string"/>
+    </input>
+    <output/>
+    <attrib name="endpoint" type="string">
+        <value encoded="n"/>
+    </attrib>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="50.0" x="500.0"/>
+    </workflow-item>
+    <workflow-item name="item1" out-name="item3" type="input" comparator="0">
+        <display-name>User interaction</display-name>
+        <in-binding>
+            <bind name="security.group" type="LdapGroup">
+                <description>Any user member of this group will be authorized to fill in this form.</description>
+            </bind>
+            <bind name="security.assignees" type="Array/LdapUser">
+                <description>Any user from this array of users will be authorized to fill in this form</description>
+            </bind>
+            <bind name="security.assignee.groups" type="Array/LdapGroup">
+                <description>Any user member of any of the groups will be authorized to fill in this form.</description>
+            </bind>
+            <bind name="timeout.date" type="Date">
+                <description>If not null, this input item will wait until date and will continue workflow execution.</description>
+            </bind>
+        </in-binding>
+        <out-binding>
+            <bind name="endpoint" type="string" export-name="endpoint"/>
+        </out-binding>
+        <description>Use this element to set up a user interaction.</description>
+        <presentation/>
+        <position y="60.0" x="260.0"/>
+    </workflow-item>
+    <workflow-item name="item2" out-name="item1" type="task" comparator="0">
+        <display-name>Read vRA Properties</display-name>
+        <script encoded="false">//endpoint = inputProperties.get("endpointId");&#13;
+&#13;
+endpoint = inputProperties&#13;
+&#13;
+//Remove after debug&#13;
+ System.log("endpoint is array: " +Array.isArray(endpoint));&#13;
+&#13;
+if (endpoint != null &amp;&amp; endpoint != ""){&#13;
+    System.log("endpoint found is: " +endpoint);&#13;
+}</script>
+        <in-binding>
+            <bind name="inputProperties" type="string" export-name="inputProperties"/>
+        </in-binding>
+        <out-binding>
+            <bind name="endpoint" type="string" export-name="endpoint"/>
+        </out-binding>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="155.0"/>
+    </workflow-item>
+    <workflow-item name="item3" out-name="item0" type="task" comparator="0">
+        <display-name>Log Output</display-name>
+        <script encoded="false">System.log("Updated endpoitID: "+endpoint);</script>
+        <in-binding>
+            <bind name="endpoint" type="string" export-name="endpoint"/>
+        </in-binding>
+        <out-binding/>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="365.0"/>
+    </workflow-item>
+</ns2:workflow>

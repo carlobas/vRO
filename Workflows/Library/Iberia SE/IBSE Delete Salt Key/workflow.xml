@@ -12,7 +12,7 @@
         <description>Salt Minion Key to be deleted</description>
     </attrib>
     <attrib name="var_hostNameOrIP" type="string">
-        <value encoded="n">10.10.10.70</value>
+        <value encoded="n">10.10.0.54</value>
         <description>Salt Master Hostname or IP address</description>
     </attrib>
     <attrib name="var_port" type="number">
@@ -24,7 +24,7 @@
         <description>Salt Master Username</description>
     </attrib>
     <attrib name="var_password" type="SecureString">
-        <value encoded="n">13BT41S7AQ36K34P21J21J70N4FT63X68S30Q6CS30GE52FBCFX434D1DDM5C2A51BI8A44C62W992BF98UEBFB629HDD91ADFT86ADC30S9DF23C7T87D0CD2NDEB7BB8L9113FC6UD2A6DADRAA834FBW8D8E82AUC44A379T620D768N789E5A4Q1602EF5N</value>
+        <value encoded="n">12BM76P50R2EQ29H55Y5BM57O58H7AT45I4BZ49SEB3E16EI1F3DC8EIAA9947ETDC32765K265BB78J1CA3883XEE6D4A9RE90E739ZAD64CBCP6640363PD123F60VD73ECE2ICFCB23BKC38F909G4F72A55UF122022J617404DM9B7D15FOCDEDB93SB346F6BS</value>
         <description>Salt Master Password</description>
     </attrib>
     <attrib name="var_passwordAuthentication" type="boolean">
@@ -40,11 +40,11 @@
         <description>0 = OK, Negative = Error, Positive = Number of values returned, after error text</description>
     </attrib>
     <attrib name="var_errorText" type="string">
-        <value encoded="n"/>
+        <value encoded="n"></value>
         <description>Error text, if any</description>
     </attrib>
     <attrib name="var_outputText" type="string">
-        <value encoded="n"/>
+        <value encoded="n"></value>
         <description>Result of running the SSH command</description>
     </attrib>
     <workflow-item name="item0" type="end" end-mode="0" comparator="0">
@@ -183,5 +183,4 @@ System.log("Error Text: " +var_errorText);</script>
         <description>Simple task with custom script capability.</description>
         <position y="60.0" x="447.5"/>
     </workflow-item>
-    <presentation/>
 </ns2:workflow>

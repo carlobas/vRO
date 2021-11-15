@@ -1,0 +1,1 @@
+{"schema":{"machineName":{"id":"machineName","type":{"dataType":"string"},"label":"machineName","constraints":{"required":false}}},"layout":{"pages":[{"id":"page_6kw1rb5q","title":"General","sections":[{"id":"section_8tjhjscz","fields":[{"id":"machineName","display":"textField","signpostPosition":"right-middle","state":{"visible":true,"read-only":false}}]}]}]},"itemId":""}

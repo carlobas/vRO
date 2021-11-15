@@ -1,0 +1,22 @@
+Metadata-Version: 2.1
+Name: SSEAPE
+Version: 8.3.0+4
+Summary: SaltStack Enterprise Application Programming Extension
+Home-page: https://saltstack.com
+Author: Thomas S Hatch
+Author-email: thatch@saltstack.com
+License: UNKNOWN
+Platform: UNKNOWN
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2.6
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: License :: Other/Proprietary License
+Requires-Dist: pycryptodomex (<4,>=3.9.8)
+
+UNKNOWN
+
+

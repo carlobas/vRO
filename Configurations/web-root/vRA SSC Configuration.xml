@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<config-element id="910ab210-483e-41b0-a4f9-e9cba758ef58" version="0.0.0">
+  <display-name><![CDATA[vRA SSC Configuration]]></display-name>
+  <atts>
+    <att name="hostNameOrIP" type="string" read-only="false">
+      <value encoded="n"><![CDATA[10.10.0.54]]></value>
+      <description><![CDATA[Salt Master Hostname or IP address]]></description>
+    </att>
+    <att name="port" type="number" read-only="false">
+      <value encoded="n"><![CDATA[22.0]]></value>
+      <description><![CDATA[Salt Master Port]]></description>
+    </att>
+    <att name="username" type="string" read-only="false">
+      <value encoded="n"><![CDATA[root]]></value>
+      <description><![CDATA[Salt Master Username]]></description>
+    </att>
+    <att name="password" type="SecureString" read-only="false">
+      <value encoded="n"><![CDATA[__NULL__]]></value>
+      <description><![CDATA[Salt Master Password ]]></description>
+    </att>
+    <att name="restHostUrl" type="string" read-only="false">
+      <value encoded="n"><![CDATA[https://vrassc.iberia.local]]></value>
+      <description><![CDATA[SaltStack RaaS URL]]></description>
+    </att>
+    <att name="restMasterID" type="string" read-only="false">
+      <value encoded="n"><![CDATA[salt]]></value>
+      <description><![CDATA[Salt Master ID]]></description>
+    </att>
+  </atts>
+</config-element>

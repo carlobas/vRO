@@ -24,7 +24,7 @@ var requestHeaders = new Properties();
 
 var requestContent = '';
 
-var requestResult = System.getModule("com.vmware.iberia.se.rest").restRequest(restHost, requestMethod, requestContent, requestUri, requestHeaders, false);
+var requestResult = System.getModule("com.vmware.iberia.se.rest").restRequest(restHost, requestMethod, requestContent, requestUri, requestHeaders, true);
 
 if(requestResult["statusCode"] == "200") {
     for each (var auxItem in requestResult["cookies"]){

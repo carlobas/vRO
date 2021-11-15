@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item1" object-name="workflow:name=generic" id="5ee93fb2-619d-4ee2-9eb8-fc9ccd4156b2" editor-version="2.0" version="0.0.0" api-version="6.0.0" restartMode="1" resumeFromFailedMode="0">
+    <display-name>IBSE Custom action - Install SW</display-name>
+    <position y="50.0" x="120.0"/>
+    <input>
+        <param name="saltkey" type="string"/>
+        <param name="application" type="string"/>
+    </input>
+    <output/>
+    <attrib name="var_cmd" type="string">
+        <value encoded="n"></value>
+        <description>Command to be executed on Salt Master</description>
+    </attrib>
+    <attrib name="var_hostNameOrIP" type="string" conf-id="910ab210-483e-41b0-a4f9-e9cba758ef58" conf-key="hostNameOrIP">
+        <description>Salt Master Hostname or IP address</description>
+    </attrib>
+    <attrib name="var_port" type="number" conf-id="910ab210-483e-41b0-a4f9-e9cba758ef58" conf-key="port">
+        <description>Salt Master Port</description>
+    </attrib>
+    <attrib name="var_username" type="string" conf-id="910ab210-483e-41b0-a4f9-e9cba758ef58" conf-key="username">
+        <description>Salt Master Username</description>
+    </attrib>
+    <attrib name="var_password" type="SecureString" conf-id="910ab210-483e-41b0-a4f9-e9cba758ef58" conf-key="password">
+        <description>Salt Master Password</description>
+    </attrib>
+    <attrib name="var_passwordAuthentication" type="boolean">
+        <value encoded="n">true</value>
+        <description>Sets authentication to password or key file</description>
+    </attrib>
+    <attrib name="var_result" type="number">
+        <value encoded="n"/>
+        <description>0 = OK, Negative = Error, Positive = Number of values returned, after error text</description>
+    </attrib>
+    <attrib name="var_errorText" type="string">
+        <value encoded="n"></value>
+        <description>Error text, if any</description>
+    </attrib>
+    <attrib name="var_outputText" type="string">
+        <value encoded="n"></value>
+        <description>Result of running the SSH command</description>
+    </attrib>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="50.0" x="545.0"/>
+    </workflow-item>
+    <workflow-item name="item1" out-name="item2" type="task" comparator="0">
+        <display-name>Create cmd</display-name>
+        <script encoded="false">//Build the cmd&#13;
+var_cmd="salt "+saltkey+" state.apply /applications/"+application;&#13;
+System.log("Command to be executed on the Salt Master: " +var_cmd);&#13;
+&#13;
+//How to use request context parameters&#13;
+&#13;
+//var auxProperties = __metadata_resourceProperties;&#13;
+//var pProperties = new Properties();&#13;
+//System.getContext().getParameter('__metadata_resourceProperties');&#13;
+&#13;
+//System.log("CPU: " +auxProperties.get("cpuCount"));&#13;
+//System.log("Total Mem GB: " +auxProperties.get("totalMemoryMB"));&#13;
+//System.log("Provision disk GB: " +auxProperties.get("provisionGB"));&#13;
+//System.log("vSphere ID: " +auxProperties.get("__moref"));</script>
+        <in-binding>
+            <bind name="saltkey" type="string" export-name="saltkey"/>
+            <bind name="application" type="string" export-name="application"/>
+        </in-binding>
+        <out-binding>
+            <bind name="var_cmd" type="string" export-name="var_cmd"/>
+        </out-binding>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="220.0"/>
+    </workflow-item>
+    <workflow-item name="item2" out-name="item3" type="link" linked-workflow-id="90808080808080808080808080808080D28080800120523434428525559a3425f" comparator="0">
+        <display-name>Run SSH command</display-name>
+        <script encoded="false"></script>
+        <in-binding>
+            <bind name="hostNameOrIP" type="string" export-name="var_hostNameOrIP">
+                <description>Hostname or IP address of the SSH host</description>
+            </bind>
+            <bind name="port" type="number" export-name="var_port">
+                <description>Target port</description>
+            </bind>
+            <bind name="username" type="string" export-name="var_username">
+                <description>Username</description>
+            </bind>
+            <bind name="password" type="SecureString" export-name="var_password">
+                <description>Password</description>
+            </bind>
+            <bind name="cmd" type="string" export-name="var_cmd">
+                <description>The SSH command to run</description>
+            </bind>
+            <bind name="passwordAuthentication" type="boolean" export-name="var_passwordAuthentication">
+                <description>Sets authentication to password or key file</description>
+            </bind>
+            <bind name="path" type="Path" export-name="">
+                <description>Path to the private key</description>
+            </bind>
+            <bind name="passphrase" type="SecureString" export-name="">
+                <description>Private key pass-phrase</description>
+            </bind>
+            <bind name="encoding" type="string" export-name="">
+                <description>The encoding to be used. Leave this field empty to use the default system encoding. (Example values: "UTF-8", "ISO-8859-1"...)</description>
+            </bind>
+        </in-binding>
+        <out-binding>
+            <bind name="result" type="number" export-name="var_result">
+                <description>0 = OK, Negative = Error, Positive = Number of values returned, after error text</description>
+            </bind>
+            <bind name="errorText" type="string" export-name="var_errorText">
+                <description>Error text, if any</description>
+            </bind>
+            <bind name="outputText" type="string" export-name="var_outputText">
+                <description>Result of running the SSH command</description>
+            </bind>
+        </out-binding>
+        <description> </description>
+        <position y="60.0" x="310.0"/>
+    </workflow-item>
+    <workflow-item name="item3" out-name="item0" type="task" comparator="0">
+        <display-name>Show results</display-name>
+        <script encoded="false">System.log("Salt command result");&#13;
+System.log("Result:" +var_result);&#13;
+System.log("Outpuet Text: " +var_outputText);&#13;
+System.log("Error Text: " +var_errorText);</script>
+        <in-binding>
+            <bind name="var_outputText" type="string" export-name="var_outputText"/>
+            <bind name="var_result" type="number" export-name="var_result"/>
+            <bind name="var_errorText" type="string" export-name="var_errorText"/>
+        </in-binding>
+        <out-binding/>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="412.5"/>
+    </workflow-item>
+</ns2:workflow>

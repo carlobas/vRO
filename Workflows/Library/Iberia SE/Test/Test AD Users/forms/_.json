@@ -1,0 +1,1 @@
+{"schema":{"inTextToSearch":{"id":"inTextToSearch","type":{"dataType":"string"},"label":"inTextToSearch"}},"layout":{"pages":[{"id":"page_4vf9k7gx","title":"General","sections":[{"id":"section_w3xnt0vq","fields":[{"id":"inTextToSearch","display":"textField","signpostPosition":"right-middle","state":{"visible":true,"read-only":false}}]}]}]},"itemId":""}

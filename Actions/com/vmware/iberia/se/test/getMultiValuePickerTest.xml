@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getMultiValuePickerTest" result-type="Array/Properties" api-version="6.0.0" id="858a994c-4793-4346-ac46-3f55f32cb8bb" version="0.0.0" category-name="com.vmware.iberia.se.test">
+  <script encoded="false"><![CDATA[var res = [];
+res.push(new Properties({value: 'val1', label: 'lab1'}));
+res.push(new Properties({value: 'val2', label: 'lab2'}));
+res.push(new Properties({value: 'val3', label: 'lab3'}));
+return res;]]></script>
+</dunes-script-module>

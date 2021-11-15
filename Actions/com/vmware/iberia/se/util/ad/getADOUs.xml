@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getADOUs" result-type="Array/Properties" api-version="6.0.0" id="bdc248b3-e013-47e7-9f86-341dabe0f33e" version="1.1.0" category-name="com.vmware.iberia.se.util.ad">
+  <description><![CDATA[Get organisation units from active directory based on a given OU root path ]]></description>
+  <param n="in_AD" t="string"><![CDATA[Identifies registered AD. The name]]></param>
+  <param n="in_OUbase" t="string"><![CDATA[Identifies base OU to look into. Expected DN format]]></param>
+  <param n="in_ReturnFullDN" t="boolean"><![CDATA[Data returned will be relative or full DN path]]></param>
+  <script encoded="false"><![CDATA[/*
+in_AD: will search in AD registered in vRO (useful if we have more than one AD registered)
+in_OUbase: Base path into AD to look for OUs. Expexted DN format (OU=Whatever,DC=whatever,DC=whatever)
+in_ReturnFullDN: values returned will contain full DN path (true) or relative DN path regarding in_OUbase (if false). Be very carefull, because relative path uses a regex expresion to remove base DN path, so base DN path is case sensitive
+*/
+
+var result = [];
+var auxADHost = null; //Will contain AD host to llok for OU, extrated from all AD registered
+var auxADs = AD_HostManager.findAllHosts();
+var auxOUs = null; //Will contain the list of all OUs found
+var auxOU = null; //Will contain the base OU object
+var auxOUBaseName = "";
+var auxProperties;
+
+//Getting OU Base name. Filter AD function Expects a name, not DN
+auxOUBaseName = in_OUbase.split(',')[0].split('=')[1];
+System.log("OU DN: " +in_OUbase);
+System.log("OU Name: " +auxOUBaseName);
+
+//Looking for AD registered
+for (var auxItem in auxADs ){
+    if (auxADs[auxItem].name == in_AD){
+        //AD Found
+        System.log("AD Found: " +in_AD);
+        auxADHost = auxADs[auxItem];
+    }
+}
+
+//Looking for OU Base path. OU Object will retrieve the list of OUs as a parameter
+if (auxADHost != null){
+    auxOUs = ActiveDirectory.searchExactMatch('OrganizationalUnit', auxOUBaseName, 50, auxADHost);
+    //Search function always return an array for results, as we can have more than 1 OU with same name, in different branches
+    //We need to filter the results with DN, it's unique
+    if (auxOUs != null && auxOUs.length > 0){
+        System.log("OUs Found: " +auxOUs.length);
+        for (var auxItem in auxOUs){
+            if (in_OUbase.toLowerCase() == auxOUs[auxItem].distinguishedName.toLowerCase()){
+                //This is the object representing OU base
+                auxOU = auxOUs[auxItem];
+                System.log("OU DN:" +auxOUs[auxItem].distinguishedName);
+                System.log("OU gUID:" +auxOUs[auxItem].gUID);
+            }
+        }
+    }
+}
+
+//At this point, if auxOU is null is because we didn't find the base ou
+if (auxOU != null){
+    for (var auxItem in auxOU.organizationalUnits){
+        auxProperties = new Properties();
+        if (in_ReturnFullDN){
+            auxProperties.put('id', auxOU.organizationalUnits[auxItem].distinguishedName)
+        }else{
+            auxProperties.put('id', auxOU.organizationalUnits[auxItem].distinguishedName.replace("," +in_OUbase, ""));
+        }
+        System.log(auxProperties["id"]);
+        auxProperties.put('label', auxOU.organizationalUnits[auxItem].distinguishedName.split(',')[0].split('=')[1])
+        result.push(auxProperties);
+    }
+}
+return result;]]></script>
+</dunes-script-module>

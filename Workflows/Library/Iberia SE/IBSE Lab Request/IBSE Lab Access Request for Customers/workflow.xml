@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item0" object-name="workflow:name=generic" id="42d8e235-9450-4391-8776-6edc4870888a" editor-version="2.0" version="1.0.0" api-version="6.0.0" restartMode="1" resumeFromFailedMode="0">
+    <display-name>IBSE Lab Access Request for Customers</display-name>
+    <description>Provides vRA XaaS service to allow Iberia SE  team ask for external access to the lab (for final customers only) </description>
+    <position y="50.0" x="100.0"/>
+    <input>
+        <param name="in_requestor_name" type="string"/>
+        <param name="in_requestor_email" type="string"/>
+        <param name="in_requestor_surname" type="string"/>
+        <param name="in_access_deadline" type="Date">
+            <description>Blank or null means permanent access request</description>
+        </param>
+        <param name="in_overall_description" type="string">
+            <description>Short detail about the test or project </description>
+        </param>
+    </input>
+    <output/>
+    <attrib name="var_IBSE_contact_name" type="string">
+        <value encoded="n"/>
+        <description>Will be extrated from the request</description>
+    </attrib>
+    <attrib name="var_IBSE_contact_email" type="string">
+        <value encoded="n"/>
+        <description>Will be extrated from the request</description>
+    </attrib>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="50.0" x="240.0"/>
+    </workflow-item>
+</ns2:workflow>

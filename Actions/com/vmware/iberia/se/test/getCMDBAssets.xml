@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getCMDBAssets" result-type="Array/Properties" api-version="6.0.0" id="72152c97-1621-4fa2-8d28-3cbe9e8ce765" version="1.0.0" category-name="com.vmware.iberia.se.test">
+  <description><![CDATA[Test function to connect to SQL Server and get Assets]]></description>
+  <param n="SQLName" t="string"><![CDATA[SQL Connection Name]]></param>
+  <param n="SearchText" t="string"><![CDATA[]]></param>
+  <script encoded="false"><![CDATA[var auxDBs = SQLDatabaseManager.getDatabases();
+var activeDB = null;
+var resultRecords = null;
+var returnData = [];
+var auxProperties;
+
+for (var item in auxDBs){
+	System.log(auxDBs[item].name);
+	if (auxDBs[item].name == SQLName){
+	    System.log("Database found");
+		activeDB = auxDBs[item];
+	}
+}
+
+if (activeDB != null){
+        if (SearchText != ""){
+		    resultRecords = activeDB.readCustomQuery("Select * from CMDB WHERE VM_NAME like '%" +SearchText +"%' ORDER BY VM_NAME");
+        }else{
+            resultRecords = activeDB.readCustomQuery("Select * from CMDB ORDER BY VM_NAME");
+        }
+}
+
+if (resultRecords != null){
+	for (var record in resultRecords){
+        /*auxProperties = new Properties();
+        auxProperties.put('value',resultRecords[record].getProperty("ASSET_ID"));
+        auxProperties.put('label',resultRecords[record].getProperty("VM_NAME"));
+		returnData.push(new Properties(auxProperties));
+        */
+        returnData.push(new Properties({value: resultRecords[record].getProperty("ASSET_ID"), label: resultRecords[record].getProperty("VM_NAME")}));
+		System.log(resultRecords[record].getProperty("VM_NAME").trim());
+	}
+}else{
+	System.log ("No result found");
+}
+return returnData]]></script>
+</dunes-script-module>

@@ -14,6 +14,8 @@
     <workflow-item name="item1" out-name="item0" type="task" comparator="0">
         <display-name>Scriptable task</display-name>
         <script encoded="false">var auxProperties = __metadata_resourceProperties;
+//var pProperties = new Properties();
+//System.getContext().getParameter('__metadata_resourceProperties');
 
 System.log("Action request for " +auxProperties.get("resourceName"));
 System.log("VM Config:");
@@ -26,5 +28,4 @@ System.log("vSphere ID: " +auxProperties.get("__moref"));</script>
         <description>Simple task with custom script capability.</description>
         <position y="60.5" x="170.0"/>
     </workflow-item>
-    <presentation/>
 </ns2:workflow>

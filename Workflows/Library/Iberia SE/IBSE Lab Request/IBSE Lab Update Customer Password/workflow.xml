@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item1" object-name="workflow:name=generic" id="ffef554e-b239-4cd9-9d0d-3a2c311766b0" editor-version="2.0" version="1.0.0" api-version="6.0.0" restartMode="1" resumeFromFailedMode="0">
+    <display-name>IBSE Lab Update Customer Password</display-name>
+    <description>Same functionality as original WF for AD change password. This WF will be publish in vRA Service Broker, and must filter the users showed to fit only OU for customers (iberia.local &gt; iberia &gt; Customers)</description>
+    <position y="50.0" x="100.0"/>
+    <input>
+        <param name="user" type="AD:User"/>
+        <param name="password" type="SecureString"/>
+        <param name="confirmPassword" type="SecureString"/>
+        <param name="changePasswordAtNextLogon" type="boolean"/>
+    </input>
+    <output/>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="50.0" x="340.0"/>
+    </workflow-item>
+    <workflow-item name="item1" out-name="item0" type="link" linked-workflow-id="1E818080808080808080808080808080B180808001270557368849c62c352aa82" comparator="0">
+        <display-name>Change a user password</display-name>
+        <script encoded="false"></script>
+        <in-binding>
+            <bind name="user" type="AD:User" export-name="user">
+                <description>The user which password will be changed</description>
+            </bind>
+            <bind name="password" type="SecureString" export-name="password">
+                <description>The new password to set</description>
+            </bind>
+            <bind name="confirmPassword" type="SecureString" export-name="confirmPassword">
+                <description>Confirmation of the new password</description>
+            </bind>
+            <bind name="changePasswordAtNextLogon" type="boolean" export-name="changePasswordAtNextLogon">
+                <description>Set to true if the user must change its password at next logon</description>
+            </bind>
+        </in-binding>
+        <out-binding/>
+        <description> </description>
+        <position y="60.0" x="170.0"/>
+    </workflow-item>
+</ns2:workflow>

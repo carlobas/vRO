@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item1" object-name="workflow:name=generic" id="bee3f983-580f-4e20-aa32-dae54d372cae" editor-version="2.0" version="0.0.0" api-version="6.0.0" restartMode="1" resumeFromFailedMode="0">
+    <display-name>Test AD Users</display-name>
+    <position y="50.0" x="100.0"/>
+    <input>
+        <param name="inTextToSearch" type="string"/>
+    </input>
+    <output/>
+    <attrib name="varADToSearch" type="string">
+        <value encoded="n">iberia.local</value>
+    </attrib>
+    <attrib name="actionResult" type="Array/Properties">
+        <value encoded="n">[]</value>
+    </attrib>
+    <attrib name="varTypeToSearch" type="string">
+        <value encoded="n">User</value>
+    </attrib>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="50.0" x="300.0"/>
+    </workflow-item>
+    <workflow-item name="item1" out-name="item0" type="task" script-module="com.vmware.iberia.se/ADGetUsers" business-status="" comparator="0">
+        <display-name>ADGetUsers</display-name>
+        <script encoded="false">//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.vmware.iberia.se").ADGetUsers(inADToSearch,inStringToSearch,inTypeToSearch);
+</script>
+        <in-binding>
+            <bind name="inADToSearch" type="string" export-name="varADToSearch">
+                <description>AD Registered in vRO</description>
+            </bind>
+            <bind name="inStringToSearch" type="string" export-name="inTextToSearch">
+                <description></description>
+            </bind>
+            <bind name="inTypeToSearch" type="string" export-name="varTypeToSearch">
+                <description>Object type to search in AD</description>
+            </bind>
+        </in-binding>
+        <out-binding>
+            <bind name="actionResult" type="Array/Properties" export-name="actionResult"/>
+        </out-binding>
+        <description>Add a note to the workflow schema.</description>
+        <position y="60.0" x="170.0"/>
+    </workflow-item>
+</ns2:workflow>

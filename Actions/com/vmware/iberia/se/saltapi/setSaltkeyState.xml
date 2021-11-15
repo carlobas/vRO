@@ -7,7 +7,7 @@
   <param n="SaltKey" t="string"><![CDATA[]]></param>
   <param n="SaltMasterID" t="string"><![CDATA[]]></param>
   <param n="SaltKeyState" t="string"><![CDATA[key state (reject, accept..)]]></param>
-  <param n="XXsrftoken" t="string"/>
+  <param n="XXsrftoken" t="string"><![CDATA[]]></param>
   <script encoded="false"><![CDATA[// Uses basic Auth and return a cookie with two componentes that must be passed as headers for next request
 // Salt doesn't provide an API Rest based on url, the url is always the same because its the way to pass the function & parameters to a RPC function
 var saltToken = "";
@@ -27,7 +27,7 @@ var requestHeaders = new Properties();
 
 var requestContent = '{"resource": "api", "method": "get_versions"}';
 
-var requestResult = System.getModule("com.vmware.iberia.se.rest").restRequest(restHost, requestMethod, requestContent, requestUri, requestHeaders, false);
+var requestResult = System.getModule("com.vmware.iberia.se.rest").restRequest(restHost, requestMethod, requestContent, requestUri, requestHeaders, true);
 
 if(requestResult["statusCode"] == "200") {
     for each (var auxItem in requestResult["cookies"]){
@@ -39,7 +39,7 @@ if(requestResult["statusCode"] == "200") {
 requestUri = "/rpc";
 requestContent = '{"resource": "minions", "method": "set_minion_key_state", "kwarg": { "state": "' +SaltKeyState +'", "minions": [["' +SaltMasterID +'","' +SaltKey +'"]], "include_accepted":"true"}}';
 
-requestResult = System.getModule("com.vmware.iberia.se.rest").restRequest(restHost, requestMethod, requestContent, requestUri, requestHeaders, false);
+requestResult = System.getModule("com.vmware.iberia.se.rest").restRequest(restHost, requestMethod, requestContent, requestUri, requestHeaders, true);
 
 return saltToken;]]></script>
 </dunes-script-module>

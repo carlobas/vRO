@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item3" object-name="workflow:name=generic" id="06d5c41a-c4c6-45c9-8307-78ed249f2f82" editor-version="2.0" version="0.0.0" api-version="6.0.0" restartMode="1" resumeFromFailedMode="0">
+    <display-name>IBSE SSC Delete Minion Key</display-name>
+    <position y="50.0" x="100.0"/>
+    <input>
+        <param name="inputProperties" type="Properties">
+            <description>Properties from vRA Extensibility Event Subscription</description>
+        </param>
+    </input>
+    <output/>
+    <attrib name="minionKey" type="string">
+        <value encoded="n"/>
+        <description>The Minion Key to be deleted</description>
+    </attrib>
+    <attrib name="actionResult" type="Properties">
+        <value encoded="n">{}</value>
+        <description>The outcome of the delete action</description>
+    </attrib>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="50.0" x="500.0"/>
+    </workflow-item>
+    <workflow-item name="item1" out-name="item2" type="task" script-module="com.vmware.iberia.se.saltapipy/deleteMinion" comparator="0">
+        <display-name>deleteMinion</display-name>
+        <script encoded="false">//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.vmware.iberia.se.saltapipy").deleteMinion(minionKey);
+</script>
+        <in-binding>
+            <bind name="minionKey" type="string" export-name="minionKey">
+                <description>The Minion Key to be deleted</description>
+            </bind>
+        </in-binding>
+        <out-binding>
+            <bind name="actionResult" type="Properties" export-name="actionResult"/>
+        </out-binding>
+        <description>Add a note to the workflow schema.</description>
+        <position y="60.0" x="260.0"/>
+    </workflow-item>
+    <workflow-item name="item2" out-name="item0" type="task" comparator="0">
+        <display-name>Log Output</display-name>
+        <script encoded="false">System.log("Action result: "+actionResult["greetings"])</script>
+        <in-binding>
+            <bind name="actionResult" type="Properties" export-name="actionResult"/>
+        </in-binding>
+        <out-binding/>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="345.0"/>
+    </workflow-item>
+    <workflow-item name="item3" out-name="item1" type="task" comparator="0">
+        <display-name>Read from vRA</display-name>
+        <script encoded="false">var pProperties = new Array();&#13;
+minionKey = "";&#13;
+//Looking for 'saltkey' in Custom Properties&#13;
+pProperties = inputProperties.get("addresses");&#13;
+&#13;
+//Remove after debug&#13;
+// System.log("Propesties[0] is array: " +Array.isArray(pProperties[0]));   &lt;&lt;&lt; Returns True&#13;
+// Currently casting to string, String(pProperties[0])&#13;
+// This might fails with &gt; 1 NICs VM, in that case we should assume an Array of Arrays is passaed&#13;
+&#13;
+if (pProperties[0] != null &amp;&amp; pProperties[0] != ""){&#13;
+    minionKey = String(pProperties[0]);&#13;
+    System.log("Minion ID found: " +minionKey);&#13;
+}</script>
+        <in-binding>
+            <bind name="inputProperties" type="Properties" export-name="inputProperties"/>
+        </in-binding>
+        <out-binding>
+            <bind name="minionKey" type="string" export-name="minionKey"/>
+        </out-binding>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="155.0"/>
+    </workflow-item>
+</ns2:workflow>

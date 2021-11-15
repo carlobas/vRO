@@ -12,4 +12,5 @@
 <elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='43118550-f007-4350-bb05-b1b0dc03f72f'&dunesName='Action'&name='getLoginToken'&category='com.vmware.iberia.se.vra8api']]></elm>
 <elm src-category='null'><![CDATA[dunes://service.dunes.ch/ConfigurationElement?id='35894b22-3767-4d35-b00c-62d9bae9eb86'&dunesName='ConfigurationElement']]></elm>
 <elm src-category='null'><![CDATA[dunes://service.dunes.ch/ConfigurationElement?id='3fbaecc5-5f5c-426b-a0f9-22491deb0f43'&dunesName='ConfigurationElement']]></elm>
+<used-plugin name='REST' version='2.4.1' />
 </package>

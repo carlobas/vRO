@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item1" object-name="workflow:name=generic" id="203988a3-11e6-40da-9ea3-0e0f133ac481" editor-version="2.0" version="0.0.0" api-version="6.0.0" allowed-operations="vef" restartMode="1" resumeFromFailedMode="0">
+    <display-name>IBSE Custom action - TEST</display-name>
+    <position y="50.0" x="120.0"/>
+    <input>
+        <param name="machine" type="string"/>
+    </input>
+    <output/>
+    <attrib name="var_cmd" type="string">
+        <value encoded="n"></value>
+        <description>Command to be executed on Salt Master</description>
+    </attrib>
+    <attrib name="var_hostNameOrIP" type="string" conf-id="910ab210-483e-41b0-a4f9-e9cba758ef58" conf-key="hostNameOrIP">
+        <description>Salt Master Hostname or IP address</description>
+    </attrib>
+    <attrib name="var_port" type="number" conf-id="910ab210-483e-41b0-a4f9-e9cba758ef58" conf-key="port">
+        <description>Salt Master Port</description>
+    </attrib>
+    <attrib name="var_username" type="string" conf-id="910ab210-483e-41b0-a4f9-e9cba758ef58" conf-key="username">
+        <description>Salt Master Username</description>
+    </attrib>
+    <attrib name="var_password" type="SecureString" conf-id="910ab210-483e-41b0-a4f9-e9cba758ef58" conf-key="password">
+        <description>Salt Master Password</description>
+    </attrib>
+    <attrib name="var_passwordAuthentication" type="boolean">
+        <value encoded="n">true</value>
+        <description>Sets authentication to password or key file</description>
+    </attrib>
+    <attrib name="var_result" type="number">
+        <value encoded="n"/>
+        <description>0 = OK, Negative = Error, Positive = Number of values returned, after error text</description>
+    </attrib>
+    <attrib name="var_errorText" type="string">
+        <value encoded="n"></value>
+        <description>Error text, if any</description>
+    </attrib>
+    <attrib name="var_outputText" type="string">
+        <value encoded="n"></value>
+        <description>Result of running the SSH command</description>
+    </attrib>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="50.0" x="545.0"/>
+    </workflow-item>
+    <workflow-item name="item1" out-name="item0" type="task" comparator="0">
+        <display-name>Create cmd</display-name>
+        <script encoded="false">System.log(saltkey)</script>
+        <in-binding>
+            <bind name="saltkey" type="string" export-name="machine"/>
+        </in-binding>
+        <out-binding>
+            <bind name="var_cmd" type="string" export-name="var_cmd"/>
+        </out-binding>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="220.0"/>
+    </workflow-item>
+</ns2:workflow>

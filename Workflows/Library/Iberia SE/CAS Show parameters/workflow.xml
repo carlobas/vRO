@@ -35,7 +35,8 @@ for (p in System.getContext().parameterNames()) {
 //To get a specific property 
 System.log(System.getContext().getParameter("__metadata_userName"));
  
-System.log("Stop");</script>
+System.log("Stop");
+System.log("GIT test");</script>
         <in-binding>
             <bind name="inputProperties" type="Properties" export-name="inputProperties"/>
         </in-binding>
@@ -43,5 +44,4 @@ System.log("Stop");</script>
         <description>Simple task with custom script capability.</description>
         <position y="60.0" x="150.0"/>
     </workflow-item>
-    <presentation/>
 </ns2:workflow>

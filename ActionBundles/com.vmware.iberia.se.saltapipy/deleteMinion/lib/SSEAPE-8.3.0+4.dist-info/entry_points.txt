@@ -1,0 +1,16 @@
+[console_scripts]
+sseapi-config = sseape.scripts:main
+
+[salt.loader]
+beacons_dirs = sseape.loader:beacons_dirs
+engines_dirs = sseape.loader:engines_dirs
+fileserver_dirs = sseape.loader:fileserver_dirs
+metaproxy_dirs = sseape.loader:metaproxy_dirs
+module_dirs = sseape.loader:module_dirs
+pillar_dirs = sseape.loader:pillar_dirs
+proxy_dirs = sseape.loader:proxy_dirs
+returner_dirs = sseape.loader:returner_dirs
+roster_dirs = sseape.loader:roster_dirs
+runner_dirs = sseape.loader:runner_dirs
+states_dirs = sseape.loader:states_dirs
+

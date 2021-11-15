@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="ADGetUsers" result-type="Array/Properties" api-version="6.0.0" id="cd431dfd-3ff7-425e-bbf6-07f9a2df8813" version="1.0.0" category-name="com.vmware.iberia.se">
+  <param n="inADToSearch" t="string"><![CDATA[AD Registered in vRO]]></param>
+  <param n="inStringToSearch" t="string"><![CDATA[]]></param>
+  <param n="inTypeToSearch" t="string"><![CDATA[Object type to search in AD]]></param>
+  <script encoded="false"><![CDATA[/*
+inADToSearch: will search in AD registered in vRO (useful if we have more than one AD registered)
+inTypeToSearch: win contain the type of object for search. As an example, 'User' will search only for Users. This is a literal
+inStringToSearch: the string to reduce the objects
+*/
+
+
+var result = [];
+var auxADHost = null;
+var auxADs = AD_HostManager.findAllHosts();
+for (var auxItem in auxADs ){
+    if (auxADs[auxItem].name == inADToSearch){
+        //AD Found
+        System.log("AD Found: " +inADToSearch);
+        auxADHost = auxADs[auxItem];
+    }
+}
+
+if (auxADHost != null){
+    //AD Found, look for Users (return properties array with Name & ID)
+    var auxUsers = ActiveDirectory.search(inTypeToSearch,inStringToSearch, auxADHost);
+    var auxProperties;
+    for (var auxUser in auxUsers){
+        System.log(auxUsers[auxUser].sID +" " +auxUsers[auxUser].name +" " +auxUsers[auxUser].userPrincipalName);
+        /*auxProperties = new Properties();
+        auxProperties.put('id',auxUsers[auxUser].sID);
+        auxProperties.put('label',auxUsers[auxUser].name);
+        result.push(new Properties(auxProperties));
+        */
+    } 
+}
+result.push(new Properties({id: 'id1',label: 'label1'}));
+result.push(new Properties({id: 'id2',label: 'label2'}));
+result.push(new Properties ({id: 'id3',label: 'label3'}));
+return result;]]></script>
+</dunes-script-module>

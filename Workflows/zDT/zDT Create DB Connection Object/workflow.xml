@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item1" object-name="workflow:name=generic" id="812cfa14-7e6c-4736-9ab1-688bbf89fd3b" editor-version="2.0" version="0.0.1" api-version="6.0.0" allowed-operations="vef" restartMode="1" resumeFromFailedMode="0">
+    <display-name>zDT Create DB Connection Object</display-name>
+    <position y="50.0" x="100.0"/>
+    <input>
+        <param name="name" type="string"/>
+        <param name="environment" type="string"/>
+        <param name="appcode" type="string"/>
+    </input>
+    <output>
+        <param name="webSiteObj" type="DynamicTypes:zDT.DBConnecition"/>
+    </output>
+    <attrib name="newObj" type="Any">
+        <value encoded="n"/>
+    </attrib>
+    <attrib name="newObjectId" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <attrib name="objectType" type="string">
+        <value encoded="n">zDT.DBConnection</value>
+    </attrib>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="45.40909090909091" x="664.5"/>
+    </workflow-item>
+    <workflow-item name="item1" out-name="item2" type="task" comparator="0">
+        <display-name>Create object</display-name>
+        <script encoded="false">//split supplied type into namespace and type name
+var dt_attributes = objectType.split(".");
+
+//check supplied type exists
+if (!DynamicTypesManager.getType(dt_attributes[0] , dt_attributes[1])){
+  System.error(objectType + " is not a valid dynamic types oject type");
+  throw new Error(objectType + " is not a valid dynamic types oject type");
+}
+
+var newObj = {};
+newObj.name = name;
+if(environment){
+    newObj['environment'] = environment;
+}
+if(appcode){
+    newObj['appcode'] = appcode;
+}
+</script>
+        <in-binding>
+            <bind name="name" type="string" export-name="name"/>
+            <bind name="objectType" type="string" export-name="objectType"/>
+            <bind name="environment" type="string" export-name="environment"/>
+            <bind name="appcode" type="string" export-name="appcode"/>
+        </in-binding>
+        <out-binding>
+            <bind name="newObj" type="Any" export-name="newObj"/>
+        </out-binding>
+        <position y="55.40909090909091" x="204.5"/>
+    </workflow-item>
+    <workflow-item name="item2" out-name="item3" type="task" script-module="com.vmware.extensibility.dynamictypes.persistanceLayer/addObject" comparator="0">
+        <display-name>addObject</display-name>
+        <script encoded="false">//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.vmware.extensibility.dynamictypes.persistanceLayer").addObject(objectType,objectIn);
+</script>
+        <in-binding>
+            <bind name="objectType" type="string" export-name="objectType"/>
+            <bind name="objectIn" type="Any" export-name="newObj"/>
+        </in-binding>
+        <out-binding>
+            <bind name="actionResult" type="string" export-name="newObjectId"/>
+        </out-binding>
+        <position y="55.40909090909091" x="344.5"/>
+    </workflow-item>
+    <workflow-item name="item3" out-name="item0" type="task" comparator="0">
+        <display-name>Get DT object</display-name>
+        <script encoded="false">//split supplied type into namespace and type name
+var dt_attributes = objectType.split(".");
+
+var webSiteObj =  DynamicTypesManager.getObject(dt_attributes[0], dt_attributes[1], newObjectId) ;
+
+System.log('New Object Name: ' + webSiteObj.name);
+System.log('New Object Id: ' + webSiteObj.id);</script>
+        <in-binding>
+            <bind name="newObjectId" type="string" export-name="newObjectId"/>
+            <bind name="objectType" type="string" export-name="objectType"/>
+        </in-binding>
+        <out-binding>
+            <bind name="webSiteObj" type="DynamicTypes:zDT.DBConnecition" export-name="webSiteObj"/>
+        </out-binding>
+        <position y="55.40909090909091" x="484.5"/>
+    </workflow-item>
+</ns2:workflow>

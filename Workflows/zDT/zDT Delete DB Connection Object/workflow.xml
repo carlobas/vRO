@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item2" object-name="workflow:name=generic" id="9b7afa32-ac28-4ad0-b5b2-a3b86c8d4feb" editor-version="2.0" version="0.0.0" api-version="6.0.0" allowed-operations="vef" restartMode="1" resumeFromFailedMode="0">
+    <display-name>zDT Delete DB Connection Object</display-name>
+    <position y="50.0" x="100.0"/>
+    <input>
+        <param name="object" type="DynamicTypes:zDT.DBConnecition"/>
+    </input>
+    <output/>
+    <attrib name="actionResult" type="boolean">
+        <value encoded="n">false</value>
+    </attrib>
+    <attrib name="objectType" type="string">
+        <value encoded="n">zDT.DBConnection</value>
+    </attrib>
+    <attrib name="objectId" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="50.0" x="480.0"/>
+    </workflow-item>
+    <workflow-item name="item1" out-name="item0" type="task" script-module="com.vmware.extensibility.dynamictypes.persistanceLayer/deleteObject" comparator="0">
+        <display-name>deleteObject</display-name>
+        <script encoded="false">//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.vmware.extensibility.dynamictypes.persistanceLayer").deleteObject(objectType,objectId);
+</script>
+        <in-binding>
+            <bind name="objectType" type="string" export-name="objectType"/>
+            <bind name="objectId" type="string" export-name="objectId"/>
+        </in-binding>
+        <out-binding>
+            <bind name="actionResult" type="boolean" export-name="actionResult"/>
+        </out-binding>
+        <position y="60.0" x="300.0"/>
+    </workflow-item>
+    <workflow-item name="item2" out-name="item1" type="task" comparator="0">
+        <display-name>Get object id</display-name>
+        <script encoded="false">objectId = object.id;
+</script>
+        <in-binding>
+            <bind name="object" type="DynamicTypes:zDT.DBConnecition" export-name="object"/>
+        </in-binding>
+        <out-binding>
+            <bind name="objectId" type="string" export-name="objectId"/>
+        </out-binding>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="180.0"/>
+    </workflow-item>
+</ns2:workflow>

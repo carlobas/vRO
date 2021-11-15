@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<package>
+<description><![CDATA[Worflows & configurations for vRA 8 DNS Register use case]]></description>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Workflow?id='45c04987-5569-48ec-a7e9-227b5329be96'&dunesName='Workflow']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Workflow?id='d3e064a9-2ec0-4bc4-a400-e7860de4ed46'&dunesName='Workflow']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Workflow?id='C98080808080808080808080808080805E80808001322751030482b80adf61e7c'&dunesName='Workflow']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/ConfigurationElement?id='9d4d0ff9-0b5d-4a68-9cc2-867f5968e65c'&dunesName='ConfigurationElement']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Workflow?id='021a79bb-944f-4d31-946d-a7574f42138d'&dunesName='Workflow']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Workflow?id='266dd259-805f-473e-a49b-50f8da153654'&dunesName='Workflow']]></elm>
+</package>

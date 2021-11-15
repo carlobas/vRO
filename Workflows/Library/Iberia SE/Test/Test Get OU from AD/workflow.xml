@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item1" object-name="workflow:name=generic" id="248a24b8-2e29-4c96-9262-b43e1cee8851" editor-version="2.0" version="0.0.0" api-version="6.0.0" restartMode="1" resumeFromFailedMode="0">
+    <display-name>Test Get OU from AD</display-name>
+    <position y="50.0" x="100.0"/>
+    <input>
+        <param name="in_AD" type="string"/>
+        <param name="in_OUBase" type="string"/>
+        <param name="in_ReturnFullDN" type="boolean"/>
+    </input>
+    <output>
+        <param name="actionResult" type="Array/Properties"/>
+    </output>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="50.0" x="300.0"/>
+    </workflow-item>
+    <workflow-item name="item1" out-name="item0" type="task" script-module="com.vmware.iberia.se.util.ad/getADOUs" comparator="0">
+        <display-name>getADOUs</display-name>
+        <script encoded="false">//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.vmware.iberia.se.util.ad").getADOUs(in_AD,in_OUbase,in_ReturnFullDN);
+</script>
+        <in-binding>
+            <bind name="in_AD" type="string" export-name="in_AD">
+                <description>Identifies registered AD</description>
+            </bind>
+            <bind name="in_OUbase" type="string" export-name="in_OUBase">
+                <description>Identifies base OU to look into</description>
+            </bind>
+            <bind name="in_ReturnFullDN" type="boolean" export-name="in_ReturnFullDN">
+                <description>Data returned will be relative or full DN path</description>
+            </bind>
+        </in-binding>
+        <out-binding>
+            <bind name="actionResult" type="Array/Properties" export-name="actionResult"/>
+        </out-binding>
+        <description>Add a note to the workflow schema.</description>
+        <position y="60.0" x="160.0"/>
+    </workflow-item>
+</ns2:workflow>

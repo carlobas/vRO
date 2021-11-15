@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getValuePickerCT" result-type="Array/CompositeType(id:string,label:string):TestSantander" api-version="6.0.0" id="3be36ad5-2d01-4555-bb01-0e03f4c87c37" version="0.0.0" category-name="com.vmware.iberia.se.test">
+  <param n="SQLName" t="string"><![CDATA[]]></param>
+  <param n="SearchText" t="string"><![CDATA[]]></param>
+  <script encoded="false"><![CDATA[var auxDBs = SQLDatabaseManager.getDatabases();
+var activeDB = null;
+var resultRecords = null;
+var returnData = [];
+var auxProperties;
+
+for (var item in auxDBs){
+	System.log(auxDBs[item].name);
+	if (auxDBs[item].name == SQLName){
+	    System.log("Database found");
+		activeDB = auxDBs[item];
+	}
+}
+
+if (activeDB != null){
+        if (SearchText != ""){
+		    resultRecords = activeDB.readCustomQuery("Select * from CMDB WHERE VM_NAME like '%" +SearchText +"%' ORDER BY VM_NAME");
+        }else{
+            resultRecords = activeDB.readCustomQuery("Select * from CMDB ORDER BY VM_NAME");
+        }
+}
+
+if (resultRecords != null){
+	for (var record in resultRecords){
+        returnData.push({label: resultRecords[record].getProperty("VM_NAME"), id: resultRecords[record].getProperty("ASSET_ID") +" "});
+		System.log(resultRecords[record].getProperty("VM_NAME").trim());
+	}
+}else{
+	System.log ("No result found");
+}
+return returnData]]></script>
+</dunes-script-module>

@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="deleteMinion" result-type="Properties" api-version="6.0.0" id="88675cd3-e283-4944-a832-8213f8142a7d" version="0.0.0" category-name="com.vmware.iberia.se.saltapipy">
+  <runtime><![CDATA[python:3.7]]></runtime>
+  <entry-point><![CDATA[vro_ssc_delete_minion.handler]]></entry-point>
+  <param n="minionKey" t="string"><![CDATA[The Minion Key to be deleted]]></param>
+</dunes-script-module>
