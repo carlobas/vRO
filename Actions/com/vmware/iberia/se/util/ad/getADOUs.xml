@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<dunes-script-module name="getADOUs" result-type="Array/Properties" api-version="6.0.0" id="bdc248b3-e013-47e7-9f86-341dabe0f33e" version="1.1.0" category-name="com.vmware.iberia.se.util.ad">
+<dunes-script-module name="getADOUs" result-type="Array/Properties" api-version="6.0.0" id="bdc248b3-e013-47e7-9f86-341dabe0f33e" version="1.2.0" category-name="com.vmware.iberia.se.util.ad">
   <description><![CDATA[Get organisation units from active directory based on a given OU root path ]]></description>
   <param n="in_AD" t="string"><![CDATA[Identifies registered AD. The name]]></param>
   <param n="in_OUbase" t="string"><![CDATA[Identifies base OU to look into. Expected DN format]]></param>
@@ -8,6 +8,13 @@
 in_AD: will search in AD registered in vRO (useful if we have more than one AD registered)
 in_OUbase: Base path into AD to look for OUs. Expexted DN format (OU=Whatever,DC=whatever,DC=whatever)
 in_ReturnFullDN: values returned will contain full DN path (true) or relative DN path regarding in_OUbase (if false). Be very carefull, because relative path uses a regex expresion to remove base DN path, so base DN path is case sensitive
+*******************************************
+TO USE With vRA 8 AD Integration
+AD integration defines the DN base for the integration in vRA. Each project has his "own" relative DN. The sum of AD Integration DN & Project relative DN, is the final DN where the machines will be moved.
+We can modify the relative DN for a project, but it can't be an OU bellow AD Integration DN
+if in_ReturnFullDN is "No", the function will return a full relative DN for a project. This value can be used with "finalRelativeDN" property in vRA Cloud Template
+*******************************************
+This function doesn't look for OUs recursively (not yet)
 */
 
 var result = [];
@@ -55,12 +62,12 @@ if (auxOU != null){
     for (var auxItem in auxOU.organizationalUnits){
         auxProperties = new Properties();
         if (in_ReturnFullDN){
-            auxProperties.put('id', auxOU.organizationalUnits[auxItem].distinguishedName)
+            auxProperties.put('value', auxOU.organizationalUnits[auxItem].distinguishedName)
         }else{
-            auxProperties.put('id', auxOU.organizationalUnits[auxItem].distinguishedName.replace("," +in_OUbase, ""));
+            auxProperties.put('value', auxOU.organizationalUnits[auxItem].distinguishedName.replace("," +in_OUbase, ""));
         }
-        System.log(auxProperties["id"]);
         auxProperties.put('label', auxOU.organizationalUnits[auxItem].distinguishedName.split(',')[0].split('=')[1])
+        System.log('Label: ' +auxProperties["label"] +', value: ' +auxProperties["value"]);
         result.push(auxProperties);
     }
 }
