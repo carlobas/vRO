@@ -11,7 +11,7 @@
       <description><![CDATA[This value can be gather for every request, but it's saved for easy management]]></description>
     </att>
     <att name="vRAUser" type="string" read-only="false">
-      <value encoded="n"><![CDATA[vra8@iberia.local]]></value>
+      <value encoded="n"><![CDATA[ccarballeira@iberia.local]]></value>
     </att>
     <att name="vRAUserPassword" type="SecureString" read-only="false">
       <value encoded="n"><![CDATA[__NULL__]]></value>

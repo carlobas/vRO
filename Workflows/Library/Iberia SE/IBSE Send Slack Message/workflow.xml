@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item1" object-name="workflow:name=generic" id="50122378-adad-48b1-8301-b97e501beea0" editor-version="2.0" version="0.0.0" api-version="6.0.0" restartMode="1" resumeFromFailedMode="0">
+    <display-name>IBSE Send Slack Message</display-name>
+    <position y="50.0" x="100.0"/>
+    <input>
+        <param name="in_SlackText" type="string"/>
+        <param name="in_SlackChannelID" type="string"/>
+    </input>
+    <output/>
+    <attrib name="var_SlackURI" type="string">
+        <value encoded="n">/chat.postMessage?channel=</value>
+    </attrib>
+    <attrib name="var_SlackMethod" type="string">
+        <value encoded="n">POST</value>
+    </attrib>
+    <attrib name="var_SlackRestHost" type="REST:RESTHost">
+        <value encoded="n">dunes://service.dunes.ch/CustomSDKObject?id='cb8cb804-4ed3-4713-8a60-d30f37b55b16'&amp;dunesName='REST:RESTHost'</value>
+    </attrib>
+    <attrib name="var_EnableLogging" type="boolean">
+        <value encoded="n">true</value>
+    </attrib>
+    <attrib name="actionResult" type="Properties">
+        <value encoded="n">{}</value>
+    </attrib>
+    <attrib name="var_HeaderProperties" type="Properties">
+        <value encoded="n">{12:40:Content-Type=string#application/x-www-form-urlencoded
+}</value>
+    </attrib>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="49.18211863324851" x="389.9669503426646"/>
+    </workflow-item>
+    <workflow-item name="item1" out-name="item2" type="task" comparator="0">
+        <display-name>Update Slack URI</display-name>
+        <script encoded="false">var_SlackURI += in_SlackChannelID;</script>
+        <in-binding>
+            <bind name="in_SlackChannelID" type="string" export-name="in_SlackChannelID"/>
+            <bind name="var_SlackURI" type="string" export-name="var_SlackURI"/>
+        </in-binding>
+        <out-binding>
+            <bind name="var_SlackURI" type="string" export-name="var_SlackURI"/>
+        </out-binding>
+        <description>Complete URI with Channel ID</description>
+        <position y="61.0" x="150.0"/>
+    </workflow-item>
+    <workflow-item name="item2" out-name="item0" type="task" script-module="com.vmware.iberia.se.rest/restRequest" comparator="0">
+        <display-name>restRequest</display-name>
+        <script encoded="false">//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.vmware.iberia.se.rest").restRequest(restHost,method,content,uri,headers,logging);
+</script>
+        <in-binding>
+            <bind name="restHost" type="REST:RESTHost" export-name="var_SlackRestHost">
+                <description></description>
+            </bind>
+            <bind name="method" type="string" export-name="var_SlackMethod">
+                <description></description>
+            </bind>
+            <bind name="content" type="string" export-name="">
+                <description></description>
+            </bind>
+            <bind name="uri" type="string" export-name="var_SlackURI">
+                <description></description>
+            </bind>
+            <bind name="headers" type="Properties" export-name="">
+                <description></description>
+            </bind>
+            <bind name="logging" type="boolean" export-name="var_EnableLogging">
+                <description></description>
+            </bind>
+        </in-binding>
+        <out-binding>
+            <bind name="actionResult" type="Properties" export-name="actionResult"/>
+        </out-binding>
+        <description>Add a note to the workflow schema.</description>
+        <position y="59.59105931662425" x="244.98347517133226"/>
+    </workflow-item>
+</ns2:workflow>

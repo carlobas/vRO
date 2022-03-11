@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="addTag" result-type="boolean" api-version="6.0.0" id="2f417d26-5c5a-4a39-b8b0-17f0b47971e7" version="0.0.0" category-name="com.vmware.iberia.datastoreTag">
+  <param n="datastore" t="VC:Datastore"/>
+  <script encoded="false"><![CDATA[if (datastore == null) {
+	return false;
+}
+
+return true;]]></script>
+</dunes-script-module>

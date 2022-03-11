@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<package>
+<description><![CDATA[vRO generic functions]]></description>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='bdc248b3-e013-47e7-9f86-341dabe0f33e'&dunesName='Action'&name='getADOUs'&category='com.vmware.iberia.se.util.ad']]></elm>
+</package>
