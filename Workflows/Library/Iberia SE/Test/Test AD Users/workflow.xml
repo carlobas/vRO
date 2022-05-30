@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item1" object-name="workflow:name=generic" id="bee3f983-580f-4e20-aa32-dae54d372cae" editor-version="2.0" version="0.0.0" api-version="6.0.0" restartMode="1" resumeFromFailedMode="0">
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item1" object-name="workflow:name=generic" id="bee3f983-580f-4e20-aa32-dae54d372cae" editor-version="2.0" version="1.0.0" api-version="6.0.0" restartMode="1" resumeFromFailedMode="0">
     <display-name>Test AD Users</display-name>
+    <description>First release</description>
     <position y="50.0" x="100.0"/>
     <input>
         <param name="inTextToSearch" type="string"/>
