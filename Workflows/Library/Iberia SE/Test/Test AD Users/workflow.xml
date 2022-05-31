@@ -9,6 +9,7 @@
     <output/>
     <attrib name="varADToSearch" type="string">
         <value encoded="n">iberia.local</value>
+        <description>Domain to look into</description>
     </attrib>
     <attrib name="actionResult" type="Array/Properties">
         <value encoded="n">[]</value>
