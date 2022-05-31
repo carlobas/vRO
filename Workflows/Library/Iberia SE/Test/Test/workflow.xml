@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item1" object-name="workflow:name=generic" id="9dc65fde-9b08-4a88-a557-4fc8c8e244ce" editor-version="2.0" version="0.0.0" api-version="6.0.0" restartMode="1" resumeFromFailedMode="0">
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item1" object-name="workflow:name=generic" id="9dc65fde-9b08-4a88-a557-4fc8c8e244ce" editor-version="2.0" version="1.0.0" api-version="6.0.0" restartMode="1" resumeFromFailedMode="0">
     <display-name>Test</display-name>
+    <description>Primera version</description>
     <position y="50.0" x="100.0"/>
-    <input/>
+    <input>
+        <param name="in_0" type="string"/>
+        <param name="in_1" type="string"/>
+    </input>
     <output/>
     <attrib name="var_SQL" type="string">
         <value encoded="n">vRAExtensibility</value>
@@ -58,5 +62,4 @@ actionResult = System.getModule("com.vmware.iberia.se").CMDB_NewAsset(SQLName,CA
         <description>Add a note to the workflow schema.</description>
         <position y="66.05572809000084" x="243.38699100999077"/>
     </workflow-item>
-    <presentation/>
 </ns2:workflow>
