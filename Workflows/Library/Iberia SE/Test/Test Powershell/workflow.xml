@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item1" object-name="workflow:name=generic" id="e4616867-7ed0-4aa6-afc6-cae90bd5029c" editor-version="2.0" version="0.0.0" api-version="6.0.0" restartMode="1" resumeFromFailedMode="0">
+    <display-name>Test Powershell</display-name>
+    <position y="50.0" x="100.0"/>
+    <input>
+        <param name="in_String" type="string"/>
+        <param name="in_Array" type="Array/string"/>
+    </input>
+    <output/>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="50.0" x="300.0"/>
+    </workflow-item>
+    <workflow-item name="item1" out-name="item0" type="task" comparator="0">
+        <display-name>Scriptable task</display-name>
+        <runtime>powercli:12-powershell-7.1</runtime>
+        <script encoded="false">function Handler($context, $inputs) {
+    $inputsString = $inputs | ConvertTo-Json -Compress
+
+    Write-Host "All inputs were $inputsString"
+    Write-Host "Array input were $inputsString.in_Array"
+
+    $myArray = $inputs.in_Array
+    Foreach ($item in $myArray)
+    {
+        Write-Host $item
+    }
+    
+    $output=@{status = 'done'}
+
+    return $output
+}
+</script>
+        <in-binding>
+            <bind name="in_String" type="string" export-name="in_String"/>
+            <bind name="in_Array" type="Array/string" export-name="in_Array"/>
+        </in-binding>
+        <out-binding/>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="160.0"/>
+    </workflow-item>
+</ns2:workflow>

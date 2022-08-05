@@ -1,5 +1,34 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <package>
 <description><![CDATA[Demo scripts & workflows]]></description>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Workflow?id='0827e703-0928-4d29-8ecd-ebc278a974de'&dunesName='Workflow']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Workflow?id='4de2afa6-122b-4a99-9e43-32877572df41'&dunesName='Workflow']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='6ad6483a-c787-4d5a-b230-2221cf6e5035'&dunesName='Action'&name='CMDB_UpdateAsset'&category='com.vmware.iberia.se']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Workflow?id='4e6e0a54-36ed-49a9-a6e9-ab4399723783'&dunesName='Workflow']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Workflow?id='45c04987-5569-48ec-a7e9-227b5329be96'&dunesName='Workflow']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Workflow?id='d3e064a9-2ec0-4bc4-a400-e7860de4ed46'&dunesName='Workflow']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Workflow?id='C98080808080808080808080808080805E80808001322751030482b80adf61e7c'&dunesName='Workflow']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/ConfigurationElement?id='9d4d0ff9-0b5d-4a68-9cc2-867f5968e65c'&dunesName='ConfigurationElement']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Workflow?id='021a79bb-944f-4d31-946d-a7574f42138d'&dunesName='Workflow']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Workflow?id='266dd259-805f-473e-a49b-50f8da153654'&dunesName='Workflow']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Workflow?id='daea9ba0-7607-45cb-b64f-859a883cac8c'&dunesName='Workflow']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Workflow?id='b61fb679-6c55-4508-9db9-ee6cf1145251'&dunesName='Workflow']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='bd9fa3d7-2c4d-48e5-8492-196ed2df0f1b'&dunesName='Action'&name='CMDB_NewAsset'&category='com.vmware.iberia.se']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Workflow?id='45bbf7b2-79f0-4781-b4f8-4351afc3733c'&dunesName='Workflow']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='76848b09-cb7f-4959-8251-7c5756c194e7'&dunesName='Action'&name='getToken'&category='com.vmware.iberia.se.vra8api']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='0373f68c-7431-47a9-836c-612632240c41'&dunesName='Action'&name='restRequest'&category='com.vmware.iberia.se.rest']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='386e629e-c6a8-433a-b9a8-f4402b4be227'&dunesName='Action'&name='getUserInfo'&category='com.vmware.iberia.se.vra8api']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Workflow?id='5ed27aa2-9f14-41ba-b501-2aa645d2d0b5'&dunesName='Workflow']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Workflow?id='8D80808080808080808080808080808089808080012318760241416446ce5b52f'&dunesName='Workflow']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/ConfigurationElement?id='0b7b5ecb-0799-4608-ba95-f33df6a08d69'&dunesName='ConfigurationElement']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='b400f373-65e4-4387-aa78-818d86de9610'&dunesName='Action'&name='getDeploymentInfo'&category='com.vmware.iberia.se.vra8api']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='43118550-f007-4350-bb05-b1b0dc03f72f'&dunesName='Action'&name='getLoginToken'&category='com.vmware.iberia.se.vra8api']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/ConfigurationElement?id='35894b22-3767-4d35-b00c-62d9bae9eb86'&dunesName='ConfigurationElement']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/ConfigurationElement?id='3fbaecc5-5f5c-426b-a0f9-22491deb0f43'&dunesName='ConfigurationElement']]></elm>
 <elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='158b8aaf-489f-44f5-832e-185952f9b259'&dunesName='Action'&name='getRandomPort'&category='com.vmware.iberia.se']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='ec6d13e3-c8f5-4186-8a8e-1cb8d796999b'&dunesName='Action'&name='getFromSQL'&category='com.vmware.iberia.se']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='72152c97-1621-4fa2-8d28-3cbe9e8ce765'&dunesName='Action'&name='getCMDBAssets'&category='com.vmware.iberia.se.test']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='3d4d871b-e4a0-4aa4-8a51-b1eee23f3a8f'&dunesName='Action'&name='getLoginToken'&category='com.vmware.iberia.se.saltapi']]></elm>
+<used-plugin name='VC' version='7.0.0' />
+<used-plugin name='REST' version='2.4.1' />
 </package>

@@ -4,20 +4,20 @@
   <description><![CDATA[Configuration for REST operations at vRA 8]]></description>
   <atts>
     <att name="vRARestHost" type="REST:RESTHost" read-only="false">
-      <value encoded="n"><![CDATA[dunes://service.dunes.ch/CustomSDKObject?id='908bff99-09f4-4542-b7af-397b8accf018'&dunesName='REST:RESTHost']]></value>
+      <value encoded="n"><![CDATA[dunes://service.dunes.ch/CustomSDKObject?id='4f80d8a6-5156-42d1-89ec-9b01e4453959'&dunesName='REST:RESTHost']]></value>
     </att>
     <att name="vRAOrgID" type="string" read-only="false">
-      <value encoded="n"><![CDATA[c5319d80-5607-4636-957d-d193db7943ca]]></value>
+      <value encoded="n"><![CDATA[766b0539-a365-4c85-8169-28614e93e5c3]]></value>
       <description><![CDATA[This value can be gather for every request, but it's saved for easy management]]></description>
     </att>
     <att name="vRAUser" type="string" read-only="false">
-      <value encoded="n"><![CDATA[ccarballeira@iberia.local]]></value>
+      <value encoded="n"><![CDATA[ccarballeira@seiberia.lab]]></value>
     </att>
     <att name="vRAUserPassword" type="SecureString" read-only="false">
       <value encoded="n"><![CDATA[__NULL__]]></value>
     </att>
     <att name="vRAHost" type="string" read-only="false">
-      <value encoded="n"><![CDATA[https://vra8.iberia.local]]></value>
+      <value encoded="n"><![CDATA[https://vra.seiberia.lab]]></value>
     </att>
   </atts>
 </config-element>

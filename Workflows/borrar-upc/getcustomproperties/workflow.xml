@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item1" object-name="workflow:name=generic" id="0761576d-3e49-4eac-8212-d333eea169c9" editor-version="2.0" version="0.0.0" api-version="6.0.0" restartMode="1" resumeFromFailedMode="0">
+    <display-name>getcustomproperties</display-name>
+    <position y="50.0" x="100.0"/>
+    <input>
+        <param name="var_0" type="VRA:Host"/>
+        <param name="var_1" type="VRA:Machine"/>
+    </input>
+    <output/>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="50.0" x="300.0"/>
+    </workflow-item>
+    <workflow-item name="item1" out-name="item0" type="task" comparator="0">
+        <display-name>Scriptable task</display-name>
+        <script encoded="false">var properties = new Properties();&#13;
+properties.put("VirtualMachineID", virtualMachine.virtualMachineID);&#13;
+&#13;
+&#13;
+var virtualMachineEntity = &#13;
+vCACEntityManager.readModelEntity(host.id, "ManagementModelEntities.svc", "VirtualMachines", properties, null);&#13;
+var vmProperties = new Properties();&#13;
+&#13;
+var virtualMachinePropertiesEntities = virtualMachineEntity.getLink(host, "VirtualMachineProperties");&#13;
+for each (var virtualMachinePropertiesEntity in virtualMachinePropertiesEntities) {&#13;
+	var propertyName = virtualMachinePropertiesEntity.getProperty("PropertyName");&#13;
+	var propertyValue = virtualMachinePropertiesEntity.getProperty("PropertyValue");&#13;
+	System.log("Found property " + propertyName + " = " + propertyValue);&#13;
+	vmProperties.put(propertyName, propertyValue);&#13;
+}&#13;
+return vmProperties;</script>
+        <in-binding>
+            <bind name="var_0" type="VRA:Host" export-name="var_0"/>
+            <bind name="var_1" type="VRA:Machine" export-name="var_1"/>
+        </in-binding>
+        <out-binding/>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="160.0"/>
+    </workflow-item>
+</ns2:workflow>

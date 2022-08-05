@@ -3,7 +3,7 @@
     <display-name>VRA Execute Codestream Pipeline</display-name>
     <description>Makes a quick call to a REST host, without the need to have a RESTOperation defined.</description>
     <ref-types>&gt;(REST:RESTHost)</ref-types>
-    <position y="200.0" x="40.0"/>
+    <position y="240.0" x="40.0"/>
     <input>
         <param name="inputProperties" type="Properties"/>
     </input>
@@ -16,7 +16,7 @@
         <value encoded="n"></value>
     </attrib>
     <attrib name="restHost" type="REST:RESTHost">
-        <value encoded="n">dunes://service.dunes.ch/CustomSDKObject?id='908bff99-09f4-4542-b7af-397b8accf018'&amp;dunesName='REST:RESTHost'</value>
+        <value encoded="n">dunes://service.dunes.ch/CustomSDKObject?id='4f80d8a6-5156-42d1-89ec-9b01e4453959'&amp;dunesName='REST:RESTHost'</value>
         <description>Specify pre-defined rest host</description>
     </attrib>
     <attrib name="requestType" type="string">
@@ -40,16 +40,16 @@
         <description>will be provided by EBS payload</description>
     </attrib>
     <attrib name="vrauser" type="string">
-        <value encoded="n">vra8</value>
+        <value encoded="n">ccarballeira</value>
         <description>user to access vRA API</description>
     </attrib>
     <attrib name="vrauserpassword" type="SecureString">
-        <value encoded="n">12BN38K6AW36N21T52H78H2FG44G46N62T53S33Z916E3ACPF68434DS3081AFCV7905347YFADAF5ET62A03D6Q644D2C1W4972562UB99B152UEFC188EH3CB8ECCL4CCD76BU9396353J3721A5CWBE6DD2FUDC01FEBTEBAC093G6C1D2D5L185F2B9O1037D8BR</value>
+        <value encoded="n">8BM46W65K6EP65P32V30L30V30ZF396067S96E9E9EY283998BR2DC87F7LB97386AQF22DB9FJ885628BSDF405B2N8B2E6C0V4632DB8K6E35D65LE6F3C67OFEFBDE4S8F4FBABL24E089FQFAF2248OA025896Y3FEF050PBFBA3FAP73515ADPB73A6FFT34CEFFCN31DE814K617C100P</value>
         <description>Password of user to access vRA API</description>
     </attrib>
     <attrib name="pipelinename" type="string">
-        <value encoded="n">Push Blueprint to GIT Repo</value>
-        <description>Name of Pipeline to execute</description>
+        <value encoded="n">d5bc909b-b9b7-495f-a863-73a1e3b1af21</value>
+        <description>ID of Pipeline to execute (changed from previous versions)</description>
     </attrib>
     <attrib name="vraproject" type="string">
         <value encoded="n">Project demo</value>
@@ -124,7 +124,7 @@ result.put("contentAsString", response.contentAsString);
         <script encoded="false">//Execute Codestream Pipeline
 var pipeencoded = encodeURIComponent(pipelinename)
 var projectencoded = encodeURIComponent(vraproject)
-var operationUrl = "codestream/api/pipelines/" + projectencoded + "/" + pipeencoded + "/executions";
+var operationUrl = "codestream/api/pipelines/" + pipeencoded + "/executions";
 System.log(operationUrl);
 var requestContent = '{"input": {"blueprintId": "' + blueprintid + '","blueprintName": "' + blueprintname + '","version": "' + blueprintversion + '"}}';
 System.log(requestContent);
@@ -195,37 +195,4 @@ blueprintversion=inputProperties.get("version")
         <description>Simple task with custom script capability.</description>
         <position y="150.0" x="140.0"/>
     </workflow-item>
-    <presentation>
-        <p-group>
-            <title>Request properties</title>
-            <p-param name="restHost">
-                <desc>The host that should take the request</desc>
-                <p-qual kind="static" name="mandatory" type="boolean">true</p-qual>
-                <p-qual name="contextualParameter" type="void"></p-qual>
-            </p-param>
-            <p-param name="operationUrl">
-                <desc>The URL that should be appended to the host base URL in order to make the request</desc>
-                <p-qual kind="static" name="mandatory" type="boolean">true</p-qual>
-            </p-param>
-            <p-param name="requestType">
-                <desc>The type of the request</desc>
-                <p-qual kind="static" name="mandatory" type="boolean">true</p-qual>
-                <p-qual kind="static" name="defaultValue" type="string">GET</p-qual>
-                <p-qual kind="static" name="genericEnumeration" type="Array/string">#{#string#GET#;#string#POST#;#string#PUT#;#string#DELETE#;#string#OPTIONS#;#string#HEAD#;#string#PATCH#;#string#TRACE#}#</p-qual>
-            </p-param>
-            <p-param name="requestContent">
-                <desc>The request content</desc>
-                <p-qual kind="static" name="mandatory" type="boolean">true</p-qual>
-                <p-qual kind="ognl" name="visible" type="boolean">(#requestType=="POST"||#requestType=="PUT"||#requestType=="PATCH"||#requestType=="DELETE")</p-qual>
-                <p-qual kind="static" name="defaultValue" type="string">__NULL__</p-qual>
-                <p-qual name="textInput" type="void"></p-qual>
-            </p-param>
-            <p-param name="requestContentType">
-                <desc>The request content type</desc>
-                <p-qual kind="static" name="mandatory" type="boolean">true</p-qual>
-                <p-qual kind="ognl" name="visible" type="boolean">(#requestType=="POST"||#requestType=="PUT"||#requestType=="PATCH"||#requestType=="DELETE")</p-qual>
-                <p-qual kind="static" name="defaultValue" type="string">__NULL__</p-qual>
-            </p-param>
-        </p-group>
-    </presentation>
 </ns2:workflow>

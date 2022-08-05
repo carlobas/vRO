@@ -3,6 +3,7 @@
   <param n="SQLName" t="string"><![CDATA[DB registered at vRO]]></param>
   <param n="CAS_Project" t="string"><![CDATA[]]></param>
   <param n="VM_NAME" t="string"><![CDATA[]]></param>
+  <param n="PROJECT_ID" t="string"/>
   <script encoded="false"><![CDATA[var auxDBs = SQLDatabaseManager.getDatabases();
 var activeDB = null;
 var auxRecords = null;
@@ -21,8 +22,8 @@ if (activeDB == null){
     return false;
 }else{
     //Inserting new record
-    auxQuery = "INSERT INTO CMDB (CAS_PROJECT, VM_NAME, ASSET_STATUS) ";
-    auxQuery += "VALUES ('" +CAS_Project +"','" +VM_NAME +"','CREATED')";
+    auxQuery = "INSERT INTO CMDB (CAS_PROJECT, VM_NAME, ASSET_STATUS, PROJECT_ID) ";
+    auxQuery += "VALUES ('" +CAS_Project +"','" +VM_NAME +"','CREATED','" +PROJECT_ID +"')";
     System.log(auxQuery);
     auxRecords = activeDB.executeCustomQuery(auxQuery);
     if (auxRecords != 1){

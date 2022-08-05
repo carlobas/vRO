@@ -20,15 +20,15 @@
         <description>Remote host where command will be executed</description>
     </attrib>
     <attrib name="var_DNSRemoteHost" type="string">
-        <value encoded="n">labdc01.iberia.local</value>
+        <value encoded="n">labdc11.seiberia.lab</value>
         <description>DNS Server</description>
     </attrib>
     <attrib name="var_DNSZone" type="string">
-        <value encoded="n">iberia.local</value>
+        <value encoded="n">seiberia.lab</value>
         <description>Zone at DNS server</description>
     </attrib>
     <attrib name="var_DNSSubdomain" type="string">
-        <value encoded="n">k8s</value>
+        <value encoded="n">vra</value>
         <description>Register in a "subdomain" into the zone. Example: to register test.k8s.iberia.local, zone is iberia.local and subdomain is k8s</description>
     </attrib>
     <attrib name="var_DNSRecordType" type="string">
@@ -148,5 +148,4 @@ System.log("DNS Command output: " +result);</script>
         <description>Simple task with custom script capability.</description>
         <position y="61.5" x="355.0"/>
     </workflow-item>
-    <presentation/>
 </ns2:workflow>

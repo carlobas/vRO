@@ -3,13 +3,13 @@
   <display-name><![CDATA[IBSE Remote execution cmd]]></display-name>
   <atts>
     <att name="SessionUser" type="string" read-only="false">
-      <value encoded="n"><![CDATA[domain_joiner@iberia.local]]></value>
+      <value encoded="n"><![CDATA[domain_joiner@seiberia.lab]]></value>
     </att>
     <att name="SessionUserPassword" type="SecureString" read-only="false">
       <value encoded="n"><![CDATA[__NULL__]]></value>
     </att>
     <att name="RemoteHost" type="VC:VirtualMachine" read-only="false">
-      <value encoded="n"><![CDATA[dunes://service.dunes.ch/CustomSDKObject?id='vcenter.regiona.iberia.local%2Cid:vm-2328'&dunesName='VC:VirtualMachine']]></value>
+      <value encoded="n"><![CDATA[dunes://service.dunes.ch/CustomSDKObject?id='vcenter.regiona.seiberia.lab%2Cid:vm-1069'&dunesName='VC:VirtualMachine']]></value>
       <description><![CDATA[Remote host where script and/or command will be executed]]></description>
     </att>
   </atts>

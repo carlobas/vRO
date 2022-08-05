@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item1" object-name="workflow:name=generic" id="daea9ba0-7607-45cb-b64f-859a883cac8c" editor-version="2.0" version="1.0.0" api-version="6.0.0" restartMode="1" resumeFromFailedMode="0">
-    <display-name>IBSE CMDB New</display-name>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item1" object-name="workflow:name=generic" id="0827e703-0928-4d29-8ecd-ebc278a974de" editor-version="2.0" version="1.0.0" api-version="6.0.0" allowed-operations="vef" restartMode="1" resumeFromFailedMode="0">
+    <display-name>IBSE CMDB Retire</display-name>
     <position y="50.0" x="100.0"/>
     <input>
         <param name="inputProperties" type="Properties"/>
@@ -15,8 +15,8 @@
     <attrib name="auxCustomProperties" type="Properties">
         <value encoded="n">{}</value>
     </attrib>
-    <attrib name="str_ProjectID" type="string">
-        <value encoded="n"></value>
+    <attrib name="var_Status" type="string">
+        <value encoded="n">RETIRED</value>
     </attrib>
     <workflow-item name="item0" type="end" end-mode="0" comparator="0">
         <in-binding/>
@@ -30,23 +30,12 @@
 System.log("Parsing CAS parameters");
 System.log("Project ID:" +inputParameters.get("projectId"));
 str_CASProjectID = inputParameters.get("projectId");
-System.log("Component Type:" +inputParameters.get("componentTypeId"));
 
 //Get VM List
 System.log("VM List");
 strVMs = inputParameters.get("resourceNames");
 for (auxInt = 0; auxInt &lt; strVMs.length; auxInt++){
     System.log(auxInt +" " +strVMs[auxInt]);
-}
-
-//Properties
-System.log("Project properties");
-auxCustomProperties = inputParameters.get("customProperties");
-for (var auxKey in auxCustomProperties){
-    System.log("Key: " +auxKey +" Value: " +auxCustomProperties.get(auxKey));
-    if (auxKey == 'projectID'){
-        str_ProjectID = auxCustomProperties.get(auxKey);
-    }
 }</script>
         <in-binding>
             <bind name="inputParameters" type="Properties" export-name="inputProperties"/>
@@ -54,21 +43,20 @@ for (var auxKey in auxCustomProperties){
         <out-binding>
             <bind name="strVMs" type="Array/string" export-name="strVMs"/>
             <bind name="auxCustomProperties" type="Properties" export-name="auxCustomProperties"/>
-            <bind name="str_ProjectID" type="string" export-name="str_ProjectID"/>
             <bind name="str_CASProjectID" type="string" export-name="str_CASProjectID"/>
         </out-binding>
         <description>Simple task with custom script capability.</description>
         <position y="60.0" x="160.0"/>
     </workflow-item>
     <workflow-item name="item2" out-name="item0" type="foreach" comparator="0">
-        <display-name>Foreach element</display-name>
+        <display-name>Handler CMDB Retire Asset</display-name>
         <in-binding>
-            <bind name="in_CASprojectId" type="string" export-name="str_CASProjectID"/>
+            <bind name="in_CASProjectID" type="string" export-name="str_CASProjectID"/>
             <bind name="in_VMName" type="Array/string" export-name="*strVMs"/>
-            <bind name="in_ProjectID" type="string" export-name="str_ProjectID"/>
+            <bind name="in_Status" type="string" export-name="var_Status"/>
         </in-binding>
         <out-binding/>
-        <reference id="b61fb679-6c55-4508-9db9-ee6cf1145251" type="Workflow"/>
+        <reference id="4de2afa6-122b-4a99-9e43-32877572df41" type="Workflow"/>
         <position y="60.0" x="270.0"/>
     </workflow-item>
 </ns2:workflow>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item1" object-name="workflow:name=generic" id="4e6e0a54-36ed-49a9-a6e9-ab4399723783" editor-version="2.0" version="1.0.0" api-version="6.0.0" restartMode="1" resumeFromFailedMode="0">
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item2" object-name="workflow:name=generic" id="4e6e0a54-36ed-49a9-a6e9-ab4399723783" editor-version="2.0" version="1.0.0" api-version="6.0.0" restartMode="1" resumeFromFailedMode="0">
     <display-name>IBSE Custom action - Update Asset</display-name>
     <description>Update asset status. This workflow works for those blueprints using Create Asset subscription (CloudAgnostic)</description>
     <position y="50.0" x="100.0"/>
@@ -13,10 +13,13 @@
     <attrib name="var_SQL" type="string">
         <value encoded="n">vRAExtensibility</value>
     </attrib>
+    <attrib name="var_Status" type="string">
+        <value encoded="n"/>
+    </attrib>
     <workflow-item name="item0" type="end" end-mode="0" comparator="0">
         <in-binding/>
         <out-binding/>
-        <position y="50.0" x="300.0"/>
+        <position y="50.0" x="390.0"/>
     </workflow-item>
     <workflow-item name="item1" out-name="item0" type="task" comparator="0">
         <display-name>Update</display-name>
@@ -26,13 +29,33 @@ System.log(vm.ipAddress);
 System.log(in_Status);
 actionResult = System.getModule("com.vmware.iberia.se").CMDB_UpdateAsset(var_SQL,vm.displayName,in_Status);</script>
         <in-binding>
-            <bind name="in_Status" type="string" export-name="in_Status"/>
+            <bind name="in_Status" type="string" export-name="var_Status"/>
             <bind name="vm" type="VC:VirtualMachine" export-name="vm"/>
             <bind name="var_SQL" type="string" export-name="var_SQL"/>
         </in-binding>
         <out-binding/>
         <description>Simple task with custom script capability.</description>
-        <position y="60.0" x="170.0"/>
+        <position y="60.0" x="260.0"/>
     </workflow-item>
-    <presentation/>
+    <workflow-item name="item2" out-name="item1" type="task" comparator="0">
+        <display-name>Scriptable task</display-name>
+        <script encoded="false">/*
+IMPORTANT: This Workflow is intended for CMDB update, and is fired from Day 2 Action &amp; a subscription for Compute deleted.
+- Day 2 action: in_Status will be available
+- Subscription: only VM content will be available, so in_Status = 'RETIRED' 
+*/
+if (in_Status != null &amp;&amp; in_Status != ''){
+    var_Status = 'RETIRED';
+}else{
+    var_Status = in_Status;
+}</script>
+        <in-binding>
+            <bind name="in_Status" type="string" export-name="in_Status"/>
+        </in-binding>
+        <out-binding>
+            <bind name="var_Status" type="string" export-name="var_Status"/>
+        </out-binding>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="165.0"/>
+    </workflow-item>
 </ns2:workflow>

@@ -4,13 +4,13 @@
   <description><![CDATA[Default configurations for email notifications (Used by vRA)]]></description>
   <atts>
     <att name="fromAddress" type="string" read-only="false">
-      <value encoded="n"><![CDATA[vra_noreply@iberia.local]]></value>
+      <value encoded="n"><![CDATA[noreply@seiberia.lab]]></value>
     </att>
     <att name="fromName" type="string" read-only="false">
-      <value encoded="n"><![CDATA[vRA Iberia]]></value>
+      <value encoded="n"><![CDATA[SEIberia vRealize Automation]]></value>
     </att>
     <att name="smtpHost" type="string" read-only="false">
-      <value encoded="n"><![CDATA[smtp.iberia.local]]></value>
+      <value encoded="n"><![CDATA[mail.seiberia.lab]]></value>
     </att>
     <att name="smtpHostPort" type="number" read-only="false">
       <value encoded="n"><![CDATA[25.0]]></value>
@@ -24,8 +24,6 @@
     <att name="authUser" type="string" read-only="false">
       <value encoded="n"><![CDATA[]]></value>
     </att>
-    <att name="authPassword" type="SecureString" read-only="false">
-      <value encoded="n"><![CDATA[__NULL__]]></value>
-    </att>
+    <att name="authPassword" type="SecureString" read-only="false"/>
   </atts>
 </config-element>

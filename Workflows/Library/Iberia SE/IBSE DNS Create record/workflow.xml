@@ -14,10 +14,10 @@
         <value encoded="n"></value>
     </attrib>
     <attrib name="var_DNSZone" type="string">
-        <value encoded="n">iberia.local</value>
+        <value encoded="n">seiberia.lab</value>
     </attrib>
     <attrib name="var_DNSSubdomain" type="string">
-        <value encoded="n">k8s</value>
+        <value encoded="n">vra</value>
     </attrib>
     <workflow-item name="item0" type="end" end-mode="0" comparator="0">
         <in-binding/>
@@ -96,5 +96,4 @@ if (pProperties.get("cas.iberiase.dns.subdomain") != null &amp;&amp; pProperties
         <description> </description>
         <position y="60.0" x="276.0"/>
     </workflow-item>
-    <presentation/>
 </ns2:workflow>
