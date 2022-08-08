@@ -1,0 +1,1 @@
+{"schema":{"in_0":{"id":"in_0","type":{"dataType":"string"},"label":"in_0","constraints":{"required":false}}},"layout":{"pages":[{"id":"page_onjhdoti","title":"General","sections":[{"id":"section_iotc4t53","fields":[{"id":"in_0","display":"textField","signpostPosition":"right-middle","state":{"visible":true,"read-only":false}}]}]}]},"itemId":""}
