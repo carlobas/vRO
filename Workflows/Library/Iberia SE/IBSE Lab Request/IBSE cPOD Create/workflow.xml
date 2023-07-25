@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item1" object-name="workflow:name=generic" id="f65568b2-3504-4f05-9482-a6c391de6d6e" editor-version="2.0" version="1.0.2" api-version="6.0.0" allowed-operations="vef" restartMode="1" resumeFromFailedMode="0">
+    <display-name>IBSE cPOD Create</display-name>
+    <description>Deploy cPODs on demand and create Dynamic Type to manage it</description>
+    <position y="50.0" x="100.0"/>
+    <input>
+        <param name="name" type="string"/>
+        <param name="objectType" type="string"/>
+        <param name="template" type="string"/>
+        <param name="numHost" type="number"/>
+        <param name="usevSAN" type="boolean"/>
+        <param name="password" type="SecureString"/>
+        <param name="username" type="string">
+            <description>User name to assign to cPOD</description>
+        </param>
+    </input>
+    <output>
+        <param name="outObject" type="DynamicTypes:DynamicObject"/>
+    </output>
+    <attrib name="newObj" type="Any">
+        <value encoded="n"/>
+    </attrib>
+    <attrib name="newObjectId" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <attrib name="var_Error" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <attrib name="cpod_User" type="string" conf-id="b383f0a2-f504-4060-a4f9-cefb474cf505" conf-key="cpod_User"/>
+    <attrib name="cpod_UserPassword" type="SecureString" conf-id="b383f0a2-f504-4060-a4f9-cefb474cf505" conf-key="cpod_UserPassword"/>
+    <attrib name="cpod_VM" type="VC:VirtualMachine" conf-id="b383f0a2-f504-4060-a4f9-cefb474cf505" conf-key="cpod_VM"/>
+    <attrib name="cpod_ProgramPath" type="string" conf-id="b383f0a2-f504-4060-a4f9-cefb474cf505" conf-key="cpod_ProgramPath"/>
+    <attrib name="cpod_WorkingDirectory" type="string" conf-id="b383f0a2-f504-4060-a4f9-cefb474cf505" conf-key="cpod_WorkingDirectory"/>
+    <attrib name="cpod_Environment" type="Array/string">
+        <value encoded="n"/>
+    </attrib>
+    <attrib name="cpod_Arguments" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <attrib name="cpod_InteractiveSession" type="boolean">
+        <value encoded="n">false</value>
+    </attrib>
+    <attrib name="cpod_Result" type="number">
+        <value encoded="n"/>
+    </attrib>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="38.333333333333336" x="746.6666666666667"/>
+    </workflow-item>
+    <workflow-item name="item1" out-name="item2" catch-name="item5" throw-bind-name="var_Error" type="task" comparator="0">
+        <display-name>Create object</display-name>
+        <script encoded="false">//split supplied type into namespace and type name
+var dt_attributes = objectType.split(".");
+
+//check supplied type exists
+if (!DynamicTypesManager.getType(dt_attributes[0] , dt_attributes[1])){
+  System.error(objectType + " is not a valid dynamic types oject type");
+  throw new Error(objectType + " is not a valid dynamic types oject type");
+}else{
+  System.log("The object exist");
+}
+
+var newObj = {};
+newObj.name = name.toUpperCase();
+newObj['name'] = name.toUpperCase();
+newObj['template'] = template;
+newObj['numHost'] = numHost;
+newObj['usevSAN'] = usevSAN;
+newObj['username'] = username;</script>
+        <in-binding>
+            <bind name="name" type="string" export-name="name"/>
+            <bind name="objectType" type="string" export-name="objectType"/>
+            <bind name="template" type="string" export-name="template"/>
+            <bind name="numHost" type="number" export-name="numHost"/>
+            <bind name="usevSAN" type="boolean" export-name="usevSAN"/>
+            <bind name="username" type="string" export-name="username"/>
+        </in-binding>
+        <out-binding>
+            <bind name="newObj" type="Any" export-name="newObj"/>
+        </out-binding>
+        <position y="60.0" x="180.0"/>
+    </workflow-item>
+    <workflow-item name="item2" out-name="item3" type="task" script-module="com.vmware.extensibility.dynamictypes.persistanceLayer/addObject" comparator="0">
+        <display-name>addObject</display-name>
+        <script encoded="false">//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.vmware.extensibility.dynamictypes.persistanceLayer").addObject(objectType,objectIn);
+</script>
+        <in-binding>
+            <bind name="objectType" type="string" export-name="objectType">
+                <description></description>
+            </bind>
+            <bind name="objectIn" type="Any" export-name="newObj">
+                <description></description>
+            </bind>
+        </in-binding>
+        <out-binding>
+            <bind name="actionResult" type="string" export-name="newObjectId"/>
+        </out-binding>
+        <description>Add a note to the workflow schema.</description>
+        <position y="60.0" x="300.0"/>
+    </workflow-item>
+    <workflow-item name="item3" out-name="item7" type="task" comparator="0">
+        <display-name>Get Detail</display-name>
+        <script encoded="false">//split supplied type into namespace and type name
+var dt_attributes = objectType.split(".");
+
+var dtObject =  DynamicTypesManager.getObject(dt_attributes[0], dt_attributes[1], newObjectId) ;
+
+System.log('New Object Name: ' + dtObject.name);
+System.log('New Object Id: ' + dtObject.id);</script>
+        <in-binding>
+            <bind name="newObj" type="Any" export-name="newObj"/>
+            <bind name="objectType" type="string" export-name="objectType"/>
+            <bind name="newObjectId" type="string" export-name="newObjectId"/>
+        </in-binding>
+        <out-binding/>
+        <description>Simple task with custom script capability.</description>
+        <position y="132.85714285714286" x="301.90476190476187"/>
+    </workflow-item>
+    <workflow-item name="item5" throw-bind-name="var_Error" type="end" end-mode="1" business-status="Failed to create Dynamic Type" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="122.85714285714286" x="227.61904761904762"/>
+    </workflow-item>
+    <workflow-item name="item6" out-name="item0" throw-bind-name="var_Error" type="link" linked-workflow-id="C98080808080808080808080808080805E80808001322751030482b80adf61e7c" comparator="0">
+        <display-name>Run program in guest</display-name>
+        <script encoded="false"></script>
+        <in-binding>
+            <bind name="vmUsername" type="string" export-name="cpod_User">
+                <description>Username for the virtual machine</description>
+            </bind>
+            <bind name="vmPassword" type="SecureString" export-name="cpod_UserPassword">
+                <description>Password for the virtual machine</description>
+            </bind>
+            <bind name="vm" type="VC:VirtualMachine" export-name="cpod_VM">
+                <description>Virtual machine</description>
+            </bind>
+            <bind name="interactiveSession" type="boolean" export-name="cpod_InteractiveSession">
+                <description>This is set to true if the client wants an interactive session in the guest.</description>
+            </bind>
+            <bind name="programPath" type="string" export-name="cpod_ProgramPath">
+                <description>The absolute path to the program to start. For Linux guest operating systems, /bin/bash is used to start the program.  For Solaris guest operating systems, /bin/bash is used to start the program if it exists. Otherwise /bin/sh is used. If /bin/sh is used, then the process ID returned will be that of the shell used to start the program, rather than the program itself, due to the differences in how /bin/sh and /bin/bash work. This PID will still be usable for watching the process with this API to find its exit code and elapsed time. </description>
+            </bind>
+            <bind name="arguments" type="string" export-name="cpod_Arguments">
+                <description>The arguments to the program. In Linux and Solaris guest operating systems, the program will be executed by a guest shell. This allows stdio redirection, but may also require that characters which must be escaped to the shell also be escaped on the command line provided. For Windows guest operating systems, prefixing the command with "cmd /c" can provide stdio redirection. </description>
+            </bind>
+            <bind name="workingDirectory" type="string" export-name="cpod_WorkingDirectory">
+                <description>The absolute path of the working directory for the program to be run. VMware recommends explicitly setting the working directory for the program to be run. If this value is unset or is an empty string, the behavior depends on the guest operating system. For Linux guest operating systems, if this value is unset or is an empty string, the working directory will be the home directory of the user associated with the guest authentication. For other guest operating systems, if this value is unset, the behavior is unspecified. </description>
+            </bind>
+            <bind name="environment" type="Array/string" export-name="cpod_Environment">
+                <description>An array of environment variables, specified in the guest OS notation (eg PATH=c:\bin;c:\windows\system32 or LD_LIBRARY_PATH=/usr/lib:/lib), to be set for the program being run. Note that these are not additions to the default environment variables; they define the complete set available to the program. If none are specified the values are guest dependent. </description>
+            </bind>
+        </in-binding>
+        <out-binding>
+            <bind name="result" type="number" export-name="cpod_Result">
+                <description>The pid of the program started.</description>
+            </bind>
+        </out-binding>
+        <description> </description>
+        <position y="132.85714285714286" x="492.3809523809524"/>
+    </workflow-item>
+    <workflow-item name="item7" out-name="item6" type="task" comparator="0">
+        <display-name>Update vars &amp; params</display-name>
+        <script encoded="false">//Fill the array with environment variables
+cpod_Environment = new Array();
+cpod_Environment.push("NOCUSTO=YES");
+cpod_Environment.push("TEMPLATE_ESX=" + template);
+if (usevSAN){
+    cpod_Environment.push("DISKVSAN=YES");
+}else{
+    cpod_Environment.push("DISKVSAN=NO");
+}
+if (password != ''){
+    cpod_Environment.push("CPODPASSWORD=" +password);
+}
+
+//Ahora construimos los parámetros a pasar
+cpod_Arguments = 'create ' +name + ' ' +numHost +' ' +username;</script>
+        <in-binding>
+            <bind name="cpod_Environment" type="Array/string" export-name="cpod_Environment"/>
+            <bind name="template" type="string" export-name="template"/>
+            <bind name="usevSAN" type="boolean" export-name="usevSAN"/>
+            <bind name="password" type="SecureString" export-name="password"/>
+            <bind name="cpod_Arguments" type="string" export-name="cpod_Arguments"/>
+            <bind name="numHost" type="number" export-name="numHost"/>
+            <bind name="name" type="string" export-name="name"/>
+            <bind name="username" type="string" export-name="username"/>
+        </in-binding>
+        <out-binding>
+            <bind name="cpod_Environment" type="Array/string" export-name="cpod_Environment"/>
+            <bind name="cpod_Arguments" type="string" export-name="cpod_Arguments"/>
+        </out-binding>
+        <description>Simple task with custom script capability.</description>
+        <position y="56.66666666666666" x="492.3809523809524"/>
+    </workflow-item>
+    <workflow-note x="170.0" y="37.0" w="273.0" h="136.0" color="FFFFC0">
+        <description>DynamicType: IBSE.cPOD</description>
+    </workflow-note>
+    <workflow-note x="450.0" y="37.0" w="235.0" h="136.0" color="7bbfea">
+        <description>cPOD creation</description>
+    </workflow-note>
+</ns2:workflow>
